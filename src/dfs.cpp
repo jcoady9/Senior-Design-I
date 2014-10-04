@@ -3,16 +3,26 @@
  * 
  * Copyright 2014 Jason Fiddle <jfiddle@J-FId-VirtualBox>
  */
+#include "vertex.cpp"
 
-void DFS(Graph G)
-{
-	for each(Vertex u in G.V)
+
+/*
+**DFS will take one argument, the graph in which we need to parse through
+**The Graph is represents simply by an array of Vertices
+*/
+void DFS(Vertex arr[])
+{//Note: varibles will need to be changed depending on our needs
+	for(Vertex u : arr)
 	{
 		u.color = WHITE;
-		u.pi = NULL;
+		//Pi should not be needed. We do not need to know 
+		//where we came from just where we are headed.
+		//u.pi = NULL;
 	}
 	
-	time = 0;
+	//time will also be needed. We do not need to know how long it 		
+	//took us to visit a vertex, only that the vertex as been visited.  
+	//time = 0;
 	
 	for each(Vertex u in G.V)
 	{
@@ -23,10 +33,10 @@ void DFS(Graph G)
 
 void DFS_Visit(Graph G, Vertex u)
 {
-	time++;
-	u.d = time;
+	//time++;
+	//u.d = time;
 	u.color = GRAY
-	
+	//visit all other vertices associated with current vertex
 	for each(v in G.Adj[u])
 	{
 		if(v.color == WHITE)
@@ -37,10 +47,9 @@ void DFS_Visit(Graph G, Vertex u)
 	}
 	
 	u.color = BLACK;
-	time++;
-	u.f = time;
+	//time++;
+	//u.f = time;
 }
-
 
 
 
