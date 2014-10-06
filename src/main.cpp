@@ -1,5 +1,8 @@
 #include<stdio.h>
+#include<errno.h>
 #include<opencv2/highgui/highgui.hpp>
+
+#include "../include/vertexSearch.h"
 
 using namespace cv;
 
@@ -7,7 +10,7 @@ int main(int argc, char** argv){
 	
 	//make sure path to the image was entered
 	if(argc < 2){
-		printf("Missing Arguements. Did you forget to add the path of the image?\n");
+		printf("Missing Arguements. Did you forget to add the path of the image?\n\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -22,6 +25,10 @@ int main(int argc, char** argv){
 	
 	//open a window to display the image and enter any key to close the window
 	imshow("opencvtest", img);
+
+	Mat dst = detectCorners(img);
+	imshow("corner detection", dst);
+	
 	waitKey(0);
 
 	return 0;
