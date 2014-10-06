@@ -12,7 +12,7 @@
 */
 void DFS(Vertex arr[])
 {//Note: varibles will need to be changed depending on our needs
-	for(Vertex u : arr)
+	for(int i = 1; i<arr[0]; i++)
 	{
 		u.color = WHITE;
 		//Pi should not be needed. We do not need to know 
@@ -24,7 +24,7 @@ void DFS(Vertex arr[])
 	//took us to visit a vertex, only that the vertex as been visited.  
 	//time = 0;
 	
-	for each(Vertex u in G.V)
+	for(int i = 1; i<arr[0]; i++)
 	{
 		if(u.color == WHITE)
 			DFS_Visit(G, u);
@@ -37,6 +37,7 @@ void DFS_Visit(Graph G, Vertex u)
 	//u.d = time;
 	u.color = GRAY
 	//visit all other vertices associated with current vertex
+	//TODO: need to know structure of vertex class before we can continue
 	for each(v in G.Adj[u])
 	{
 		if(v.color == WHITE)
