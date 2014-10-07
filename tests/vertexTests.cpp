@@ -49,20 +49,31 @@ int main(){
 	Line* tmp = v1->getLine(0);
 	
 	printf("v1->line[0] addr: %p\n\n", tmp);
+	printf("v1->line[0] start vertex: %p\n\n", tmp->getVertex());
+	
 
 	tmp = v1->getLine(1);
 	printf("v1->line[1] addr: %p\n\n", tmp);
+	printf("v1->line[1] start vertex: %p\n\n", tmp->getVertex());
 
 	tmp = v1->getLine(2);
 	printf("v1->line[2] addr: %p\n\n", tmp);
+	printf("v1->line[2] start vertex: %p\n\n", tmp->getVertex());
 
 	printf("v1 addr: %p\n", v1);
 	printf("v2 addr: %p\n", v2);
 	printf("v3 addr: %p\n\n", v3);
 	
-	
+	printf("Testing resize Method...\n\n");
 
-	printf("%p\n\n", v1->getLine(0)->getVertex());
+	printf("%i Lines: Size = %i: \n",v1->getNum_Lines(), v1->getSize());
+	for(int i = 0; i<=25; i++){
+		for(int j = 0; j<=4; j++){
+			v1->addLine(l2);
+		}
+	printf("%i Lines: Size = %i: \n",v1->getNum_Lines(), v1->getSize());
+	}
+
 
 	return 0;
 }

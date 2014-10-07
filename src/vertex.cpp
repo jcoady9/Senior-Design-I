@@ -33,10 +33,10 @@ void Vertex::addLine(Line* newLine){
 		resize(2 * arr_size);
 	}
 
-	//lines[arr_pos] = newLine;
+	lines[arr_pos] =  *newLine;
 
 	lines[arr_pos].setVertex(newLine->getVertex());
-	
+
 	arr_pos++; //increment position in the array
 	
 }
@@ -63,3 +63,23 @@ void Vertex::resize(int newSize){
 	arr_size = newSize;
 
 }
+
+//current size of the array
+int Vertex::getSize(){
+	int size = arr_size;
+	return size;
+}
+
+//returns number of lines currently in the line array
+int Vertex::getNum_Lines(){
+	//arr_pos is the position a new element will be added
+	int numlines = 0;
+
+	if(arr_pos > 0){
+		numlines = arr_pos; 		
+	}
+
+	return numlines; 
+}
+
+

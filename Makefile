@@ -20,10 +20,9 @@ all :
 	$(CC) $(CFLAGS) src/*.cpp -o project $(LIBS) $(LFLAGS)
 
 #compile all test code
-test vertex:
+test :
 	$(CC) $(CFLAGS) src/vertex.cpp src/line.cpp tests/vertexTests.cpp -o vertextest
 
-test line:
 	$(CC) $(CFLAGS) src/vertex.cpp src/line.cpp tests/lineTests.cpp -o linetest
 
 #clean the project directory of all object & executable files

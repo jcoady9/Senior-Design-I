@@ -9,7 +9,7 @@
 /*
 **DFS will take one argument, the graph in which we need to parse through
 **The Graph is represents simply by an array of Vertices
-*/
+
 void DFS(Vertex arr[])
 {//Note: varibles will need to be changed depending on our needs
 	for(int i = 1; i<arr[0]; i++)
@@ -51,7 +51,7 @@ void DFS_Visit(Graph G, Vertex u)
 	//time++;
 	//u.f = time;
 }
-
+*/
 
 
 

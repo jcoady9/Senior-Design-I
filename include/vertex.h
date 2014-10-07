@@ -18,6 +18,9 @@ class Vertex {
 		void addLine(Line* line);			//adds a line to the lines array
 		Line* getLine(int n);			//retrieve a line from the lines array
 		void resize(int newSize);	    //resizes the verices array
+		int getSize();				//returns current line array size
+		int getNum_Lines(); 			//returns the number of lines in the array
+
 };
 
 #endif
