@@ -10,7 +10,7 @@ Vertex::Vertex(int x_coord, int y_coord){
 	x = x_coord;
 	y = y_coord;
 	arr_pos = 0;
-	arr_size = 1;
+	arr_size = 2;
 	lines = new Line[arr_size];
 }
 
