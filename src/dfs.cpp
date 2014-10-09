@@ -1,47 +1,24 @@
 
+#include "../include/dfs.h"
 #include "../include/vertex.h"
 #include "../include/line.h"
 
-void DFS_Visit(Vertex* v);
-/*
-**DFS will take one argument, the graph in which we need to parse through
-**The Graph is represents simply by an array of Vertices
-
-void DFS(Vertex arr[])
-{//Note: varibles will need to be changed depending on our needs
-	for(int i = 1; i<arr[0]; i++)
-	{
-		u.color = WHITE;
-		//Pi should not be needed. We do not need to know 
-		//where we came from just where we are headed.
-		//u.pi = NULL;
-	}
-	
-	//time will also be needed. We do not need to know how long it 		
-	//took us to visit a vertex, only that the vertex as been visited.  
-	//time = 0;
-	
-	for(int i = 1; i<arr[0]; i++)
-	{
-		if(u.color == WHITE)
-			DFS_Visit(G, u);
-	}
-}*/
 //Accepts first vertex and accesses all other via the Line's next vertex functionality.
-void DFS_Visit(Vertex* v)
+void DFS_Visit(Vertex* v)//visit all other vertices associated with current vertex
 {
-	//visit all other vertices associated with current vertex
-	for(int i = 0; i<v->getNum_Lines(); i++)
-	{
-		if(v->getLine(i)->getVertex()->getVisited() == 0)
+	Vertex* temp = v;
+	//run for each line in the current vertex's line array
+	for(int i = 0; i < temp->getNum_Lines(); i++)
+	{ 
+		if(temp->getLine(i)->getVertex()->getVisited() == 0)
 		{
 			//TODO: Call the draw line method
-			DFS_Visit(v->getLine(i)->getVertex());
+			temp->setVisited(1);//vertex is being processed, used for debugging
+			DFS_Visit(temp->getLine(i)->getVertex());
 		}
+		
 	}
-	
-	v->setVisited(2);
-
+	temp->setVisited(2);//current vertex's line array has been completed, therefore this vertex is complete	
 }
 
 
