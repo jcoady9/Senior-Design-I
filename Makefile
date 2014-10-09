@@ -25,6 +25,8 @@ test :
 
 	$(CC) $(CFLAGS) src/vertex.cpp src/line.cpp tests/lineTests.cpp -o linetest
 
+	$(CC) $(CFLAGS) src/vertex.cpp src/line.cpp src/dfs.cpp tests/dfsTests.cpp -o dfstest
+
 #clean the project directory of all object & executable files
 clean:
 	rm -f core $(EXE)

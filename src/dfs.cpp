@@ -1,9 +1,6 @@
-/*
- * dfs.cpp
- * 
- * Copyright 2014 Jason Fiddle <jfiddle@J-FId-VirtualBox>
- */
-#include "vertex.cpp"
+
+#include "../include/vertex.h"
+#include "../include/line.h"
 
 void DFS_Visit(Vertex* v);
 /*
@@ -36,7 +33,7 @@ void DFS_Visit(Vertex* v)
 	//visit all other vertices associated with current vertex
 	for(int i = 0; i<v->getNum_Lines(); i++)
 	{
-		if(v->getLine(i)->getVertex()->getVisited == 0)
+		if(v->getLine(i)->getVertex()->getVisited() == 0)
 		{
 			//TODO: Call the draw line method
 			DFS_Visit(v->getLine(i)->getVertex());
