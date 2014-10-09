@@ -5,7 +5,7 @@
  */
 #include "vertex.cpp"
 
-
+void DFS_Visit(Vertex* v);
 /*
 **DFS will take one argument, the graph in which we need to parse through
 **The Graph is represents simply by an array of Vertices
@@ -29,29 +29,24 @@ void DFS(Vertex arr[])
 		if(u.color == WHITE)
 			DFS_Visit(G, u);
 	}
-}
-
-void DFS_Visit(Graph G, Vertex u)
+}*/
+//Accepts first vertex and accesses all other via the Line's next vertex functionality.
+void DFS_Visit(Vertex* v)
 {
-	//time++;
-	//u.d = time;
-	u.color = GRAY
 	//visit all other vertices associated with current vertex
-	//TODO: need to know structure of vertex class before we can continue
-	for each(v in G.Adj[u])
+	for(int i = 0; i<v->getNum_Lines(); i++)
 	{
-		if(v.color == WHITE)
+		if(v->getLine(i)->getVertex()->getVisited == 0)
 		{
-			v.pi = u;
-			DFS_Visit(G, v);
+			//TODO: Call the draw line method
+			DFS_Visit(v->getLine(i)->getVertex());
 		}
 	}
 	
-	u.color = BLACK;
-	//time++;
-	//u.f = time;
+	v->setVisited(2);
+
 }
-*/
+
 
 
 
