@@ -1,4 +1,5 @@
 
+#include <stdio.h>
 #include "../include/vertexSearch.h"
 
 cv::Mat detectCorners(cv::Mat src){
@@ -17,15 +18,18 @@ cv::Mat detectCorners(cv::Mat src){
 
 	normalize(dst, norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat());
 	convertScaleAbs(norm, norm_scaled);
-
+	
+	int count = 0;
+	
 	for(int i = 0; i < norm.rows; i++){
 		for(int j = 0; j < norm.cols; j++){
-			if((int) norm.at<float>(i,j) > 60){
+			if((int) norm.at<float>(i,j) > 200){
 				circle(norm_scaled, cv::Point(j, i), 15, cv::Scalar(0), 2, 8, 0);
+				count++;
 			}
 		}
 	}
-
+	printf("corner count: %i\n", count);
 	return norm_scaled;
 }
 
