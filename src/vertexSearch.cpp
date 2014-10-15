@@ -36,7 +36,7 @@ cv::Mat detectCorners(cv::Mat src){
 //line detection
 cv::Mat HoughLines(cv::Mat src){
 
- Mat dst, cdst;
+ cv::Mat dst, cdst;
  Canny(src, dst, 50, 200, 3);
  cvtColor(dst, cdst, CV_GRAY2BGR);
 
@@ -65,10 +65,7 @@ cv::Mat HoughLines(cv::Mat src){
     line( cdst, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0,0,255), 3, CV_AA);
   }
  #endif*/
- imshow("source", src);
- imshow("detected lines", cdst);
 
- waitKey();
 
- return 0;
+ return dst;
 }
