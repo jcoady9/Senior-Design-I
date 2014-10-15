@@ -38,27 +38,31 @@ cv::Mat detectCorners(cv::Mat src){
 
 
 //line detection
-cv::Mat HoughLines(cv::Mat src){
+cv::Mat lineDetection(cv::Mat src){
 
- Mat dst, cdst;
+ cv::Mat dst, cdst;
  Canny(src, dst, 50, 200, 3);
  cvtColor(dst, cdst, CV_GRAY2BGR);
 
  //#if 0
-  vector<Vec2f> lines;
-  HoughLines(dst, lines, 1, CV_PI/180, 100, 0, 0 );
+  cv::vector<cv::Vec2f> lines;
+  cv::HoughLines(dst, lines, 1, CV_PI/180, 100, 0, 0 );
 
   for( size_t i = 0; i < lines.size(); i++ )
   {
-     float rho = lines[i][0], theta = lines[i][1];
-     Point pt1, pt2;
-     double a = cos(theta), b = sin(theta);
-     double x0 = a*rho, y0 = b*rho;
+     float rho = lines[i][0];
+	float theta = lines[i][1];
+     cv::Point pt1;
+	cv::Point pt2;
+     double a = cos(theta);
+	double b = sin(theta);
+     double x0 = a*rho;
+	double y0 = b*rho;
      pt1.x = cvRound(x0 + 1000*(-b));
      pt1.y = cvRound(y0 + 1000*(a));
      pt2.x = cvRound(x0 - 1000*(-b));
      pt2.y = cvRound(y0 - 1000*(a));
-     line( cdst, pt1, pt2, Scalar(0,0,255), 3, CV_AA);
+     line( cdst, pt1, pt2, cv::Scalar(0,0,255), 3, CV_AA);
   }
  /*#else
   vector<Vec4i> lines;
@@ -69,10 +73,6 @@ cv::Mat HoughLines(cv::Mat src){
     line( cdst, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0,0,255), 3, CV_AA);
   }
  #endif*/
- imshow("source", src);
- imshow("detected lines", cdst);
 
- waitKey();
-
- return 0;
+ return cdst;
 }
