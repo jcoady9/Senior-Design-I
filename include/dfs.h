@@ -4,6 +4,6 @@
 
 #include "vertex.h"
 
-void DFS(Vertex arr[]);
+void DFS_Visit(Vertex* v);
 
 #endif
