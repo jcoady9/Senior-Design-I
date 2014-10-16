@@ -31,7 +31,10 @@ int main(int argc, char** argv){
 	imshow("corner detection", dst);
 
 	//Hough Line Transformation
-	Mat dst2 = detectCorners(img);
+	Mat dst2 = lineDetection(img);
+	if(dst2.empty()){
+		printf("line detection image file is empty.\n");
+	}
 	imshow("line detection", dst2);
 
 	waitKey(0);

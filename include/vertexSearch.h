@@ -10,6 +10,6 @@
 cv::Mat detectCorners(cv::Mat src);
 
 //line detection
-cv::Mat HoughLines(cv::Mat src)
+cv::Mat lineDetection(cv::Mat src);
 
 #endif
