@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<errno.h>
-#include<opencv2/highgui/highgui.hpp>
 
+#include <opencv2/highgui/highgui.hpp>
 #include "../include/vertexSearch.h"
 
 using namespace cv;
@@ -26,9 +26,17 @@ int main(int argc, char** argv){
 	//open a window to display the image and enter any key to close the window
 	imshow("opencvtest", img);
 
+	//corner detection
 	Mat dst = detectCorners(img);
 	imshow("corner detection", dst);
-	
+
+	//Hough Line Transformation
+	Mat dst2 = lineDetection(img);
+	if(dst2.empty()){
+		printf("line detection image file is empty.\n");
+	}
+	imshow("line detection", dst2);
+
 	waitKey(0);
 
 	return 0;
