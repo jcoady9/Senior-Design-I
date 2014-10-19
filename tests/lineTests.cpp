@@ -6,11 +6,11 @@
 int main(){
 	
 	printf("-------------------------------------------\n");
-	printf("Testing Line class.........\n");
+	printf("\tTesting Line class...\n");
 	printf("-------------------------------------------\n\n");
 	
 	printf("-------------------------------------------\n");
-	printf("Testing getVertex() method\n");
+	printf("\tTesting getVertex() method\n");
 	printf("------------------------------------------\n\n");
 	
 	Vertex* v1 = new Vertex(0, 0);
@@ -30,7 +30,7 @@ int main(){
 	//Here we test setVertex in the same manner as getVertex(). We compare the address of the vertex with the
 	//addresss of the vertex returned by the line
 	printf("-------------------------------------------\n");
-	printf("Testing setVertex() method\n");	
+	printf("\tTesting setVertex() method\n");	
 	printf("-------------------------------------------\n\n");
 
 	l1->setVertex(v3);
@@ -41,8 +41,9 @@ int main(){
 	printf("vertex v1 addr:  %p\nl2->next_vertex: %p\n\n", v1, l2->getVertex());
 	printf("vertex v2 addr:  %p\nl3->next_vertex: %p\n\n", v2, l3->getVertex());
 	
-	printf("---------------------------\n");
-	printf("End of Tests.....\n");
+	printf("------------------------------------------\n");
+	printf("\t\tEnd of Tests...\n");
+	printf("------------------------------------------\n");
 
 	return 0;
 }
