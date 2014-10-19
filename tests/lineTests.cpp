@@ -24,8 +24,8 @@ int main(){
 	//testing that the vertex added to Line in the constructor is the vertex we return with getVertex()
 	//by looking at the pointers, we see if the vertex added to the line is the vertex returned.
 	printf("vertex v1 addr:  %p\nl1->next_vertex: %p\n\n", v1, l1->getVertex());
-	printf("vertex v2 addr:  %p\nl1->next_vertex: %p\n\n", v2, l2->getVertex());
-	printf("vertex v3 addr:  %p\nl1->next_vertex: %p\n\n", v3, l3->getVertex());
+	printf("vertex v2 addr:  %p\nl2->next_vertex: %p\n\n", v2, l2->getVertex());
+	printf("vertex v3 addr:  %p\nl3->next_vertex: %p\n\n", v3, l3->getVertex());
 	
 	//Here we test setVertex in the same manner as getVertex(). We compare the address of the vertex with the
 	//addresss of the vertex returned by the line
@@ -38,8 +38,8 @@ int main(){
 	l3->setVertex(v2);
 
 	printf("vertex v3 addr:  %p\nl1->next_vertex: %p\n\n", v3, l1->getVertex());
-	printf("vertex v1 addr:  %p\nl1->next_vertex: %p\n\n", v1, l2->getVertex());
-	printf("vertex v2 addr:  %p\nl1->next_vertex: %p\n\n", v2, l3->getVertex());
+	printf("vertex v1 addr:  %p\nl2->next_vertex: %p\n\n", v1, l2->getVertex());
+	printf("vertex v2 addr:  %p\nl3->next_vertex: %p\n\n", v2, l3->getVertex());
 	
 	printf("---------------------------\n");
 	printf("End of Tests.....\n");
