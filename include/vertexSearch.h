@@ -12,4 +12,8 @@ cv::Mat detectCorners(cv::Mat src);
 //line detection
 cv::Mat lineDetection(cv::Mat src);
 
+
+bool inRange(cv::Vec4i center, cv::Vec4i point);
+void findEndpoints(cv::vector<cv::Vec4i> endpoint_vec);
+
 #endif
