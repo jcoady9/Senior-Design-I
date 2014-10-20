@@ -48,7 +48,7 @@ cv::Mat lineDetection(cv::Mat src){
   cv::vector<cv::Vec2f> lines;
   cv::HoughLines(dst, lines, 1, CV_PI/180, 100, 0, 0 );
 
-  for( size_t i = 0; i < lines.size(); i++ )
+   /*for( size_t i = 0; i < lines.size(); i++ )
   {
      float rho = lines[i][0];
 	float theta = lines[i][1];
@@ -64,7 +64,7 @@ cv::Mat lineDetection(cv::Mat src){
      pt2.y = cvRound(y0 - 1000*(a));
      line( cdst, pt1, pt2, cv::Scalar(0,0,255), 3, CV_AA);
   }
- /*#else
+#else*/
   vector<Vec4i> lines;
   HoughLinesP(dst, lines, 1, CV_PI/180, 50, 50, 10 );
   for( size_t i = 0; i < lines.size(); i++ )
@@ -72,7 +72,7 @@ cv::Mat lineDetection(cv::Mat src){
     Vec4i l = lines[i];
     line( cdst, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0,0,255), 3, CV_AA);
   }
- #endif*/
+ //#endif
 
 
  return cdst;
