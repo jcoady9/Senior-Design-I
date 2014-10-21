@@ -15,12 +15,13 @@ void loop(){
     // set AX-12 servo with ID=1, to position i, where 0=<i<950 because of extention
    int inByte = Serial.read();
    Serial.println("Running...");
-   while(i<700){
-     delay(50);
-      SetPosition(2,i);
+   while(i<600){
+     delay(35);
      SetPosition(1,i);
+     SetPosition(2,i);
+     SetPosition(3,i);
      i++;
-     
+    
      int inByte = Serial.read();       
       switch (inByte)
       {
@@ -31,7 +32,7 @@ void loop(){
       }
    }
    
-   while(i>512){
+   while(i>400){
      switch (inByte)
       {
         case '0':    
@@ -41,8 +42,9 @@ void loop(){
       }
       
      delay(50);
-     SetPosition(2,i);
      SetPosition(1,i);
+     SetPosition(2,i);
+     SetPosition(3,i);
      i--;
    }
    
