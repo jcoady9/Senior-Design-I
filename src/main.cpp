@@ -24,7 +24,7 @@ int main(int argc, char** argv){
 	}
 	
 	//open a window to display the image and enter any key to close the window
-	imshow("opencvtest", img);
+	imshow("Source Image", img);
 
 	//corner detection
 	Mat dst = detectCorners(img);

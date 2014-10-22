@@ -12,12 +12,12 @@ int main(){
 	Vertex* v3 = new Vertex(arr[4], arr[5]);
 
 	printf("-------------------------------------------\n");
-	printf("Testing Vertex class........\n");
+	printf("\tTesting Vertex class...\n");
 	printf("-------------------------------------------\n\n");
 
 	
 	printf("-------------------------------------------\n");
-	printf("Testing getPoint() method...\n");
+	printf("\tTesting getPoint() method...\n");
 	printf("-------------------------------------------\n\n");
 	
 	//the getPoint method is being tested by comparing the x, y-coordinates with the array of int values declared above. 
@@ -32,9 +32,9 @@ int main(){
 	v3->getPoint(point);
 	printf("Correct output is -> x: %i, y: %i\nv3 output is -> x: %i, y: %i\n\n", 100, 350, point[0], point[1]);
 
-	printf("-------------------------------------------\n");
-	printf("Testing addLine() & getLine() methods...\n");
-	printf("-------------------------------------------\n\n");
+	printf("-----------------------------------------------------\n");
+	printf("\tTesting addLine() & getLine() methods...\n");
+	printf("-----------------------------------------------------\n\n");
 
 	//We are testing addLine() and getLine() by comparing the address' of the Line object at initialization and
 	//the address' of the Line pointer returned by the getLine() method
@@ -85,7 +85,9 @@ int main(){
 	printf("v3 addr: %p\n\n", v3);
 	
 	//getVisited() - setVisited()
-	printf("Testing Visiting Methods...\n\n");
+	printf("-------------------------------------------------\n");
+	printf("\tTesting Visiting Methods...\n");
+	printf("-------------------------------------------------\n");
 
 	v1->setVisited(2);
 	v2->setVisited(1);
@@ -95,8 +97,10 @@ int main(){
 	printf("v2 visited (0 for not, 1 for referenced, 2 for completed) should be 1: %i\n", v2->getVisited());
 	printf("v3 visited (0 for not, 1 for referenced, 2 for completed) should be 0: %i\n", v3->getVisited());
 	
-	//current output of referencing a line's next Vertex's attributes is a segfault. 
-	printf("Testing refercencing on the next Vertex...\n\n");
+
+	printf("---------------------------------------------------------\n"); 
+	printf("\tTesting refercencing on the next Vertex...\n");
+	printf("---------------------------------------------------------\n");
 	
 	Vertex* t = v1->getLine(0)->getVertex();
 
@@ -107,7 +111,7 @@ int main(){
 	//resize()
 
 	printf("-------------------------------------------\n");
-	printf("Testing resize Method...\n");
+	printf("\tTesting resize Method...\n");
 	printf("-------------------------------------------\n\n");
 	printf("%i Lines: Size = %i: \n",v1->getNum_Lines(), v1->getSize());
 	int counter = 3; 
@@ -124,7 +128,7 @@ int main(){
 	
 
 	printf("-------------------------------------------\n");
-	printf("End of Tests...\n");
+	printf("\t\tEnd of Tests...\n");
 	printf("-------------------------------------------\n");
 
 	return 0;
