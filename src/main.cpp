@@ -27,15 +27,19 @@ int main(int argc, char** argv){
 	imshow("Source Image", img);
 
 	//corner detection
-	Mat dst = detectCorners(img);
+	Mat dst;
+	detectCorners(img, dst);
 	imshow("corner detection", dst);
 
 	//Hough Line Transformation
-	Mat dst2 = lineDetection(img);
-	if(dst2.empty()){
-		printf("line detection image file is empty.\n");
+	cv::vector<cv::Vec4i> lines = lineDetection(img);
+	
+	for( size_t i = 0; i < lines.size(); i++ )
+	{
+		cv::Vec4i l = lines[i];	
+		printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
+		//line( bw, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 1, CV_AA);
 	}
-	imshow("line detection", dst2);
 
 	waitKey(0);
 

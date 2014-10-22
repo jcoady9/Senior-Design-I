@@ -1,23 +1,21 @@
 #include <iostream>
-
 #include <stdio.h>
 #include <math.h>
 
 #include "../include/vertexSearch.h"
-#include "../include/heapsort.h"
 
 #define R_DELTA 12
 #define T_DELTA 0.05
 
 
 //corner detection
-cv::Mat detectCorners(cv::Mat src){
+void detectCorners(cv::Mat src, cv::Mat & dst){
 	
 	cv::Mat gray_scale, norm, norm_scaled;
 
 	cvtColor(src, gray_scale, CV_BGR2GRAY);
 
-	cv::Mat dst = cv::Mat::zeros(src.size(), CV_32FC1);
+	dst = cv::Mat::zeros(src.size(), CV_32FC1);
 
 	int block_size = 5;
 	int aperature_size = 3;
@@ -25,14 +23,14 @@ cv::Mat detectCorners(cv::Mat src){
 
 	cornerHarris(gray_scale, dst, block_size, aperature_size, hfp, cv::BORDER_DEFAULT);
 
-	normalize(dst, norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat());
-	convertScaleAbs(norm, norm_scaled);
+	normalize(dst, norm, 0, 255, cv::NORM_MINMAX, CV_8UC1, cv::Mat());
+	convertScaleAbs(dst, dst);
 	
 	int count = 0;
 	
-	for(int i = 0; i < norm.rows; i++){
-		for(int j = 0; j < norm.cols; j++){
-			if((int) norm.at<float>(i,j) > 200){
+	for(int i = 0; i < dst.rows; i++){
+		for(int j = 0; j < dst.cols; j++){
+			if((int) dst.at<float>(i,j) > 200){
 				circle(norm_scaled, cv::Point(j, i), 15, cv::Scalar(0), 2, 8, 0);
 				printf("corner: (%i, %i)\n", j, i);
 				count++;
@@ -40,34 +38,109 @@ cv::Mat detectCorners(cv::Mat src){
 		}
 	}
 	printf("corner count: %i\n", count);
-	return norm_scaled;
+	
+	imshow("corners", norm_scaled);
+
+	dst = norm;
+
+	return;
 }
 
 //line detection
-cv::Mat lineDetection(cv::Mat src){
+cv::vector<cv::Vec4i> lineDetection(cv::Mat src){
 
-	cv::Mat dst, cdst;
-	Canny(src, dst, 50, 200, 3);
-	cvtColor(dst, cdst, CV_GRAY2BGR);
+	cv::Mat dst, bw;
 
-	cv::vector<cv::Vec2f> vec = findLineFamily(dst);
+	detectCorners(src, dst);
+	
+	//convert image to gray-scale
+	cv::cvtColor(src, bw, CV_BGR2GRAY);
 
+	cv::threshold(dst, bw, 10, 255, CV_THRESH_BINARY_INV);
+	
+	//make the line thinner
+	thinning(bw);	
+
+	//
 	cv::vector<cv::Vec4i> lines;
-	cv::HoughLinesP(dst, lines, 1, CV_PI/180, 50, 50, 10 );
-	int line_count = 0;
-	for( size_t i = 0; i < lines.size(); i++ )
-	{
-		//cv::Vec4i l = lines[i];	
-		//printf("\npt1: (%i, %i)\n", l[0], l[1]);
-		//printf("pt2: (%i, %i)\n", l[2], l[3]);
-		//line( cdst, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 1, CV_AA);
-		line_count++;
-	}
-
-	printf("line count: %i\n\n", line_count);
-
-	return cdst;
+	cv::HoughLinesP(bw, lines, 1, CV_PI/180, 50, 50, 10 );
+	
+	return lines;
 }
+
+/**
+ * Based off of code found from here: http://opencv-code.com/quick-tips/implementation-of-thinning-algorithm-in-opencv/
+ *
+ * This is part of the Zhang-Suen algorithm, documentation on how it works can be seenhere: http://read.pudn.com/downloads99/sourcecode/graph/texture_mapping/403914/Parallel%20thinning%20with%20two-	    subiteration%20algorithms.pdf
+ *
+ * Perform one thinning iteration.
+ * Normally you wouldn't call this function directly from your code.
+ *
+ * @param  im    Binary image with range = 0-1
+ * @param  iter  0=even, 1=odd
+ */
+void thinningIteration(cv::Mat& im, int iter)
+{
+    cv::Mat marker = cv::Mat::zeros(im.size(), CV_8UC1);
+
+    for (int i = 1; i < im.rows-1; i++)
+    {
+        for (int j = 1; j < im.cols-1; j++)
+        {
+            uchar p2 = im.at<uchar>(i-1, j);
+            uchar p3 = im.at<uchar>(i-1, j+1);
+            uchar p4 = im.at<uchar>(i, j+1);
+            uchar p5 = im.at<uchar>(i+1, j+1);
+            uchar p6 = im.at<uchar>(i+1, j);
+            uchar p7 = im.at<uchar>(i+1, j-1);
+            uchar p8 = im.at<uchar>(i, j-1);
+            uchar p9 = im.at<uchar>(i-1, j-1);
+
+            int A  = (p2 == 0 && p3 == 1) + (p3 == 0 && p4 == 1) + 
+                     (p4 == 0 && p5 == 1) + (p5 == 0 && p6 == 1) + 
+                     (p6 == 0 && p7 == 1) + (p7 == 0 && p8 == 1) +
+                     (p8 == 0 && p9 == 1) + (p9 == 0 && p2 == 1);
+            int B  = p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9;
+            int m1 = iter == 0 ? (p2 * p4 * p6) : (p2 * p4 * p8);
+            int m2 = iter == 0 ? (p4 * p6 * p8) : (p2 * p6 * p8);
+
+            if (A == 1 && (B >= 2 && B <= 6) && m1 == 0 && m2 == 0)
+                marker.at<uchar>(i,j) = 1;
+        }
+    }
+
+    im &= ~marker;
+}
+
+/**
+ * Function for thinning the given binary image
+ *
+ * Based off of code found from here: http://opencv-code.com/quick-tips/implementation-of-thinning-algorithm-in-opencv/
+ *
+ * This is part of the Zhang-Suen algorithm, documentation on how it works can be seen here: http://read.pudn.com/downloads99/sourcecode/graph/texture_mapping/403914/Parallel%20thinning%20with%20two-	    subiteration%20algorithms.pdf
+ *
+ * @param  im  Binary image with range = 0-255
+ */
+void thinning(cv::Mat& im)
+{
+    im /= 255;
+
+    cv::Mat prev = cv::Mat::zeros(im.size(), CV_8UC1);
+    cv::Mat diff;
+
+    do {
+        thinningIteration(im, 0);
+        thinningIteration(im, 1);
+        cv::absdiff(im, prev, diff);
+        im.copyTo(prev);
+    } 
+    while (cv::countNonZero(diff) > 0);
+
+    im *= 255;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 cv::vector<cv::Vec2f> findLineFamily(cv::Mat graySrc){
 	
@@ -203,30 +276,7 @@ bool inRange(cv::Vec2f center, cv::Vec2f point){
 	return false;
 }
 
-void findEndpoints(cv::vector<cv::Vec4i> lines_vec){
-	/*
-	cv::vector< cv::vector<cv::Vec4i> > line_clusters; 	
 
-	std::stack<cv::Vec4i> line_stack;
-
-	cv::Vec4i line = lines_vec.back();
-	while(!lines_vec.empty()){
-		cv::vector<cv::Vec4i> cluster;
-		if(inRange(line, lines_vec.back())){
-			cluster.push_back(lines_vec.back());
-			lines_vec.pop_back();
-		}else{
-			//add vector to stack
-			line_stack.push(lines_vec.back());
-			lines_vec.pop_back();
-		}
-		line_clusters.push_back(cluster);
-	}	
-	*/
-
-	//printf("line[]: p1(%i, %i) p2(%i, %i)", *i[0], *i[1], *i[2], *i[3]);
-
-}
 
 
 
