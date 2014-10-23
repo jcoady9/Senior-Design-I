@@ -15,7 +15,7 @@ class Line {
 		Line& operator= (const Line& line);
 		
 		void setVertex(Vertex* v);
-		Vertex* getVertex();//return the next_vertex
+		Vertex* getVertex();	//return next_vertex
 };
 
 #endif

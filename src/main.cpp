@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<errno.h>
-#include<opencv2/highgui/highgui.hpp>
 
+#include <opencv2/highgui/highgui.hpp>
 #include "../include/vertexSearch.h"
 
 using namespace cv;
@@ -24,11 +24,23 @@ int main(int argc, char** argv){
 	}
 	
 	//open a window to display the image and enter any key to close the window
-	imshow("opencvtest", img);
+	imshow("Source Image", img);
 
-	Mat dst = detectCorners(img);
+	//corner detection
+	Mat dst;
+	detectCorners(img, dst);
 	imshow("corner detection", dst);
+
+	//Hough Line Transformation
+	cv::vector<cv::Vec4i> lines = lineDetection(img);
 	
+	for( size_t i = 0; i < lines.size(); i++ )
+	{
+		cv::Vec4i l = lines[i];	
+		printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
+		//line( bw, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 1, CV_AA);
+	}
+
 	waitKey(0);
 
 	return 0;
