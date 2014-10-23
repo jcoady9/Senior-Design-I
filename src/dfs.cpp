@@ -3,6 +3,7 @@
 #include "../include/vertex.h"
 #include "../include/line.h"
 #include "../include/RobotComm.h"
+#include <stdio.h>
 
 
 
@@ -19,12 +20,23 @@ void DFS_Visit(Vertex* v)//visit all other vertices associated with current vert
 
 		if(temp->getLine(i)->getVertex()->getVisited() == 0)
 		{
-			//TODO: Call the draw line method
+			//Send the vertices coordinates to the robot through its port file
 			sendCoordinates(points1[0], points1[1], points2[0], points2[1]);
-			//sleep(50);
-			//receiveACK();
 
 			temp->setVisited(1);//vertex is being processed, used for debugging
+			
+			//hold until the last line has been drawn
+			bool done  = false;  
+			while(!done){
+				usleep(10000);//check if drawing is done every 10ms
+					
+				int response = -1;
+				response = receiveACK();
+				if(response == 0){
+					done = true; 
+				}
+				
+			}
 			DFS_Visit(temp->getLine(i)->getVertex());
 		}
 		
