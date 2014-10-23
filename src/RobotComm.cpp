@@ -1,11 +1,7 @@
 #include "../include/RobotComm.h"
 #include <iostream>
 #include <fstream>
-#include <cctype>
 #include <string>
-#include <sstream>
-
-
 
 using namespace std;
 
@@ -18,9 +14,14 @@ returns -1 if an
 void sendCoordinates(int x1, int y1, int x2, int y2){
     FILE *file;
     file = fopen("testfile.txt","w");  //Opening device file(/dev/ttyUSB0)
-    fprintf(file,"%d,%d,%d,%d\n",x1,y1,x2,y2); //Writing to the file. Seperate coordinates using commas
-    fprintf(file, "DONE\n");
-    fclose(file);
+
+    if(file){
+	    fprintf(file,"%d,%d,%d,%d\n",x1,y1,x2,y2); //Writing to the file. Seperate coordinates using commas
+	    fprintf(file, "DONE\n");
+	    fclose(file);
+    }else{
+	cout << "Couldn't open file" << "\n"; 
+    }
 }
  
 
