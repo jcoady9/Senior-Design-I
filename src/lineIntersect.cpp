@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "opencv2/core/core.hpp"
 
+using namespace cv;
 using namespace std;
 
 // Given three colinear points p, q, r, the function checks if

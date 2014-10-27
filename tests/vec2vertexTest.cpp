@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <stddef.h>
 #include "../include/dfs.h"
 #include "../include/vertex.h"
 #include "../include/line.h"
@@ -11,16 +11,17 @@ int main()
 	printf("\tTesting vec2vertex.cpp...\n");
 	printf("-----------------------------------------------\n");
 	
-	cv::Vec4i* vec;
-	vec.push_back(10);
-	vec.push_back(20);
-	vec.push_back(30);
-	vec.push_back(40);
+	cv::Vec4i vec;
+	vec[0] = 10;
+	vec[1] = 20;
+	vec[2] = 30;
+	vec[3] = 40;
 	
 	//Run vec2vertex
-	vec2Vertex(&vec);
+	Vertex* test = vec2Vertex(vec);
 	
-	
+	printf("v1: %i\n", test->getVisited());
+	printf("v2: %i\n", test->getLine(0)->getVertex()->getVisited());
 	
 	printf("-----------------------------------------------\n");
 	printf("\t\tEnd of test.\n");
