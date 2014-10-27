@@ -28,7 +28,7 @@ void DFS_Visit(Vertex* v)//visit all other vertices associated with current vert
 			//hold until the last line has been drawn
 			bool done  = false;  
 			while(!done){
-				usleep(10000);//check if drawing is done every 10ms
+				usleep(100);//check if drawing is done every 10ms
 					
 				int response = -1;
 				response = receiveACK();
