@@ -13,17 +13,17 @@ returns -1 if an
 */
 void sendCoordinates(int x1, int y1, int x2, int y2){
     FILE *file;
-    file = fopen(filename,"w");  //Opening device file(/dev/ttyUSB0)
+    file = fopen(filename,"a");  //Opening device file(/dev/ttyUSB0)
 
     if(!file){
 	cout << "Couldn't open file: Switching ports..." << "\n"; 
 	filename = "/dev/ttyUSB1";
-	file = fopen(filename,"w");  //Opening device file(/dev/ttyUSB0or1) 
+	file = fopen(filename,"a");  //Opening device file(/dev/ttyUSB0or1) 
 
 	if(!file){
 		cout << "Couldn't open file: Switching ports..." << "\n";
 		filename = "dev/ttyS0"; 
-		file = fopen(filename,"w");  //Opening device file(/dev/ttyUSB0or1) 	
+		file = fopen(filename,"a");  //Opening device file(/dev/ttyUSB0or1) 	
 		if(!file){
 			cout << "Please make sure robot is connected." << "\n";
 		}
@@ -31,6 +31,7 @@ void sendCoordinates(int x1, int y1, int x2, int y2){
 
     } 
 	fprintf(file,"%d,%d,%d,%d\n",x1,y1,x2,y2); //Writing to the file. Seperate coordinates using commas
+	fflush(file);//send the message 
 	fclose(file);
 }
  
@@ -49,7 +50,7 @@ int receiveACK(){
      
     if (!filestream){         // return error message if couldn't open file 
 	cout << "Couldn't open file: Robot has disconnected." << "\n"; 
-        return -1;
+        return -2;
     } 
 
     filestream.seekg (0, ios::end);            // go to end of file 

@@ -4,7 +4,7 @@
 #include "../include/line.h"
 #include "../include/RobotComm.h"
 #include <stdio.h>
-
+#include <stdlib.h> 
 
 
 //Accepts first vertex and accesses all other via the Line's next vertex functionality.
@@ -28,12 +28,13 @@ void DFS_Visit(Vertex* v)//visit all other vertices associated with current vert
 			//hold until the last line has been drawn
 			bool done  = false;  
 			while(!done){
-				usleep(100);//check if drawing is done every 10ms
-					
-				int response = -1;
+				usleep(1500);//check if drawing is done every 1.5secs	
+				int response = -5;
 				response = receiveACK();
 				if(response == 0){
 					done = true; 
+				}if(response == -2){
+					 exit(0);
 				}
 				
 			}
