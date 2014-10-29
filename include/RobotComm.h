@@ -1,6 +1,8 @@
 #ifndef _ROBOTCOMM_H__
 #define _ROBOTCOMM_H__
 
+
+
 /*
 **Method prototype for sending coordinates to the robocontroller
 **x1 and y1 are the current vertex's coordinates
