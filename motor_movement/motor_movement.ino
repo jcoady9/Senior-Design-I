@@ -6,18 +6,18 @@
 // we always need to create an instance of the bioloid control, usually with baud = 1Mbps.
 BioloidController bioloid = BioloidController(1000000);
 
-<<<<<<< HEAD
+
 int i;
 const int NUMBER_OF_FIELDS = 3; // how many comma separated fields we expect
 int fieldIndex = 0;            // the current field being received
 int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
-=======
+
 int i, num;
 char input;
 int buff[10]= {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 int points[4]; 
 int j,p;
->>>>>>> 8b7fe066a026ff71352695d99a527d81cd1ac4d7
+
 
 void setup(){
     i = 512;
@@ -99,33 +99,44 @@ void readCoordinates(){
   
   while(Serial.available()>0)
     {
-          input=Serial.read();
+        input=Serial.read();
    
-          if(input == ','){
-             num = calc();
-            j=-1;
-          }else{
-              j++;
-<<<<<<< HEAD
-              buff[j]=input;
-          }
-  }else{
-   Serial.println(buff[0]);
-    Serial.println(buff[1]);
-    Serial.println(buff[2]);
-    Serial.println(buff[3]);
-    Serial hy.println(buff[4]);
-    Serial.println("DONE\n");
-    Serial.flush(); 
+        if(input == ','){
+           num = calc();
+          j=-1;
+        }
+        else{
+          j++;
+          buff[j]= input;
+          points[p] =  input - '0'; 
+          //Serial.print("P= ");
+         // Serial.println(points[p]);
+          p++; 
+       }
+          
+    int checksum = points[p] + points[p] + points[p] + points[p];
+    Serial.write("DONE(");
+    Serial.print(checksum);
+    Serial.print(")\n");
+    Serial.flush();
+
  }
 }
 
 int determineLineLength(){
   
 }
-    
+//methond to convert char to an int
+int calc()
+{
+  int num=0,x=0;
+ 
+    for(x;x<=j;x++){
+          num=num+(buff[x]-48)*pow(10,j-x);
+    }     
+     
+    return num;
 }
-
 
 //other test code I (Shane) wrote to try and communicate in a different way
 /* if( Serial.available())
@@ -157,32 +168,3 @@ int determineLineLength(){
   }
   */
 
-
-=======
-              buff[j]= input;
-              points[p] =  input - '0'; 
-              //Serial.print("P= ");
-             // Serial.println(points[p]);
-              p++; 
-         }
-          
-    }
-    int checksum = points[p] + points[p] + points[p] + points[p];
-    Serial.write("DONE(");
-    Serial.print(checksum);
-    Serial.print(")\n");
-    Serial.flush();
-}
-
-//methond to convert char to an int
-int calc()
-{
-  int num=0,x=0;
- 
-    for(x;x<=j;x++){
-          num=num+(buff[x]-48)*pow(10,j-x);
-    }     
-     
-    return num;
-}
->>>>>>> 8b7fe066a026ff71352695d99a527d81cd1ac4d7
