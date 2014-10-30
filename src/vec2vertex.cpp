@@ -16,7 +16,5 @@ Vertex* vec2Vertex(cv::Vec4i vec)
 	Line* l = new Line(v2);
 	v1->addLine(l);
 	
-	DFS_Visit(v1);
-	
 	return v1;
 }
