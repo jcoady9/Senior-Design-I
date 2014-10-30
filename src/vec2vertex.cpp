@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <stddef.h>
-#include "../include/dfs.h"
 #include "../include/vertex.h"
 #include "../include/line.h"
 #include "../include/vec2vertex.h"
