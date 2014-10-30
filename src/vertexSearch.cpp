@@ -24,24 +24,9 @@ void detectCorners(cv::Mat src, cv::Mat & dst){
 	cornerHarris(gray_scale, dst, block_size, aperature_size, hfp, cv::BORDER_DEFAULT);
 
 	normalize(dst, norm, 0, 255, cv::NORM_MINMAX, CV_8UC1, cv::Mat());
-	convertScaleAbs(dst, dst);
-	
-	int count = 0;
-	
-	for(int i = 0; i < dst.rows; i++){
-		for(int j = 0; j < dst.cols; j++){
-			if((int) dst.at<float>(i,j) > 200){
-				circle(norm_scaled, cv::Point(j, i), 15, cv::Scalar(0), 2, 8, 0);
-				printf("corner: (%i, %i)\n", j, i);
-				count++;
-			}
-		}
-	}
-	printf("corner count: %i\n", count);
-	
-	imshow("corners", norm_scaled);
+	convertScaleAbs(norm, dst);
 
-	dst = norm;
+	//dst = norm;
 
 	return;
 }
