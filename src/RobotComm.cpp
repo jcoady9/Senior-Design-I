@@ -2,14 +2,17 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 
 using namespace std;
 const char * filename = "/dev/ttyUSB0";
+
+int checkSum; 
 /*
 **method for sending coordinates to the robocontroller
 **x1 and y1 are the current vertex's coordinates
 **x2 and y2 are the next vertex's coordinates. 
-returns -1 if an
+returns -1 if an error occurs
 */
 void sendCoordinates(int x1, int y1, int x2, int y2){
     FILE *file;
@@ -18,7 +21,7 @@ void sendCoordinates(int x1, int y1, int x2, int y2){
     if(!file){
 	cout << "Couldn't open file: Switching ports..." << "\n"; 
 	filename = "/dev/ttyUSB1";
-	file = fopen(filename,"a");  //Opening device file(/dev/ttyUSB0or1) 
+	file = fopen(filename,"w");  //Opening device file(/dev/ttyUSB0or1) 
 
 	if(!file){
 		cout << "Couldn't open file: Switching ports..." << "\n";
@@ -30,7 +33,11 @@ void sendCoordinates(int x1, int y1, int x2, int y2){
 	}
 
     } 
-	fprintf(file,"%d,%d,%d,%d\n",x1,y1,x2,y2); //Writing to the file. Seperate coordinates using commas
+	
+	fprintf(file, "%d,%d,%d,%d\n",x1,y1,x2,y2); //Writing to the file. Seperate coordinates using commas
+	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "\n";
+	checkSum = x1+y1+y2+x2; 
+	fprintf(file, "DONE(%d)\n",checkSum);
 	fflush(file);//send the message 
 	fclose(file);
 }
@@ -68,12 +75,27 @@ int receiveACK(){
     //End of file reached, close stream
     filestream.close(); 
 
-    //Check to see if the lat line is "DONE"
+	//convert checkSum to a string so it can be checked
+	ostringstream convert; 
+	convert << checkSum; 
+	string checkint = convert.str();
+	string check = "DONE(";
+	check.append(checkint); 
+	check.append(")");
+
+	cout << "lastline = " << lastLine << "\n"; 
+	std::size_t pos = check.find("DONE");
+
+    //Check to see if the lat line is "DONE(checksum)"
     //if it is not, then the Robot arm is not finished drawing
-    if(lastLine== "DONE"){
+
+    if(pos == std::string::npos){//DONE not written yet
+	return -1;
+    }
+    else if(lastLine == check){
 	 return 0;
     }else{
-	return -1; 
+	return -3; //checksum did not match
     }
     
 }

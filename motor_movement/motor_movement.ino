@@ -1,29 +1,41 @@
 #include <BioloidController.h>
 #include <ax12.h>
 #include <Motors2.h>
+#include <stdlib.h>
 
 // we always need to create an instance of the bioloid control, usually with baud = 1Mbps.
 BioloidController bioloid = BioloidController(1000000);
 
+<<<<<<< HEAD
 int i;
 const int NUMBER_OF_FIELDS = 3; // how many comma separated fields we expect
 int fieldIndex = 0;            // the current field being received
 int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
+=======
+int i, num;
+char input;
+int buff[10]= {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+int points[4]; 
+int j,p;
+>>>>>>> 8b7fe066a026ff71352695d99a527d81cd1ac4d7
 
 void setup(){
     i = 512;
+    j=-1;
+    p=0;
     SetPosition(3, 450);
     Serial.begin(9600); //start serial communications at 38400bps
 }
 
 void loop(){
     // set AX-12 servo with ID=1, to position i, where 0=<i<950 because of extention
+  
   readCoordinates();
-  while(i<600){
+  /*while(i<600){
      delay(35);
      SetPosition(1,i);
      SetPosition(2,i);
-     i++;
+     i++;*/
         int inByte = Serial.read();
         switch (inByte)
         {
@@ -40,7 +52,7 @@ void loop(){
             penDown();
             break;      
       }
-   }
+   /*}
    
    while(i>400){
        int inByte = Serial.read();
@@ -65,7 +77,7 @@ void loop(){
        SetPosition(1,i);
        SetPosition(2,i);
        i--;
-     }
+     }*/
 }
 
 void relaxArm(){
@@ -85,18 +97,16 @@ void penDown(){
 
 void readCoordinates(){
   
-int input;
-int buff[5];
-int j=-1;
-while(j<5){
-  if(Serial.available()>0){
+  while(Serial.available()>0)
+    {
           input=Serial.read();
-          Serial.println("hello");
-          if(input==','){
-              j=-1; 
-              Serial.println("hello?");
+   
+          if(input == ','){
+             num = calc();
+            j=-1;
           }else{
               j++;
+<<<<<<< HEAD
               buff[j]=input;
           }
   }else{
@@ -148,3 +158,31 @@ int determineLineLength(){
   */
 
 
+=======
+              buff[j]= input;
+              points[p] =  input - '0'; 
+              //Serial.print("P= ");
+             // Serial.println(points[p]);
+              p++; 
+         }
+          
+    }
+    int checksum = points[p] + points[p] + points[p] + points[p];
+    Serial.write("DONE(");
+    Serial.print(checksum);
+    Serial.print(")\n");
+    Serial.flush();
+}
+
+//methond to convert char to an int
+int calc()
+{
+  int num=0,x=0;
+ 
+    for(x;x<=j;x++){
+          num=num+(buff[x]-48)*pow(10,j-x);
+    }     
+     
+    return num;
+}
+>>>>>>> 8b7fe066a026ff71352695d99a527d81cd1ac4d7
