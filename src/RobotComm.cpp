@@ -5,7 +5,7 @@
 #include <sstream>
 
 using namespace std;
-const char * filename = "/dev/ttyUSB0";
+const char * filename = "testOutput.txt";
 
 int checkSum; 
 /*
@@ -16,7 +16,7 @@ returns -1 if an error occurs
 */
 void sendCoordinates(int x1, int y1, int x2, int y2){
     FILE *file;
-    file = fopen(filename,"a");  //Opening device file(/dev/ttyUSB0)
+    file = fopen(filename,"w");  //Opening device file(/dev/ttyUSB0)
 
     if(!file){
 	cout << "Couldn't open file: Switching ports..." << "\n"; 
