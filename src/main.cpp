@@ -26,20 +26,21 @@ int main(int argc, char** argv){
 	//open a window to display the image and enter any key to close the window
 	imshow("Source Image", img);
 
-	//corner detection
-	Mat dst;
-	detectCorners(img, dst);
-	imshow("corner detection", dst);
-
 	//Hough Line Transformation
 	cv::vector<cv::Vec4i> lines = lineDetection(img);
 	
+	Size imgSize = img.size();
+
+	printf("Image Dimensions: %i x %i\n", imgSize.width, imgSize.height);
+
 	for( size_t i = 0; i < lines.size(); i++ )
 	{
 		cv::Vec4i l = lines[i];	
 		printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
 		//line( bw, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 1, CV_AA);
 	}
+
+	
 
 	waitKey(0);
 

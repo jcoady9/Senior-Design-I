@@ -8,7 +8,14 @@
 #define T_DELTA 0.05
 
 
-//corner detection
+/**
+
+ * performs harris corner detection on an image
+ *
+ *@param src the source image
+ *
+ *@param reference to the image with the corner detection
+*/
 void detectCorners(cv::Mat src, cv::Mat & dst){
 	
 	cv::Mat gray_scale, norm, norm_scaled;
@@ -31,7 +38,14 @@ void detectCorners(cv::Mat src, cv::Mat & dst){
 	return;
 }
 
-//line detection
+/**
+ * detects straight lines in an image
+ *
+ * @param img	the image to perform line detection on
+
+ * @return a vector with the cartesian coordinates of any detected line segments' endpoints
+ *
+*/
 cv::vector<cv::Vec4i> lineDetection(cv::Mat src){
 
 	cv::Mat dst, bw;
@@ -44,9 +58,11 @@ cv::vector<cv::Vec4i> lineDetection(cv::Mat src){
 	cv::threshold(dst, bw, 10, 255, CV_THRESH_BINARY_INV);
 	
 	//make the line thinner
-	thinning(bw);	
+	thinning(bw);
 
-	//
+	imshow("Thinning", bw);
+
+	//perform probabalistic hough line transformation storing any line segment endpoints in the lines vector
 	cv::vector<cv::Vec4i> lines;
 	cv::HoughLinesP(bw, lines, 1, CV_PI/180, 50, 50, 10 );
 	
