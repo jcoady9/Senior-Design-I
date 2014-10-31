@@ -21,9 +21,10 @@ void setup(){
 }
 
 void loop(){
-    // set AX-12 servo with ID=1, to position i, where 0=<i<950 because of extention
-  
-  readCoordinates();
+
+  if(Serial.available()>0){
+    readCoordinates();
+  }
   /*while(i<600){
      delay(35);
      SetPosition(1,i);
@@ -107,11 +108,12 @@ void readCoordinates(){
          }
           
     }
-    int checksum = points[p] + points[p] + points[p] + points[p];
-    Serial.write("DONE(");
-    Serial.print(checksum);
-    Serial.print(")\n");
-    Serial.flush();
+    int checksum = points[0] + points[1] + points[2] + points[3];
+    //Serial.write("DONE(");
+    //Serial.write("1");
+   // Serial.write(")\n");
+   // Serial.flush();
+   // Serial.end();
 }
 
 //methond to convert char to an int

@@ -1,13 +1,17 @@
 #include "../include/RobotComm.h"
 #include <iostream>
+#include <fcntl.h> 
 #include <fstream>
 #include <string>
+#include <unistd.h>
 #include <sstream>
 
 using namespace std;
-const char * filename = "/dev/ttyUSB0";
+//using namespace LibSerial;
 
-int checkSum; 
+const char * filename = "testoutput.txt";
+int checkSum;
+ 
 /*
 **method for sending coordinates to the robocontroller
 **x1 and y1 are the current vertex's coordinates
@@ -16,7 +20,7 @@ returns -1 if an error occurs
 */
 void sendCoordinates(int x1, int y1, int x2, int y2){
     FILE *file;
-    file = fopen(filename,"a");  //Opening device file(/dev/ttyUSB0)
+    file = fopen(filename,"w");  //Opening device file(/dev/ttyUSB0)
 
     if(!file){
 	cout << "Couldn't open file: Switching ports..." << "\n"; 
@@ -84,7 +88,7 @@ int receiveACK(){
 	check.append(")");
 
 	cout << "lastline = " << lastLine << "\n"; 
-	std::size_t pos = check.find("DONE");
+	std::size_t pos = lastLine.find("DONE");
 
     //Check to see if the lat line is "DONE(checksum)"
     //if it is not, then the Robot arm is not finished drawing
@@ -99,3 +103,55 @@ int receiveACK(){
     }
     
 }
+
+/*
+**Method prototype for checking if coordinates were recieved properly through a serialStream. 
+**returns -1 if coordinates did not match, -2 if robot disconnected, -3 if wrong coordinates
+*/
+int receiveACKSerial(){
+
+	char data[64]; 
+	int file = open(filename, O_RDONLY);
+
+	if(file < 0){
+		cout << "Error closing file"  << "\n"; 
+		return -2; 
+	}
+
+	int e = read(file, data, 64);
+	if(e<0){
+		cout << "Error reading file"  << "\n"; 
+		return -2; 
+	}
+	string  ack = data; 
+	
+	if(close(file) < 0){
+		cout << "Error closing file"  << "\n"; 
+		return -2; 
+	}
+	//convert checkSum to a string so it can be checked
+	ostringstream convert; 
+	convert << checkSum; 
+	string checkint = convert.str();
+	string check = "DONE(";
+	check.append(checkint); 
+	check.append(")\n");
+
+	std::size_t pos = ack.find("DONE(");
+	
+	if(pos == std::string::npos){//DONE not written yet
+		return -1;
+   	}else{//Done is written, check for checksum
+		string ack2 = ack.substr(pos);
+		if(ack2.compare(check) == 0){
+			cout << "Points recieved!!"  << "\n"; 
+			return 0; //ack recieved
+		}else{
+			return -3; //checksum did not match
+		}
+	}
+	return -2;//if this is reached, then there was an error in the program. 
+
+}
+
+

@@ -30,7 +30,7 @@ void DFS_Visit(Vertex* v)//visit all other vertices associated with current vert
 			while(!done){
 				usleep(1000);//check if drawing is done every 10ms	
 				int response = -5;
-				response = receiveACK();
+				response = receiveACKSerial();
 				if(response == 0){
 					done = true; 
 				}else if(response == -2){
