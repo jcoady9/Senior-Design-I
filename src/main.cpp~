@@ -10,7 +10,7 @@ int main(int argc, char** argv){
 	
 	//make sure path to the image was entered
 	if(argc < 2){
-		printf("Missing Arguments. Did you forget to add the path of the image?\n\n");
+		printf("Missing Arguements. Did you forget to add the path of the image?\n\n");
 		exit(EXIT_FAILURE);
 	}
 

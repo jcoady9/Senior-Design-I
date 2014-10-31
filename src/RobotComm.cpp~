@@ -7,6 +7,11 @@
 #include <sstream>
 
 using namespace std;
+<<<<<<< HEAD
+//using namespace LibSerial;
+=======
+const char * filename = "testOutput.txt";
+>>>>>>> 27ebcd6cc7320140c3809fcb6b81ae71ee97dc9a
 
 const char * filename = "testoutput.txt";
 int checkSum;
