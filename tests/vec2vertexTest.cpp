@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stddef.h>
-#include "../include/dfs.h"
 #include "../include/vertex.h"
 #include "../include/line.h"
 #include "../include/vec2vertex.h"
@@ -19,9 +18,14 @@ int main()
 	
 	//Run vec2vertex
 	Vertex* test = vec2Vertex(vec);
+
+	int points1[2];
+	int points2[2];
+	test->getPoint(points1);//current vertex
+	test->getLine(0)->getVertex()->getPoint(points2); //next vertex
 	
-	printf("v1: %i\n", test->getVisited());
-	printf("v2: %i\n", test->getLine(0)->getVertex()->getVisited());
+	printf("v1: %i , %i\n", points1[0], points1[1]);
+	printf("v2: %i , %i\n", points2[0], points2[1]);
 	
 	printf("-----------------------------------------------\n");
 	printf("\t\tEnd of test.\n");

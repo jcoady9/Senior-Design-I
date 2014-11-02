@@ -1,9 +1,8 @@
 //vec2vertex.cpp
-//Convert Vec4i into verticies.  Run verticies through DFS.
+//Convert Vec4i into verticies. 
 
 #include <stdio.h>
 #include <stddef.h>
-#include "../include/dfs.h"
 #include "../include/vertex.h"
 #include "../include/line.h"
 #include "../include/vec2vertex.h"
