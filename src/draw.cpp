@@ -28,13 +28,13 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 	while(!done){
 		usleep(1000);//check if drawing is done every 10ms	
 			int response = -5;
-			response = receiveACK();
+			response = receiveACKSerial();
 		if(response == 0){
 			done = true; 
 		}else if(response == -2){
 			exit(0);
 		}else if(response == -3){
-			printf("Wrong Checksum. Resending...");
+			printf("Wrong Checksum. Resending...\n");
 			sendCoordinates(points1[0], points1[1], points2[0], points2[1]);
 			done = false;
 		}

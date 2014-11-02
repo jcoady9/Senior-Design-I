@@ -3,10 +3,10 @@
 
 
 using namespace std;
-const char * filename = "testOutput.txt";
+const char * fileName = "testOutput.txt";
 
 int drawLine() {
-	FILE *file;
+	/*FILE *file;
 	file = fopen(filename,"w"); 
 
 	if(!file){
@@ -30,5 +30,6 @@ int drawLine() {
 
 	//End of file reached, close stream
 	filestream.close(); 
-
+*/
+return 0; 
 }

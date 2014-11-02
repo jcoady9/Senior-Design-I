@@ -29,7 +29,7 @@ void sendCoordinates(int x1, int y1, int x2, int y2){
 	if(!file){
 		cout << "Couldn't open file: Switching ports..." << "\n";
 		filename = "dev/ttyS0"; 
-		file = fopen(filename,"a");  //Opening device file(/dev/ttyUSB0or1) 	
+		file = fopen(filename,"w");  //Opening device file(/dev/ttyUSB0or1) 	
 		if(!file){
 			cout << "Please make sure robot is connected." << "\n";
 		}
@@ -86,7 +86,7 @@ int receiveACK(){
 	check.append(checkint); 
 	check.append(")");
 
-	cout << "lastline = " << lastLine << "\n"; 
+	cout << "Acknowledgement = " << lastLine << "\n"; 
 	std::size_t pos = lastLine.find("DONE");
 
     //Check to see if the lat line is "DONE(checksum)"
@@ -109,7 +109,7 @@ int receiveACK(){
 */
 int receiveACKSerial(){
 
-	char data[64]; 
+	char data[32]; 
 	int file = open(filename, O_RDONLY);
 
 	if(file < 0){
@@ -117,13 +117,13 @@ int receiveACKSerial(){
 		return -2; 
 	}
 
-	int e = read(file, data, 64);
+	int e = read(file, data, 32);
 	if(e<0){
 		cout << "Error reading file"  << "\n"; 
 		return -2; 
 	}
 	string  ack = data; 
-	
+	//cout << "Acknowledgement received: "<< ack  << "\n"; 
 	if(close(file) < 0){
 		cout << "Error closing file"  << "\n"; 
 		return -2; 
@@ -136,19 +136,24 @@ int receiveACKSerial(){
 	check.append(checkint); 
 	check.append(")\n");
 
-	std::size_t pos = ack.find("DONE(");
+	std::size_t pos = ack.find(check);
 	
-	if(pos == std::string::npos){//DONE not written yet
-		return -1;
-   	}else{//Done is written, check for checksum
-		string ack2 = ack.substr(pos);
-		if(ack2.compare(check) == 0){
+
+	if(pos == std::string::npos){
+		std::size_t pos2 = ack.find("DONE(");
+		if(pos2 == std::string::npos){
+			return -1;//DONE not written yet
+		}else{
+			return -3; 
+		}
+		
+   	}else if(pos != std::string::npos){//Done is written, check for checksum
 			cout << "Points recieved!!"  << "\n"; 
 			return 0; //ack recieved
-		}else{
-			return -3; //checksum did not match
-		}
+	}else{
+		return -3; //checksum did not match
 	}
+	
 	return -2;//if this is reached, then there was an error in the program. 
 
 }
