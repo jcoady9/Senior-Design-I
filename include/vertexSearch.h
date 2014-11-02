@@ -12,6 +12,8 @@ void detectCorners(cv::Mat src, cv::Mat & dst);
 //line detection
 cv::vector<cv::Vec4i> lineDetection(cv::Mat src);
 
+void contourDetection(cv::Mat src);
+
 cv::vector<cv::Vec2f> findLineFamily(cv::Mat graySrc);
 cv::vector<cv::Vec4f> mergeLines(cv::vector<cv::Vec4i> lines, cv::vector<cv::Vec2f> line_family);
 void vectorSort(cv::vector<cv::Vec2f> &vec);

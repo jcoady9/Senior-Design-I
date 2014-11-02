@@ -69,6 +69,30 @@ cv::vector<cv::Vec4i> lineDetection(cv::Mat src){
 	return lines;
 }
 
+void contourDetection(cv::Mat src){
+
+	cv::vector< cv::vector<cv::Point> > contours;
+	cv::vector<cv::Vec4i> hierarchy;
+	cv::RNG rng(12345);
+
+	cv::cvtColor(src, src, CV_BGR2GRAY);
+
+	Canny(src, src, 100, 200, 3);
+
+	findContours(src, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
+	
+	cv::Mat draw_contours = cv::Mat::zeros(src.size(), CV_8UC3);
+	for(size_t i = 0; i < contours.size(); i++){
+	
+		cv::Scalar color = cv::Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
+		drawContours(draw_contours, contours, i, color, 2, 8, hierarchy, 0, cv::Point());
+
+	}
+
+	imshow("curved lines?", draw_contours);
+
+}
+
 /**
  * Based off of code found from here: http://opencv-code.com/quick-tips/implementation-of-thinning-algorithm-in-opencv/
  *

@@ -40,7 +40,7 @@ int main(int argc, char** argv){
 		//line( bw, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 1, CV_AA);
 	}
 
-	
+	contourDetection(img);
 
 	waitKey(0);
 
