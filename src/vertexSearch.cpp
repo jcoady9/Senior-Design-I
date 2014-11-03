@@ -8,7 +8,14 @@
 #define T_DELTA 0.05
 
 
-//corner detection
+/**
+
+ * performs harris corner detection on an image
+ *
+ *@param src the source image
+ *
+ *@param reference to the image with the corner detection
+*/
 void detectCorners(cv::Mat src, cv::Mat & dst){
 	
 	cv::Mat gray_scale, norm, norm_scaled;
@@ -31,7 +38,14 @@ void detectCorners(cv::Mat src, cv::Mat & dst){
 	return;
 }
 
-//line detection
+/**
+ * detects straight lines in an image
+ *
+ * @param img	the image to perform line detection on
+
+ * @return a vector with the cartesian coordinates of any detected line segments' endpoints
+ *
+*/
 cv::vector<cv::Vec4i> lineDetection(cv::Mat src){
 
 	cv::Mat dst, bw;
@@ -44,13 +58,39 @@ cv::vector<cv::Vec4i> lineDetection(cv::Mat src){
 	cv::threshold(dst, bw, 10, 255, CV_THRESH_BINARY_INV);
 	
 	//make the line thinner
-	thinning(bw);	
+	thinning(bw);
 
-	//
+	imshow("Thinning", bw);
+
+	//perform probabalistic hough line transformation storing any line segment endpoints in the lines vector
 	cv::vector<cv::Vec4i> lines;
 	cv::HoughLinesP(bw, lines, 1, CV_PI/180, 50, 50, 10 );
 	
 	return lines;
+}
+
+void contourDetection(cv::Mat src){
+
+	cv::vector< cv::vector<cv::Point> > contours;
+	cv::vector<cv::Vec4i> hierarchy;
+	cv::RNG rng(12345);
+
+	cv::cvtColor(src, src, CV_BGR2GRAY);
+
+	Canny(src, src, 100, 200, 3);
+
+	findContours(src, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
+	
+	cv::Mat draw_contours = cv::Mat::zeros(src.size(), CV_8UC3);
+	for(size_t i = 0; i < contours.size(); i++){
+	
+		cv::Scalar color = cv::Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
+		drawContours(draw_contours, contours, i, color, 2, 8, hierarchy, 0, cv::Point());
+
+	}
+
+	imshow("curved lines?", draw_contours);
+
 }
 
 /**
