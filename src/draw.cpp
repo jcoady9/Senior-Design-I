@@ -3,6 +3,7 @@
 #include "../include/vertex.h"
 #include "../include/line.h"
 #include "../include/RobotComm.h"
+#include "../include/drawLine.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -20,7 +21,7 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 
 	//Send the vertices coordinates to the robot through its port file
 	sendCoordinates(points1[0], points1[1], points2[0], points2[1]);
-
+	drawPic();
 	temp->setVisited(1);//vertex is being processed, used for debugging
 
 	//hold until the last line has been drawn
@@ -43,4 +44,5 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 	//current vertex's line array has been completed, therefore this vertex is complete	
 	temp->getLine(0)->getVertex()->setVisited(2);
 	temp->setVisited(2);
+	
 }

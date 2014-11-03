@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const char * filename = "testoutput.txt";
+const char * filename = "test.txt";
 int checkSum;
  
 /*
@@ -40,7 +40,7 @@ void sendCoordinates(int x1, int y1, int x2, int y2){
 	fprintf(file, "%d,%d,%d,%d\n",x1,y1,x2,y2); //Writing to the file. Seperate coordinates using commas
 	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "\n";
 	checkSum = x1+y1+y2+x2; 
-	fprintf(file, "DONE(%d)\n",checkSum);
+	//fprintf(file, "DONE(%d)\n",checkSum);
 	fflush(file);//send the message 
 	fclose(file);
 }
@@ -123,6 +123,7 @@ int receiveACKSerial(){
 		return -2; 
 	}
 	string  ack = data; 
+
 	//cout << "Acknowledgement received: "<< ack  << "\n"; 
 	if(close(file) < 0){
 		cout << "Error closing file"  << "\n"; 
