@@ -15,7 +15,7 @@ using namespace std;
 
 
 const char * filename1 = "test.txt"; 
-class RobotSimulation: public Simulation
+class drawImageSimulation: public drawImageInterface
 {
 
 void drawPic(){

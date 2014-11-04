@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <fcntl.h> 
+#include <drawImageInterface.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
@@ -15,7 +16,7 @@ using namespace std;
 
 
 const char * filename1 = "test.txt"; 
-class RobotSimulation: public Simulation
+class drawImageSimulation: public drawImageInterface
 {
 
 void drawPic(){
