@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <fcntl.h> 
+#include "../include/drawImageInterface.h"
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
@@ -15,7 +16,7 @@ using namespace std;
 
 
 const char * filename1 = "test.txt"; 
-class RobotSimulation: public Simulation
+class drawImageSimulation: public drawImageInterface
 {
 
 void drawPic(){
@@ -41,6 +42,22 @@ void drawPic(){
 	string coordinates = data; 
 	std::size_t pos = coordinates.find("\n");
 	string cords = coordinates.substr(0,pos);
+	
+	/*ifstream filestream;
+	filestream.open(filename1);
+	string lastLine;
+	filestream.seekg (0, System::io::SeekOrgin::beg); 
+	data[0]=0; 
+	do{ 
+		if(!isspace(data[0]) && data[0] != 0) {
+		    lastLine = data; 
+		}
+		 
+        }while (filestream.getline(data, 256)); 
+
+	//End of file reached, close stream
+	filestream.close(); 
+	*/
 
 	cv::Vec4i vect;
 	
@@ -66,7 +83,9 @@ void drawPic(){
 	check.append(")\n");
 
 	const char*  buf;
-	buf = check.c_str(); 
+	buf = check.c_str();
+
+	//cv::Mat robotImage; 
 	
 	img = cv::imread("black.png", CV_LOAD_IMAGE_COLOR);
 	cv::line(img,cv::Point(vect[0],vect[1]),cv::Point(vect[2],vect[3]),cv::Scalar(0,0,255), 2,CV_AA);
