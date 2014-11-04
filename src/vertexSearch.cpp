@@ -8,6 +8,24 @@
 #define T_DELTA 0.05
 
 
+cv::vector<cv::Vec4i> processImage(cv::Mat image){
+
+	if(image.channels() > 1){
+		cvtColor(image, image, CV_RGB2GRAY);
+	}
+
+	cv::threshold(image, image, 10, 255, CV_THRESH_BINARY_INV);
+
+	thinning(image);
+
+	cv::vector<cv::Vec4i> lines;
+	cv::HoughLinesP(image, lines, 1, CV_PI/180, 50, 50, 10 );
+
+	imshow("image proc", image);
+
+	return lines;
+}
+
 /**
 
  * performs harris corner detection on an image
@@ -83,10 +101,18 @@ void contourDetection(cv::Mat src){
 	
 	cv::Mat draw_contours = cv::Mat::zeros(src.size(), CV_8UC3);
 	for(size_t i = 0; i < contours.size(); i++){
-	
 		cv::Scalar color = cv::Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
 		drawContours(draw_contours, contours, i, color, 2, 8, hierarchy, 0, cv::Point());
+	}
 
+	for(size_t i = 0; i < contours.size(); i++){
+		printf("contour[%i] size: %i\n", (int)i, (int)contours[i].size());
+	}
+
+	printf("hierarchy size: %i\n", (int)hierarchy.size());
+
+	for(size_t i = 0; i < hierarchy.size(); i++){
+		printf("%i, %i, %i, %i\n", hierarchy[i][0], hierarchy[i][1], hierarchy[i][2], hierarchy[i][3]);
 	}
 
 	imshow("curved lines?", draw_contours);

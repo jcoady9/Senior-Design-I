@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<errno.h>
 
-
+/*
 using namespace std;
 const char * filename = "testOutput.txt";
 
@@ -31,4 +31,4 @@ int drawLine() {
 	//End of file reached, close stream
 	filestream.close(); 
 
-}
+}*/
