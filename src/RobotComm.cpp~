@@ -8,7 +8,8 @@
 
 using namespace std;
 
-const char * filename = "test.txt";
+const char * filenametest = "test.txt";//simulation
+const char * filename = "/dev/ttyUSB0";//real
 int checkSum;
  
 /*
@@ -40,7 +41,6 @@ void sendCoordinates(int x1, int y1, int x2, int y2){
 	fprintf(file, "%d,%d,%d,%d\n",x1,y1,x2,y2); //Writing to the file. Seperate coordinates using commas
 	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "\n";
 	checkSum = x1+y1+y2+x2; 
-	//fprintf(file, "DONE(%d)\n",checkSum);
 	fflush(file);//send the message 
 	fclose(file);
 }
@@ -123,13 +123,13 @@ int receiveACKSerial(){
 		return -2; 
 	}
 	string  ack = data; 
-cout << "Data = " << ack  << "\n"; 
 
-	//cout << "Acknowledgement received: "<< ack  << "\n"; 
+	cout << "Acknowledgement received: "<< ack  << "\n"; //see what information is being sent from the robot
 	if(close(file) < 0){
 		cout << "Error closing file"  << "\n"; 
 		return -2; 
 	}
+
 	//convert checkSum to a string so it can be checked
 	ostringstream convert; 
 	convert << checkSum; 
@@ -138,26 +138,25 @@ cout << "Data = " << ack  << "\n";
 	check.append(checkint); 
 	check.append(")\n");
 
+
+	//locate DONE(checksum) in the out put from robot
 	std::size_t pos = ack.find(check);
 	
 
-	if(pos == std::string::npos){
+	if(pos == std::string::npos){//DONE(checksum) not found
 		std::size_t pos2 = ack.find("DONE(");
 		if(pos2 == std::string::npos){
-			return -1;//DONE not written yet
+			return -1;//DONE has not written yet
 		}else{
-			return -3; 
+			return -3; //DONE was written, with the wrong checksum
 		}
 		
-   	}else if(pos != std::string::npos){//Done is written, check for checksum
+   	}else if(pos != std::string::npos){
 			cout << "Points recieved!!"  << "\n"; 
 			return 0; //ack recieved
 	}else{
-		return -3; //checksum did not match
+		return -2;//if this is reached, then there was an error in the program. 
 	}
-	
-	return -2;//if this is reached, then there was an error in the program. 
-
 }
 
 

@@ -13,30 +13,32 @@
 void Draw(Vertex* v)//visit all other vertices associated with current vertex
 {
 	Vertex* temp = v;
-	//run for each line in the current vertex's line array
 	int points1[2];
 	int points2[2];
 	temp->getPoint(points1);//current vertex
 	temp->getLine(0)->getVertex()->getPoint(points2); //next vertex
 
 	//Send the vertices coordinates to the robot through its port file
-	sendCoordinates(points1[0], points1[1], points2[0], points2[1]);
-	drawPic();
+	sendCoordinates(points1[0], points1[1], points2[0], points2[1]);//for file writing
+	//drawPic();//for simulated robots
+
 	temp->setVisited(1);//vertex is being processed, used for debugging
 
 	//hold until the last line has been drawn
-	bool done  = false;  
-	while(!done){
-		usleep(1000);//check if drawing is done every 10ms	
-			int response = -5;
-			response = receiveACKSerial();
+	bool done  = false; 
+	int c = 0;  
+	while(!done && c<10){
+		usleep(50000);//check if drawing is done every 1 second	
+		int response = -5;
+		c++;
+		response = receiveACKSerial();
 		if(response == 0){
-			done = true; 
+			done = true; //right checksum has been recieved
 		}else if(response == -2){
-			exit(0);
+			exit(0);//fatal error happened in communication
 		}else if(response == -3){
-			printf("Wrong Checksum. Resending...\n");
-			sendCoordinates(points1[0], points1[1], points2[0], points2[1]);
+			printf("Wrong Checksum. Resending...\n");//DONE was recieved but checksum was wrong
+			sendCoordinates(points1[0], points1[1], points2[0], points2[1]);//resend
 			done = false;
 		}
 	}
