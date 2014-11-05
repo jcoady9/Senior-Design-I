@@ -11,7 +11,7 @@
 int main(){
 
 	//string array of image filenames
-	std::string filename[NUM_IMAGES] = {"line.png", "diagonal-line.png", "horizontal-lines.jpg", "wovenlines.jpeg"};
+	std::string filename[NUM_IMAGES] = {"images/line.png", "images/diagonal-line.png", "images/horizontal-lines.jpg", "images/wovenlines.jpeg"};
 	cv::Mat src[NUM_IMAGES]; //array of the actual images
 	cv::RNG rng(0); //random number generator so we can make draw each line a different color
 	
