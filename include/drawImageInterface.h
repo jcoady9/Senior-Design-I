@@ -3,7 +3,7 @@
 class drawImageInterface
 {
 	public:
-		virtual void drawPic();
+		virtual void drawPic(FILE* file) = 0;
 	
 
 }

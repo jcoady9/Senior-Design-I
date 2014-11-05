@@ -11,18 +11,19 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include "drawImageSimulator.h"
+
 using namespace std;
 //using namespace cv;
 
 
 const char * filename1 = "test.txt"; 
-class drawImageSimulation: public drawImageInterface
+
+void drawImageSimulator::drawPic(FILE* file)
 {
 
-void drawPic(){
-
-	int file;
-	file = open(filename1, O_RDWR); 
+	//int file;
+	//file = open(filename1, O_RDWR); 
 	cv::Mat img;
 	
 	if(file < 0){

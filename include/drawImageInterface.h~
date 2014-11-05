@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-class Simulation
+class drawImageInterface
 {
 	public:
-		virtual void drawPic();
+		virtual void drawPic() = 0;
 	
 
 }
