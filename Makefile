@@ -23,6 +23,7 @@ test:
 	$(CC) $(CFLAGS) src/vertex.cpp src/line.cpp tests/lineTests.cpp -o linetest
 	$(CC) $(CFLAGS) src/vertex.cpp src/line.cpp src/draw.cpp src/vec2vertex.cpp tests/vec2vertexTest.cpp src/RobotComm.cpp -o vec2vertexTest
 	$(CC) $(CFLAGS) src/vertex.cpp src/line.cpp src/draw.cpp tests/drawTests.cpp src/RobotComm.cpp -o drawtest
+	$(CC) $(CFLAGS) src/vertex.cpp src/line.cpp src/scale.cpp tests/scaleTest.cpp -o scaleTest
 
 #clean the project directory of all object & executable files
 clean:
