@@ -21,8 +21,6 @@ cv::vector<cv::Vec4i> processImage(cv::Mat image){
 	cv::vector<cv::Vec4i> lines;
 	cv::HoughLinesP(image, lines, 1, CV_PI/180, 50, 50, 10 );
 
-	imshow("image proc", image);
-
 	return lines;
 }
 

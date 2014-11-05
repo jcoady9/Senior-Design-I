@@ -6,7 +6,7 @@ CC=g++
 CFLAGS= -Wall -ggdb
 
 EXE= project
-TEST_EXE= vertextest linetest vec2vertexTest drawTest
+TEST_EXE= vertextest linetest vec2vertexTest drawtest imageProcTest
 
 #location directory of opencv library files
 LFLAGS= -L /usr/local/lib
@@ -23,6 +23,7 @@ test:
 	$(CC) $(CFLAGS) src/vertex.cpp src/line.cpp tests/lineTests.cpp -o linetest
 	$(CC) $(CFLAGS) src/vertex.cpp src/line.cpp src/draw.cpp src/vec2vertex.cpp tests/vec2vertexTest.cpp src/RobotComm.cpp -o vec2vertexTest
 	$(CC) $(CFLAGS) src/vertex.cpp src/line.cpp src/draw.cpp tests/drawTests.cpp src/RobotComm.cpp -o drawtest
+	$(CC) $(CFLAGS) src/vertexSearch.cpp tests/imageProcTests.cpp  -o imageProcTest $(LIBS) $(LFLAGS)
 
 #clean the project directory of all object & executable files
 clean:
