@@ -1,5 +1,5 @@
 //vec2vertex.cpp
-//Convert Vec4i into verticies.  Run verticies through DFS.
+//Convert Vec4i into two verticies, then append them.
 
 #include <stdio.h>
 #include <stddef.h>
