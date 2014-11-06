@@ -6,12 +6,12 @@
 
 #include "../include/vertexSearch.h"
 
-#define NUM_IMAGES 4 //number of images we are using for testing
+#define NUM_IMAGES 6 //number of images we are using for testing
 
 int main(){
 
 	//string array of image filenames
-	std::string filename[NUM_IMAGES] = {"images/line.png", "images/diagonal-line.png", "images/horizontal-lines.jpg", "images/wovenlines.jpeg"};
+	std::string filename[NUM_IMAGES] = {"images/line.png", "images/diagonal-line.png", "images/horizontal-lines.jpg", "images/wovenlines.jpeg", "images/curved-line.png", "images/two.jpg"};
 	cv::Mat src[NUM_IMAGES]; //array of the actual images
 	cv::RNG rng(0); //random number generator so we can make draw each line a different color
 	
@@ -46,15 +46,34 @@ int main(){
 			cv::Scalar line_color = cv::Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
 			cv::line(src[i], cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), line_color, 1, CV_AA);
 		}
-		
-		//cv::imshow(" after processing",src[i]);
 
 	}
 
-	cv::imshow("image[0]", src[0]);
-	cv::imshow("image[1]", src[1]);
-	cv::imshow("image[2]", src[2]);
-	cv::imshow("image[3]", src[3]);
+	//cv::imshow("image[0]", src[0]);
+	//cv::imshow("image[1]", src[1]);
+	//cv::imshow("image[2]", src[2]);
+	//cv::imshow("image[3]", src[3]);
+	//cv::imshow("image[4]", src[4]);
+	cv::imshow("image[4]", src[5]);
+
+
+	printf("=================================\n");
+	printf("detect curved line Tests.\n");
+	printf("=================================\n");
+
+	cv::Mat curve_img = cv::imread("images/curved-line.png", CV_LOAD_IMAGE_COLOR);
+	cv::Mat x_img = cv::imread("images/diagonal-line.png", CV_LOAD_IMAGE_COLOR);
+	cv::Mat two_img = cv::imread("images/two.jpg", CV_LOAD_IMAGE_COLOR);
+
+	if(curve_img.empty() || x_img.empty()){
+	    printf("'%s' is empty.\n\n", "diagonal-line.png");
+	    exit(1);
+	}
+
+	//contourDetection(curve_img);
+	//contourDetection(x_img);
+	contourDetection(two_img);
+
 
 	cv::waitKey(0);
 

@@ -90,13 +90,17 @@ void contourDetection(cv::Mat src){
 	cv::vector< cv::vector<cv::Point> > contours;
 	cv::vector<cv::Vec4i> hierarchy;
 	cv::RNG rng(12345);
+	
+	printf("channels: %i\n", src.channels());
 
-	cv::cvtColor(src, src, CV_BGR2GRAY);
+	if(src.channels() > 1){
+		cv::cvtColor(src, src, CV_BGR2GRAY);
+	}
 
 	Canny(src, src, 100, 200, 3);
-
-	findContours(src, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
 	
+	findContours(src, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
+	/*
 	cv::Mat draw_contours = cv::Mat::zeros(src.size(), CV_8UC3);
 	for(size_t i = 0; i < contours.size(); i++){
 		cv::Scalar color = cv::Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
@@ -105,15 +109,20 @@ void contourDetection(cv::Mat src){
 
 	for(size_t i = 0; i < contours.size(); i++){
 		printf("contour[%i] size: %i\n", (int)i, (int)contours[i].size());
+		cv::vector<cv::Point> point_vec = contours[i];
+		for(int j = 0; j < (int)contours[i].size(); j++){
+			cv::Point point = point_vec[j];
+			printf("[%i]:(%i, %i)\n", j, point.x, point.y);
+		}
 	}
-
+	*/
 	printf("hierarchy size: %i\n", (int)hierarchy.size());
-
+	/*
 	for(size_t i = 0; i < hierarchy.size(); i++){
 		printf("%i, %i, %i, %i\n", hierarchy[i][0], hierarchy[i][1], hierarchy[i][2], hierarchy[i][3]);
 	}
-
-	imshow("curved lines?", draw_contours);
+	*/
+	imshow("curved lines?", src);
 
 }
 
