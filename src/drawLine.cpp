@@ -15,8 +15,6 @@ using namespace std;
 
 
 const char * filename1 = "test.txt"; 
-class RobotSimulation: public Simulation
-{
 
 void drawPic(){
 
@@ -88,4 +86,4 @@ void drawPic(){
 	
 }	
 
-}
+

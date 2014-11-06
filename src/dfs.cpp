@@ -9,7 +9,7 @@
 
 //Accepts first vertex and accesses all other via the Line's next vertex functionality.
 void DFS_Visit(Vertex* v)//visit all other vertices associated with current vertex
-{
+{/*
 	printf("OOPSIES");
 	
 	Vertex* temp = v;
@@ -47,7 +47,7 @@ void DFS_Visit(Vertex* v)//visit all other vertices associated with current vert
 
 
 void CoodinateSend(int x1, int y1, int x2, int y2){
-/*Send the vertices coordinates to the robot through its port file
+Send the vertices coordinates to the robot through its port file
 			sendCoordinates(x1, y1, x2, y2);
 
 			//temp->setVisited(1);//vertex is being processed, used for debugging
@@ -67,6 +67,7 @@ void CoodinateSend(int x1, int y1, int x2, int y2){
 				}
 				
 			}*/
+
 }
 
 
