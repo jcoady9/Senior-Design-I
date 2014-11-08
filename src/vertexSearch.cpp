@@ -7,51 +7,21 @@
 #define R_DELTA 12
 #define T_DELTA 0.05
 
-
+/*
+*/
 cv::vector<cv::Vec4i> processImage(cv::Mat image){
-
+	
+	//convert image to grayscale if not done already
 	if(image.channels() > 1){
 		cvtColor(image, image, CV_RGB2GRAY);
 	}
 
-	cv::threshold(image, image, 10, 255, CV_THRESH_BINARY_INV);
+	//detect any straight lines in the image
+	cv::vector<cv::Vec4i> lines = lineDetection(image);
 
-	thinning(image);
-
-	cv::vector<cv::Vec4i> lines;
-	cv::HoughLinesP(image, lines, 1, CV_PI/180, 50, 50, 10 );
+	cv::imshow("thinning", image);
 
 	return lines;
-}
-
-/**
-
- * performs harris corner detection on an image
- *
- *@param src the source image
- *
- *@param reference to the image with the corner detection
-*/
-void detectCorners(cv::Mat src, cv::Mat & dst){
-	
-	cv::Mat gray_scale, norm, norm_scaled;
-
-	cvtColor(src, gray_scale, CV_BGR2GRAY);
-
-	dst = cv::Mat::zeros(src.size(), CV_32FC1);
-
-	int block_size = 5;
-	int aperature_size = 3;
-	double hfp = 0.04;
-
-	cornerHarris(gray_scale, dst, block_size, aperature_size, hfp, cv::BORDER_DEFAULT);
-
-	normalize(dst, norm, 0, 255, cv::NORM_MINMAX, CV_8UC1, cv::Mat());
-	convertScaleAbs(norm, dst);
-
-	//dst = norm;
-
-	return;
 }
 
 /**
@@ -62,68 +32,67 @@ void detectCorners(cv::Mat src, cv::Mat & dst){
  * @return a vector with the cartesian coordinates of any detected line segments' endpoints
  *
 */
-cv::vector<cv::Vec4i> lineDetection(cv::Mat src){
+cv::vector<cv::Vec4i> lineDetection(cv::Mat & src){
 
-	cv::Mat dst, bw;
+	if(src.channels() > 1){
+		cv::cvtColor(src, src, CV_RGB2GRAY);
+	}
 
-	detectCorners(src, dst);
-	
-	//convert image to gray-scale
-	cv::cvtColor(src, bw, CV_BGR2GRAY);
+	cv::threshold(src, src, 10, 255, CV_THRESH_BINARY_INV);
 
-	cv::threshold(dst, bw, 10, 255, CV_THRESH_BINARY_INV);
-	
-	//make the line thinner
-	thinning(bw);
+	thinning(src);
 
-	imshow("Thinning", bw);
-
-	//perform probabalistic hough line transformation storing any line segment endpoints in the lines vector
 	cv::vector<cv::Vec4i> lines;
-	cv::HoughLinesP(bw, lines, 1, CV_PI/180, 50, 50, 10 );
+	cv::HoughLinesP(src, lines, 1, CV_PI/180, 50, 50, 10 );
 	
 	return lines;
 }
 
-void contourDetection(cv::Mat src){
+/*
+ *
+ *
+*/
+void contourDetection(cv::Mat src, cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> & hierarchy){
 
-	cv::vector< cv::vector<cv::Point> > contours;
-	cv::vector<cv::Vec4i> hierarchy;
 	cv::RNG rng(12345);
-	
-	printf("channels: %i\n", src.channels());
 
 	if(src.channels() > 1){
 		cv::cvtColor(src, src, CV_BGR2GRAY);
 	}
 
 	Canny(src, src, 100, 200, 3);
-	
+
 	findContours(src, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
-	/*
+
 	cv::Mat draw_contours = cv::Mat::zeros(src.size(), CV_8UC3);
 	for(size_t i = 0; i < contours.size(); i++){
 		cv::Scalar color = cv::Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
 		drawContours(draw_contours, contours, i, color, 2, 8, hierarchy, 0, cv::Point());
 	}
 
-	for(size_t i = 0; i < contours.size(); i++){
-		printf("contour[%i] size: %i\n", (int)i, (int)contours[i].size());
-		cv::vector<cv::Point> point_vec = contours[i];
-		for(int j = 0; j < (int)contours[i].size(); j++){
-			cv::Point point = point_vec[j];
-			printf("[%i]:(%i, %i)\n", j, point.x, point.y);
-		}
-	}
-	*/
-	printf("hierarchy size: %i\n", (int)hierarchy.size());
-	/*
+	
 	for(size_t i = 0; i < hierarchy.size(); i++){
 		printf("%i, %i, %i, %i\n", hierarchy[i][0], hierarchy[i][1], hierarchy[i][2], hierarchy[i][3]);
 	}
-	*/
-	imshow("curved lines?", src);
+	
+	for(int i = 0; i < (int)contours[0].size(); i++){
+		cv::vector<cv::Point> p_vec = contours[0];
+		cv::Point p = p_vec[i];
+		circle(draw_contours, p, 5, cv::Scalar(0, 255, 0));
+		printf("[%i] (%i, %i)\n", i, p.x, p.y);
+	}
+	
+	for(int i = 0; i < (int)contours[1].size(); i++){
+		cv::vector<cv::Point> p_vec = contours[1];
+		cv::Point p = p_vec[i];
+		circle(draw_contours, p, 5, cv::Scalar(0, 0, 255));
+	}
 
+	printf("hierarchy size: %i\n", (int)hierarchy.size());
+	printf("size: %i\n", (int)contours.size());
+
+	imshow("curved lines?", draw_contours);
+	
 }
 
 /**
@@ -200,139 +169,6 @@ void thinning(cv::Mat& im)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-cv::vector<cv::Vec2f> findLineFamily(cv::Mat graySrc){
-	
-	cv::vector<cv::Vec2f> lines;	
-
-	HoughLines(graySrc, lines, 1, CV_PI/180, 100, 0, 0 );
-
-
-	for(size_t i = 0; i < lines.size(); i++){
-		printf("(%f, %f)\n", lines[i][0], lines[i][1]);
-	}
-	
-	vectorSort(lines);
-
-	cv::vector<cv::Vec2f> line_family;
-
-	int line_family_count = 0;
-	int count = 1;
-
-	while(!lines.empty()){
-
-		line_family.push_back(lines.back());
-
-		cv::Vec2f line = lines.back();
-		printf("%f \n",  line[0]);	
-	
-		lines.pop_back();
-		lines.pop_back();
-
-		//cv::Vec2f line = lines.back();
-		printf("%f \n",  line[0]);
-
-		cv::Vec2f tmp = line_family[line_family_count];
-		for(size_t i = lines.size(); i > 0; i--){
-
-			if(inRange(tmp, lines[i])){
-
-				printf("R: %f before. %f \n", line_family[line_family_count][0], lines[i][0]);
-				line_family[line_family_count][0] += lines[i][0];
-				printf("R: %f . \n", line_family[line_family_count][0]);
-
-				printf("THETA: %f before. \n", line_family[line_family_count][1]);
-				line_family[line_family_count][1] += lines[i][1];	
-				printf("THETA: %f \n", line_family[line_family_count][1]);
-
-				lines.pop_back();			
-				count++;
-				
-
-				//printf("R_avg: %f \n", line_family[line_family_count][0] / 2);
-				//printf("T_avg: %f \n", line_family[line_family_count][1] / 2);
-
-			}
-		}
-
-		line_family[line_family_count][0] /= count;
-		printf("R_avg_final: %f \n", line_family[line_family_count][0]);
-
-		line_family[line_family_count][1] /= count;
-		printf("T_avg_final: %f \n", line_family[line_family_count][1]);
-
-		line_family_count++;
-		count = 1;
-
-	}
-
-	printf("\n");
-	
-	for(size_t i = 0; i < line_family.size(); i++){
-		printf("(%f, %f)\n", line_family[i][0], line_family[i][1]);
-	}
-	
-	return line_family;
-}
-
-cv::vector<cv::Vec4f> mergeLines(cv::vector<cv::Vec4i> lines, cv::vector<cv::Vec2f> line_family){
-	
-	for(size_t i = 0; i < line_family.size(); i++){
-		cv::Vec2f point;
-		point[0] = line_family[i][0] * cos(line_family[i][1]);
-		point[1] = line_family[i][0] * sin(line_family[i][1]);
-	}	
-	
-	cv::vector<cv::Vec4f> ret;
-	return ret;
-}
-
-void vectorSort(cv::vector<cv::Vec2f> &vec){
-	
-	printf("size: %i\n", (int) vec.size());
-	printf("current capacity: %i\n", (int) vec.capacity());
-
-	if(vec.capacity() > vec.size()){
-		vec.resize(vec.size(), cv::Vec2f());
-		printf("new capacity: %i\n", (int) vec.capacity());
-	}
-	
-	
-	printf("\n");
-	printf("\n");
-
-	insertionSort(vec);
-	//heapsort(vec);
-
-	for(size_t i = 0; i < vec.size(); i++){
-		printf("(%f, %f)\n", vec[i][0], vec[i][1]);
-	}
-	
-}
-
-void insertionSort(cv::vector<cv::Vec2f> &vec){
-	cv::Vec2f temp; 
-	for(size_t i = 0; i < vec.size(); i++){
-		size_t j = i;
-		while(j > 0 && vec[j - 1][0] > vec[j][0]){
-			temp = vec[j];
-			vec[j] = vec[j - 1];
-			vec[j - 1] = temp;
-			j--;
-		}
-	}
-
-}
-
-bool inRange(cv::Vec2f center, cv::Vec2f point){
-	
-	if((point[0] <= center[0] + R_DELTA && point[0] >= center[0] - R_DELTA) ){
-		if((point[1] <= center[1] + T_DELTA && point[1] >= center[1] - T_DELTA)){
-			return true;
-		}
-	}
-
-	return false;
-}
 
 
 
