@@ -2,11 +2,12 @@
 #define DRAWIMAGESIMULATOR_H
 
 #include "drawImageInterface.h"
+#include "../include/vertex.h"
 
 class drawImageSimulator: public drawImageInterface
 {
 public:
-	virtual void drawPic(FILE* file);
+	virtual void drawPic(Vertex vertex); //CHANGE PARAMETER
 
 };
 

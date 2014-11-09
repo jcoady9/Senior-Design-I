@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include "vertex.h"
+
 
 class drawImageInterface
 {
 	public:
-		virtual void drawPic(FILE* file) = 0;
+		virtual void drawPic(Vertex vertex) = 0;
 	
 
 }

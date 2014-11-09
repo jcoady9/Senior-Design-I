@@ -19,11 +19,11 @@ using namespace std;
 
 const char * filename1 = "test.txt"; 
 
-void drawImageSimulator::drawPic()
+void drawImageSimulator::drawPic(FILE* file)
 {
 
-	int file;
-	file = open(filename1, O_RDWR); 
+	//int file;
+	//file = open(filename1, O_RDWR); 
 	cv::Mat img;
 	
 	if(file < 0){
