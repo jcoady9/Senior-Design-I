@@ -7,18 +7,22 @@
 #include <vector>
 #include <string>
 #include <fcntl.h> 
+#include "../include/drawImageInterface.h"
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include "../include/vertex.h"
+#include "../include/line.h"
+
+#include "drawImageSimulator.h"
 
 using namespace std;
 //using namespace cv;
 
 
 const char * filename1 = "test.txt"; 
-class drawImageSimulation: public drawImageInterface
-{
 
-void drawPic(){
+void drawImageSimulator::drawPic(Vertex vertex)
+{
 
 	int file;
 	file = open(filename1, O_RDWR); 
@@ -60,7 +64,7 @@ void drawPic(){
 
 	cv::Vec4i vect;
 	
-	stringstream ss(cords);
+/*	stringstream ss(cords);
 
 	int i;
 	int c = 0;
@@ -71,7 +75,19 @@ void drawPic(){
 	    if (ss.peek() == ',')
 		ss.ignore();
 	}
+*/
+	//receive the points from the vertex(model class) parameter
+	int points[2];
+	int points2[2];
+	vertex.getPoint(points);
+	vertex.getLine(0).getVertex.getPoints[points2];	
 	
+	//store the points in the vector to be used later
+	vect[0] = points[0];
+	vect[1] = points[1];
+	vect[2] = points2[0];
+	vect[3] = points2[1];
+
 	int checksum = vect[0] + vect[1] + vect[2] + vect[3];
 
 	ostringstream convert; 
