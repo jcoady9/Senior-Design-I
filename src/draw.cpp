@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 
-const char * fileName = "/dev/ttyUSB0";//real
+const char * fileName = "coordinates.txt";//real
 
 /*
 **Accepts first vertex and accesses it's other vertex via the Line's next vertex functionality.
