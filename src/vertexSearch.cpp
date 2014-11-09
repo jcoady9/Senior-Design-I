@@ -22,10 +22,32 @@ cv::vector<cv::Vec4i> processImage(cv::Mat image){
 		cvtColor(image, image, CV_RGB2GRAY);
 	}
 
-	//detect any straight lines in the image
-	cv::vector<cv::Vec4i> lines = lineDetection(image);
+	cv::Mat image_copy = image; //copy of the image since lineDetection() will modify the image
 
-	return lines;
+	//detect any straight lines in the image
+	cv::vector<cv::Vec4i> lines = lineDetection(image_copy);
+
+	//detect contours
+	cv::vector< cv::vector<cv::Point> > contours;
+	contourDetection(image, contours, lines);
+
+	//remove contours that are invalid
+	cv::vector< cv::vector<cv::Point> > valid_contours = removeRedundantContours(contours, lines);
+
+	cv::vector<cv::Vec4i> contour_lines = pointsToVec4i(contours);
+
+	//combine vectors containing line and contour coordinates
+	cv::vector<cv::Vec4i> combinedVectors;
+
+	for(int i = 0; i < (int)lines.size(); i++){
+		combinedVectors.push_back(lines[i]);
+	}
+	
+	for(int i = 0; i < (int)contour_lines.size(); i++){
+		combinedVectors.push_back(contour_lines[i]);
+	}
+
+	return combinedVectors;
 }
 
 /**
@@ -209,8 +231,34 @@ double distance(cv::Point p1, cv::Point p2){
 	return sqrt(x_sqr + y_sqr);
 }
 
+/*
+ * Convert the points that contain contour coordinates and store them in a Vec4i data type
+ *
+ *@param contours - vector containining contour information
+ * 
+ *@return the contour information as a vector of Vec4i data types
+*/
+cv::vector<cv::Vec4i> pointsToVec4i(cv::vector< cv::vector<cv::Point> > contours){
 
+	cv::vector<cv::Vec4i> vector;
 
+	for(int i = 0; i < (int)contours.size(); i++){
+		cv::vector<cv::Point> contour = contours[i];
+		for(int j = 1; j < (int)contour.size();j++){
+			cv::Point p1, p2;
+			cv::Vec4i vec;
+			p1 = contour[j - 1];
+			p2 = contour[j];
+			vec[0] = p1.x;
+			vec[1] = p1.y;
+			vec[2] = p2.x;
+			vec[3] = p2.y;
+			vector.push_back(vec);
+		}
+	}
+	
+	return vector;
+}
 
 
 
