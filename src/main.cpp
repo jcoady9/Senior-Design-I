@@ -31,8 +31,7 @@ int main(int argc, char** argv){
 	//open a window to display the image and enter any key to close the window
 	imshow("Source Image", img);
 
-	//Hough Line Transformation
-	cv::vector<cv::Vec4i> lines = lineDetection(img);
+	cv::vector<cv::Vec4i> lines = processImage(img);
 	
 	Size imgSize = img.size();
 
@@ -47,8 +46,7 @@ int main(int argc, char** argv){
 		Draw(temp); 
 		
 	}
-
-	contourDetection(img);
+	imshow("line draw", img);
 
 	waitKey(0);
 

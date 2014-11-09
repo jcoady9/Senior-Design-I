@@ -47,8 +47,8 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 	//hold until the last line has been drawn
 	bool done  = false; 
 	int c = 0;  
-	while(!done && c<25){
-		sleep(1.5);//check if drawing is done every 1 second	
+	while(!done){
+		usleep(45000);//check if drawing is done every 1 second	
 		int response = -5;
 		c++;
 		response = receiveACKSerial(comm);

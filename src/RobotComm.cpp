@@ -88,7 +88,7 @@ int receiveACKSerial(FILE * file){
 	string checkint = convert.str();
 	string check = "DONE(";
 	check.append(checkint); 
-	check.append(")\n");
+	check.append(")");
 
 
 	//locate DONE(checksum) in the out put from robot
@@ -112,13 +112,4 @@ int receiveACKSerial(FILE * file){
 }
 
 
-/*
-**Method for checking if robot is finished drawing last line 
-**returns -1 if no acknowledgement from robot is recieved
-*/
-int receiveACK(){
 
-   
-    
-return 0;
-}
