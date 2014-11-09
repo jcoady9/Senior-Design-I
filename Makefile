@@ -6,7 +6,7 @@ CC=g++
 CFLAGS= -Wall -ggdb
 
 EXE= project
-TEST_EXE= vertextest linetest vec2vertexTest drawtest imageProcTest
+TEST_EXE= vertextest linetest vec2vertexTest drawtest imageProcTest scaleTest
 
 #location directory of opencv library files
 LFLAGS= -L /usr/local/lib

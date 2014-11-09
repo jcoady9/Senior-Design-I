@@ -19,4 +19,7 @@ void contourDetection(cv::Mat src, cv::vector< cv::vector<cv::Point> > & contour
 void thinningIteration(cv::Mat& im, int iter);
 void thinning(cv::Mat& im);
 
-#endif
+cv::vector< cv::vector<cv::Point> > removeRedundantContours(cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> lines);
+double distance(cv::Point p1, cv::Point p2);
+
+#endif //VERTEXSEARCH_H
