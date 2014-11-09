@@ -4,6 +4,7 @@
 #include "../include/line.h"
 #include "../include/RobotComm.h"
 #include "../include/drawLine.h"
+#include "../include/drawImageSimulator.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -16,17 +17,17 @@ const char * fileName = "/dev/ttyUSB0";//real
 void Draw(Vertex* v)//visit all other vertices associated with current vertex
 {
 	// open serial device for both reading and writing
-	/**/FILE *comm = fopen(fileName1, "r+");
+	/**/FILE *comm = fopen(fileName, "r+");
 
 	if(!comm){
 	printf("Couldn't open file: Switching ports...\n"); 
 	fileName = "/dev/ttyUSB1";
-	comm = fopen(fileName1,"r+");  //Opening device file(/dev/ttyUSB0or1) 
+	comm = fopen(fileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 
 
 	if(!comm){
 		printf("Couldn't open file: Switching ports...\n");
 		fileName = "dev/ttyS0"; 
-		comm = fopen(fileName1,"r+");  //Opening device file(/dev/ttyUSB0or1) 	
+		comm = fopen(fileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 	
 		if(!comm){
 			printf("Please make sure robot is connected.\n");
 		}
@@ -39,16 +40,20 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 	temp->getPoint(points1);//current vertex
 	temp->getLine(0)->getVertex()->getPoint(points2); //next vertex
 
+	drawImageSimulator sim;	
+
 	//Send the vertices coordinates to the robot through its port file
 	sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//for file writing
-	//drawPic();//for simulated robots
-
+	
+	sim.drawPic(temp);//for simulated robots
+	
 	temp->setVisited(1);//vertex is being processed, used for debugging
 
 	//hold until the last line has been drawn
 	bool done  = false; 
 	int c = 0;  
 	while(!done){
+		break;
 		usleep(45000);//check if drawing is done every 1 second	
 		int response = -5;
 		c++;

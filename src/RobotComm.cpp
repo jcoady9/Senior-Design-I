@@ -42,6 +42,7 @@ void sendCoordinates(int x1, int y1, int x2, int y2, FILE * file){
 	fprintf(file, "%d,%d,%d,%d\n",x1,y1,x2,y2); //Writing to the file. Seperate coordinates using commas
 	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "\n";
 	checkSum = x1+y1+y2+x2; 
+	fprintf(file, "DONE(%i)\n",checkSum);
 	fflush(file);//send the message 
 	
 }
@@ -90,7 +91,7 @@ int receiveACKSerial(FILE * file){
 	check.append(checkint); 
 	check.append(")");
 
-
+	
 	//locate DONE(checksum) in the out put from robot
 	std::size_t pos = ack.find(check);
 	

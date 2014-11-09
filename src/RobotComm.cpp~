@@ -10,7 +10,6 @@ using namespace std;
 
 const char * filenametest = "test.txt";//simulation
 const char * filename = "/dev/ttyUSB0";//real
-const char * filename1 = "coordinates.txt";//real#2
 int checkSum;
 
 /*
@@ -43,6 +42,7 @@ void sendCoordinates(int x1, int y1, int x2, int y2, FILE * file){
 	fprintf(file, "%d,%d,%d,%d\n",x1,y1,x2,y2); //Writing to the file. Seperate coordinates using commas
 	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "\n";
 	checkSum = x1+y1+y2+x2; 
+	fprintf(file, "DONE(%i)\n",checkSum);
 	fflush(file);//send the message 
 	
 }
