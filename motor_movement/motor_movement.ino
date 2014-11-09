@@ -2,6 +2,7 @@
 #include <ax12.h>
 #include <Motors2.h>
 #include <stdlib.h>
+#include <ArduinoFileOperation.h>
 
 // we always need to create an instance of the bioloid control, usually with baud = 1Mbps.
 BioloidController bioloid = BioloidController(1000000);
@@ -12,7 +13,7 @@ const int NUMBER_OF_FIELDS = 3; // how many comma separated fields we expect
 int fieldIndex = 0;            // the current field being received
 int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
 
-int i, num;
+int num;
 char input;
 int buff[10]= {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 int points[4]; 
@@ -29,9 +30,15 @@ void setup(){
 
 void loop(){
 
-  if(Serial.available()>0){
-    readCoordinates();
-  }
+ // if(Serial.available()>0){
+  //  readCoordinates();
+//  }
+  ArduinoRead(points);
+  Serial.println(points[0]);
+  Serial.println(points[1]);
+  Serial.println(points[2]);
+  Serial.println(points[3]);
+  ArduinoWrite(points);
   /*while(i<600){
      delay(35);
      SetPosition(1,i);

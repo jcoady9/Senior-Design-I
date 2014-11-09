@@ -10,6 +10,7 @@ using namespace std;
 
 const char * filenametest = "test.txt";//simulation
 const char * filename = "/dev/ttyUSB0";//real
+const char * filename1 = "coordinates.txt";//real#2
 int checkSum;
 
 /*
@@ -88,7 +89,7 @@ int receiveACKSerial(FILE * file){
 	string checkint = convert.str();
 	string check = "DONE(";
 	check.append(checkint); 
-	check.append(")\n");
+	check.append(")");
 
 
 	//locate DONE(checksum) in the out put from robot

@@ -9,23 +9,24 @@
 
 
 const char * fileName = "/dev/ttyUSB0";//real
+
 /*
 **Accepts first vertex and accesses it's other vertex via the Line's next vertex functionality.
 */
 void Draw(Vertex* v)//visit all other vertices associated with current vertex
 {
 	// open serial device for both reading and writing
-	/**/FILE *comm = fopen(fileName, "r+");
+	/**/FILE *comm = fopen(fileName1, "r+");
 
 	if(!comm){
 	printf("Couldn't open file: Switching ports...\n"); 
 	fileName = "/dev/ttyUSB1";
-	comm = fopen(fileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 
+	comm = fopen(fileName1,"r+");  //Opening device file(/dev/ttyUSB0or1) 
 
 	if(!comm){
 		printf("Couldn't open file: Switching ports...\n");
 		fileName = "dev/ttyS0"; 
-		comm = fopen(fileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 	
+		comm = fopen(fileName1,"r+");  //Opening device file(/dev/ttyUSB0or1) 	
 		if(!comm){
 			printf("Please make sure robot is connected.\n");
 		}
