@@ -4,10 +4,16 @@
 
 #include "../include/vertexSearch.h"
 
-#define R_DELTA 12
-#define T_DELTA 0.05
+#define POWER 2
+#define MAX_DIST 10.0
+#define PERCENTAGE 0.1
 
 /*
+ * performs all neccessary processing on an image to detect lines and contours
+ *
+ *@param image - the image to be processed
+ * 
+ *@return a vector of line and contour coordinates
 */
 cv::vector<cv::Vec4i> processImage(cv::Mat image){
 	
@@ -16,19 +22,39 @@ cv::vector<cv::Vec4i> processImage(cv::Mat image){
 		cvtColor(image, image, CV_RGB2GRAY);
 	}
 
+	cv::Mat image_copy = image; //copy of the image since lineDetection() will modify the image
+
 	//detect any straight lines in the image
-	cv::vector<cv::Vec4i> lines = lineDetection(image);
+	cv::vector<cv::Vec4i> lines = lineDetection(image_copy);
 
-	cv::imshow("thinning", image);
+	//detect contours
+	cv::vector< cv::vector<cv::Point> > contours;
+	contourDetection(image, contours, lines);
 
-	return lines;
+	//remove contours that are invalid
+	cv::vector< cv::vector<cv::Point> > valid_contours = removeRedundantContours(contours, lines);
+
+	cv::vector<cv::Vec4i> contour_lines = pointsToVec4i(contours);
+
+	//combine vectors containing line and contour coordinates
+	cv::vector<cv::Vec4i> combinedVectors;
+
+	for(int i = 0; i < (int)lines.size(); i++){
+		combinedVectors.push_back(lines[i]);
+	}
+	
+	for(int i = 0; i < (int)contour_lines.size(); i++){
+		combinedVectors.push_back(contour_lines[i]);
+	}
+
+	return combinedVectors;
 }
 
 /**
  * detects straight lines in an image
  *
  * @param img	the image to perform line detection on
-
+ *
  * @return a vector with the cartesian coordinates of any detected line segments' endpoints
  *
 */
@@ -49,50 +75,27 @@ cv::vector<cv::Vec4i> lineDetection(cv::Mat & src){
 }
 
 /*
+ * detects contours (curved lines) in an image
  *
- *
+ *@param src - image to be processed for contours
+ *@param contours - reference to a vector that will store information on detected contours
+ *@param hierarchy - reference to a vector that will store information on the contour hierarchy
+ * 
 */
 void contourDetection(cv::Mat src, cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> & hierarchy){
 
 	cv::RNG rng(12345);
 
+	//convert image to grayscale if not done so already
 	if(src.channels() > 1){
 		cv::cvtColor(src, src, CV_BGR2GRAY);
 	}
 
+	//perform edge detection
 	Canny(src, src, 100, 200, 3);
 
+	//detect contours
 	findContours(src, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
-
-	cv::Mat draw_contours = cv::Mat::zeros(src.size(), CV_8UC3);
-	for(size_t i = 0; i < contours.size(); i++){
-		cv::Scalar color = cv::Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
-		drawContours(draw_contours, contours, i, color, 2, 8, hierarchy, 0, cv::Point());
-	}
-
-	
-	for(size_t i = 0; i < hierarchy.size(); i++){
-		printf("%i, %i, %i, %i\n", hierarchy[i][0], hierarchy[i][1], hierarchy[i][2], hierarchy[i][3]);
-	}
-	
-	for(int i = 0; i < (int)contours[0].size(); i++){
-		cv::vector<cv::Point> p_vec = contours[0];
-		cv::Point p = p_vec[i];
-		circle(draw_contours, p, 5, cv::Scalar(0, 255, 0));
-		printf("[%i] (%i, %i)\n", i, p.x, p.y);
-	}
-	
-	for(int i = 0; i < (int)contours[1].size(); i++){
-		cv::vector<cv::Point> p_vec = contours[1];
-		cv::Point p = p_vec[i];
-		circle(draw_contours, p, 5, cv::Scalar(0, 0, 255));
-	}
-
-	printf("hierarchy size: %i\n", (int)hierarchy.size());
-	printf("size: %i\n", (int)contours.size());
-
-	imshow("curved lines?", draw_contours);
-	
 }
 
 /**
@@ -166,12 +169,96 @@ void thinning(cv::Mat& im)
     im *= 255;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+ * Takes the vector of detected contours from and image and determines whether the points of a contour are clustered around an endpoint making the contour invalid.
+ * Any contours deemed to be invalid are not included in the returned vector containing contours deemed valid
+ * 
+ *@param contours - a vector containing all the detected contours
+ *@param lines - a vector containing all detected straight lines
+ * 
+ *@return - a vector of valid contours
+*/
+cv::vector< cv::vector<cv::Point> > removeRedundantContours(cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> lines){
+	
+	cv::vector< cv::vector<cv::Point> > valid_contours; //a vector to contain all contours that are determined to be valid
 
+	for(int i = 0; i < (int)contours.size(); i++){
 
+		float invalid_point_count = 0.0f; //count of points in a contour that are clustering around an endpoint
+		cv::vector<cv::Point> contour_vec = contours[i];
+		for(int k = 0; k < (int)contour_vec.size(); k++){
 
+			//compute the distance between each point in the contour and the endpoints of each straight line
+			cv::Point point = contour_vec[k];
+			for(int j = 0; j < (int)lines.size(); j++){
+				double dist1 = distance(point, cv::Point(lines[j][0], lines[j][1]));
+				double dist2 = distance(point, cv::Point(lines[j][2], lines[j][3]));
+				
+				//if the distance between the contour point and a line endpoint, then increment the number of detected invalid points
+				if(dist1 < MAX_DIST || dist2 < MAX_DIST){
+					invalid_point_count++;
+					break;
+				}
+			}
+		}
+		
+		//compute the percentage of invalid points in the contour, current contour is valid and pushed onto back of valid_contour vector
+		//if less than 10% of the points are found to be invalid.
+		float invalid_percentage = invalid_point_count / (float) contour_vec.size();
+		if(invalid_percentage < PERCENTAGE){
+			valid_contours.push_back(contours[i]);
+		}				
+	}
 
+	return valid_contours;
+}
+
+/*
+ * calculates the distance between two points
+ * 
+ * @param p1 - first point
+ * @param p2 - second point
+ *
+ * @return the distance between p1 and p2
+ *
+*/
+double distance(cv::Point p1, cv::Point p2){
+	
+	double x_sqr, y_sqr;
+	x_sqr = pow( (double)(p2.x - p1.x), POWER); 	
+	y_sqr = pow( (double)(p2.y - p1.y), POWER);
+	
+	return sqrt(x_sqr + y_sqr);
+}
+
+/*
+ * Convert the points that contain contour coordinates and store them in a Vec4i data type
+ *
+ *@param contours - vector containining contour information
+ * 
+ *@return the contour information as a vector of Vec4i data types
+*/
+cv::vector<cv::Vec4i> pointsToVec4i(cv::vector< cv::vector<cv::Point> > contours){
+
+	cv::vector<cv::Vec4i> vector;
+
+	for(int i = 0; i < (int)contours.size(); i++){
+		cv::vector<cv::Point> contour = contours[i];
+		for(int j = 1; j < (int)contour.size();j++){
+			cv::Point p1, p2;
+			cv::Vec4i vec;
+			p1 = contour[j - 1];
+			p2 = contour[j];
+			vec[0] = p1.x;
+			vec[1] = p1.y;
+			vec[2] = p2.x;
+			vec[3] = p2.y;
+			vector.push_back(vec);
+		}
+	}
+	
+	return vector;
+}
 
 
 
