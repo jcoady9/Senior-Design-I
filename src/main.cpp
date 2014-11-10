@@ -43,8 +43,8 @@ int main(int argc, char** argv){
 		cv::Vec4i l = lines[i];	
 		printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
 		//line( bw, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 1, CV_AA);
-		Vertex* temp = vec2Vertex(l);
-		Draw(temp); 
+		//Vertex* temp = vec2Vertex(l);
+		//Draw(temp); 
 		
 	}
 
