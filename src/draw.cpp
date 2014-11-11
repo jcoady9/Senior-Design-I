@@ -10,7 +10,8 @@
 #include <stdlib.h>
 
 
-const char * fileName = "coordinates.txt";//real
+const char * TfileName = "coordinates.txt";//test
+const char * RfileName = "/dev/ttyUSB0";//real
 
 /*
 **Accepts first vertex and accesses it's other vertex via the Line's next vertex functionality.
@@ -18,21 +19,21 @@ const char * fileName = "coordinates.txt";//real
 void Draw(Vertex* v)//visit all other vertices associated with current vertex
 {
 	// open serial device for both reading and writing
-	/**/FILE *comm = fopen(fileName, "r+");
+	/**/FILE *comm = fopen(RfileName, "r+");
 
 	if(!comm){
-	printf("Couldn't open file: Switching ports...\n"); 
-	fileName = "/dev/ttyUSB1";
-	comm = fopen(fileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 
+		printf("Couldn't open file: Switching ports...\n"); 
+		RfileName = "/dev/ttyUSB1";
+		comm = fopen(RfileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 
 
-	if(!comm){
-		printf("Couldn't open file: Switching ports...\n");
-		fileName = "dev/ttyS0"; 
-		comm = fopen(fileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 	
 		if(!comm){
-			printf("Please make sure robot is connected.\n");
+			printf("Couldn't open file: Switching ports...\n");
+			RfileName = "dev/ttyS0"; 
+			comm = fopen(RfileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 	
+			if(!comm){
+				printf("Please make sure robot is connected.\n");
+			}
 		}
-	}
     	}
 
 	Vertex* temp = v;
@@ -46,19 +47,18 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 	//Send the vertices coordinates to the robot through its port file
 	sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//for file writing
 	
-	sim.drawPic(temp);//for simulated robots
+	//sim.drawPic(temp);//for simulated robots
 	
 	temp->setVisited(1);//vertex is being processed, used for debugging
 
 	//hold until the last line has been drawn
 	bool done  = false; 
 	int c = 0;  
-	while(!done){
-		break;
-		usleep(45000);//check if drawing is done every 1 second	
+	while(!done && c<10){
+		usleep(5000);//check if drawing is done every 1 second	
 		int response = -5;
 		c++;
-		response = receiveACKSerial(comm);
+		//response = receiveACKSerial(comm);
 		if(response == 0){
 			done = true; //right checksum has been recievedcomm
 		}else if(response == -2){
