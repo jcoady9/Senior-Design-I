@@ -16,7 +16,14 @@ cv::vector<cv::Vec4i> lineDetection(cv::Mat & src);
 //detect contours (curved lines)
 void contourDetection(cv::Mat src, cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> & hierarchy);
 
+//thins thicker lines to reduce detection of invalid lines
 void thinningIteration(cv::Mat& im, int iter);
 void thinning(cv::Mat& im);
 
-#endif
+cv::vector< cv::vector<cv::Point> > removeRedundantContours(cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> lines);
+double distance(cv::Point p1, cv::Point p2);
+
+//converts vector<vector<point>> to vector<vec4i>
+cv::vector<cv::Vec4i> pointsToVec4i(cv::vector< cv::vector<cv::Point> > contours);
+
+#endif //VERTEXSEARCH_H
