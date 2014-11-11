@@ -20,7 +20,7 @@ using namespace std;
 //using namespace cv;
 
 
-const char * FILENAME = "test.txt"; 
+const char * FILE_NAME = "test.txt"; 
 
 void drawImageSimulator::drawPic(Vertex* vertex)
 {

@@ -5,6 +5,7 @@
 #include "../include/RobotComm.h"
 #include "../include/drawLine.h"
 #include "../include/drawImageSimulator.h"
+#include "../include/drawImageInterface.h"
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -85,10 +85,10 @@ void loop(){
             relaxArm();
             break;    
       }
-       Serial.print("motor 1 = ");
+      /* Serial.print("motor 1 = ");
        Serial.println(i);
        Serial.print("motor 2 = ");
-       Serial.println(i1);
+       Serial.println(i1);*/
    /*}
    
    while(i>400){
