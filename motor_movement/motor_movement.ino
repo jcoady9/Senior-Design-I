@@ -2,13 +2,13 @@
 #include <ax12.h>
 #include <Motors2.h>
 #include <stdlib.h>
-#include <ArduinoFileOperation.h>
+
 
 // we always need to create an instance of the bioloid control, usually with baud = 1Mbps.
 BioloidController bioloid = BioloidController(1000000);
 
 
-int i;
+int i, i1;
 const int NUMBER_OF_FIELDS = 3; // how many comma separated fields we expect
 int fieldIndex = 0;            // the current field being received
 int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
@@ -21,7 +21,8 @@ int j,p;
 
 
 void setup(){
-    i = 512;
+    i = 700;
+    i1 = 300;
     j=-1;
     p=0;
     SetPosition(3, 450);
@@ -30,15 +31,12 @@ void setup(){
 
 void loop(){
 
- // if(Serial.available()>0){
-  //  readCoordinates();
-//  }
-  ArduinoRead(points);
-  Serial.println(points[0]);
-  Serial.println(points[1]);
-  Serial.println(points[2]);
-  Serial.println(points[3]);
-  ArduinoWrite(points);
+ //if(Serial.available()>0){
+ //  readCoordinates();
+// }
+     SetPosition(1,i);
+     SetPosition(2,i1);
+
   /*while(i<600){
      delay(35);
      SetPosition(1,i);
@@ -58,8 +56,39 @@ void loop(){
           
           case 'd':
             penDown();
-            break;      
+            break;   
+         
+         case 'm':
+            i+= 10; //moves down and to rightn
+            break; 
+            
+         case 'n':
+            i-= 10; //moves to left in arch
+            break; 
+          
+           case 'b':
+            i1+= 10; //moves down and to rightn
+            break; 
+          
+           case 'v':
+            i1-= 10; //moves down and to rightn
+            break; 
+          
+          case 'l':
+           i +=5;
+           SetPosition(1,i);
+           i1-=20;
+            SetPosition(2,i1);
+            break;  
+          
+           case 'r':
+            relaxArm();
+            break;    
       }
+      /* Serial.print("motor 1 = ");
+       Serial.println(i);
+       Serial.print("motor 2 = ");
+       Serial.println(i1);*/
    /*}
    
    while(i>400){
@@ -89,9 +118,10 @@ void loop(){
 }
 
 void relaxArm(){
-    i=512; 
+    i=700; 
+   i1=300; 
     SetPosition(2,i);
-    SetPosition(1,i);
+    SetPosition(1,i1);
     SetPosition(3,450);
 }
 
@@ -100,7 +130,7 @@ void penUp(){
 }
 
 void penDown(){
-    SetPosition(3, 450);
+    SetPosition(3, 480);
 }
 
 void readCoordinates(){
