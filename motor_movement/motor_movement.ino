@@ -24,18 +24,18 @@ void setup(){
     i = 700;
     i1 = 300;
     j=-1;
-    p=0;
     SetPosition(3, 450);
     Serial.begin(9600); //start serial communications at 38400bps
 }
 
 void loop(){
 
- //if(Serial.available()>0){
- //  readCoordinates();
-// }
-     SetPosition(1,i);
-     SetPosition(2,i1);
+ if(Serial.available()>0){
+   delay(20); //wait for all information
+   readCoordinates();
+  }
+    // SetPosition(1,i);
+    // SetPosition(2,i1);
 
   /*while(i<600){
      delay(35);
@@ -134,31 +134,32 @@ void penDown(){
 }
 
 void readCoordinates(){
-  
+  p=0;
   while(Serial.available()>0 && p<5)
     {
         input=Serial.read();
-   
+
         if(input == ','){
-           num = calc();
-          j=-1;
         }
         else{
-          j++;
-          buff[j]= input;
           points[p] =  input - '0'; 
-          //Serial.print("P= ");
-         // Serial.println(points[p]);
+         /*test current points are recieved */
+         Serial.print("P");
+         Serial.print(p);
+         Serial.print("= ");
+         Serial.println(points[p]);
           p++; 
        }
-          
-    int checksum = points[0] + points[1] + points[2] + points[3];
-    Serial.write("DONE(");
-    Serial.print(checksum);
-    Serial.print(")\n");
-    Serial.flush();
-
- }
+    }      
+   int checksum = points[0] + points[1] + points[2] + points[3];
+     if(checksum == points[4]){
+       //TODO: call draw line method here
+       Serial.print("y"); //correct checksum and line is drawn
+     }else{
+        Serial.print("n"); //wrong checksum, resend 
+     }
+      Serial.flush();
+   
 }
 
 int determineLineLength(){

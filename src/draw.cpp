@@ -19,7 +19,7 @@ const char * RfileName = "/dev/ttyUSB0";//real
 void Draw(Vertex* v)//visit all other vertices associated with current vertex
 {
 	// open serial device for both reading and writing
-	/**/FILE *comm = fopen(RfileName, "r+");
+	FILE *comm = fopen(RfileName, "r+");
 
 	if(!comm){
 		printf("Couldn't open file: Switching ports...\n"); 
@@ -42,29 +42,30 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 	temp->getPoint(points1);//current vertex
 	temp->getLine(0)->getVertex()->getPoint(points2); //next vertex
 
-	drawImageSimulator sim;	
+	//drawImageSimulator sim;	
 
 	//Send the vertices coordinates to the robot through its port file
-	sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//for file writing
+	sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);
 	
 	//sim.drawPic(temp);//for simulated robots
 	
-	temp->setVisited(1);//vertex is being processed, used for debugging
+	temp->setVisited(1);
 
 	//hold until the last line has been drawn
 	bool done  = false; 
-	int c = 0;  
-	while(!done && c<10){
-		usleep(5000);//check if drawing is done every 1 second	
+	int c = 0;  //make sure robot is not stuck on same point for too long
+	while(!done){
+		usleep(5000);//check if drawing is done every 0.5 seconds	
 		int response = -5;
 		c++;
-		//response = receiveACKSerial(comm);
+		response = receiveACKSerial(comm);
 		if(response == 0){
-			done = true; //right checksum has been recievedcomm
+			done = true; //right checksum has been recieved
 		}else if(response == -2){
+			printf("Robot has timed out\n");
 			exit(0);//fatal error happened in communication
 		}else if(response == -3){
-			printf("Wrong Checksum. Resending...\n");//DONE was recieved but checksum was wrong
+			printf("Wrong Checksum. Resending...\n");//ack wasrecieved but checksum was wrong
 			sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//resend
 			done = false;
 		}
