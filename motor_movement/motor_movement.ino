@@ -16,7 +16,7 @@ int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
 int num;
 char input;
 int buff[10]= {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
-int points[4]; 
+int points[5]; 
 int j,p;
 
 
@@ -135,7 +135,7 @@ void penDown(){
 
 void readCoordinates(){
   
-  while(Serial.available()>0)
+  while(Serial.available()>0 && p<5)
     {
         input=Serial.read();
    
@@ -152,7 +152,7 @@ void readCoordinates(){
           p++; 
        }
           
-    int checksum = points[p] + points[p] + points[p] + points[p];
+    int checksum = points[0] + points[1] + points[2] + points[3];
     Serial.write("DONE(");
     Serial.print(checksum);
     Serial.print(")\n");

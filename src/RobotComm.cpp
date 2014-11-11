@@ -38,11 +38,10 @@ void sendCoordinates(int x1, int y1, int x2, int y2, FILE * file){
 	}
 
     } */ 
-	
-	fprintf(file, "%d,%d,%d,%d\n",x1,y1,x2,y2); //Writing to the file. Seperate coordinates using commas
-	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "\n";
 	checkSum = x1+y1+y2+x2; 
-	fprintf(file, "DONE(%i)\n",checkSum);
+	fprintf(file, "%d,%d,%d,%d,%d\n",x1,y1,x2,y2, checkSum); //Writing to the file. Seperate coordinates using commas
+	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "\n";
+	//fprintf(file, "DONE(%i)\n",checkSum);
 	fflush(file);//send the message 
 	
 }
@@ -56,9 +55,9 @@ int receiveACKSerial(FILE * file){
 
 	char data[32];  
 
-	while(fgets(data, 32, file) != NULL){
+	fgets(data, 32, file);//{while( != NULL)
 		
-	}
+	//}
 	/*int file = open(filename, O_RDONLY);
 
 	if(file < 0){
@@ -84,7 +83,7 @@ int receiveACKSerial(FILE * file){
 	cout << "Acknowledgement received: "<< ack  << "\n"; //see what information is being sent from the robot
 	
 	//convert checkSum to a string so it can be checked
-	ostringstream convert; 
+	/*ostringstream convert; 
 	convert << checkSum; 
 	string checkint = convert.str();
 	string check = "DONE(";
@@ -109,7 +108,19 @@ int receiveACKSerial(FILE * file){
 			return 0; //ack recieved
 	}else{
 		return -2;//if this is reached, then there was an error in the program. 
+	}*/
+
+	std::size_t pos1 = ack.find("y");
+	std::size_t pos2 = ack.find("n");
+	if(pos1 != std::string::npos){//Correct checksum recieved and line drawn
+		cout << "Points recieved!!"  << "\n"; 
+		return 0; //ack recieved 
+	}else if(pos2 != std::string::npos){
+		return -3; //checksums did not match
+	}else{
+		return -1; //nothing was written, keep waiting
 	}
+	return -2;//if this is reached, then there was an error in the program. 
 }
 
 
