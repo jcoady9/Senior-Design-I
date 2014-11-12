@@ -10,15 +10,14 @@ BioloidController bioloid = BioloidController(1000000);
 const int NUMBER_OF_FIELDS = 3; // how many comma separated fields we expect
 int fieldIndex = 0;            // the current field being received
 int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
-char input, ack;
-char  buff[4];
+char input;
+char  buff[4], ack ='0';
 int points[5] = {0,0,0,0,0}; 
 int p, b, num, j, i, i1;
 
 void setup(){
     i = 700;
-    i1 = 300;
-    ack = '0'; 
+    i1 = 300; 
     SetPosition(3, 450);
     Serial.begin(9600); //start serial communications at 38400bps
 }
@@ -26,34 +25,24 @@ void setup(){
 void loop(){
 
  if(Serial.available()>0){
-   delay(20); //wait for all information
+   //wait for all information
+   delay(50); 
    
+   //reset buffer each time new points come in
    j=0;
-   for(j;j<5;j++){//reset buffer each time new points come in
+   for(j;j<5;j++){
      buff[j] = '0'; 
    }
    if(ack != 'y'){
      readCoordinates();
-   }
-   /*if(ack != '0'){
-    delay(50);
-    Serial.write(ack); 
-    Serial.flush();
-  }*/
+   } 
   }
-  if(ack != '0'){
-    delay(50);
-    Serial.println(ack);
-    Serial.flush(); 
-  }
+  delay(50);
+  Serial.print(ack);
+  Serial.flush();
     // SetPosition(1,i);
     // SetPosition(2,i1);
 
-  /*while(i<600){
-     delay(35);
-     SetPosition(1,i);
-     SetPosition(2,i);
-     i++;*/
         int inByte = Serial.read();
         switch (inByte)
         {
@@ -97,41 +86,12 @@ void loop(){
             relaxArm();
             break;    
       }
-      /* Serial.print("motor 1 = ");
-       Serial.println(i);
-       Serial.print("motor 2 = ");
-       Serial.println(i1);*/
-   /*}
-   
-   while(i>400){
-       int inByte = Serial.read();
-       switch (inByte)
-        {
-          case 'q':    
-            relaxArm();
-            exit(0);
-          break; 
-       
-          case 'u':
-            penUp();
-            break;
-        
-          case 'd':
-            penDown();
-            break;
-            
-        }
-        
-       delay(50);
-       SetPosition(1,i);
-       SetPosition(2,i);
-       i--;
-     }*/
+  
 }
 
 void relaxArm(){
     i=700; 
-   i1=300; 
+    i1=300; 
     SetPosition(2,i);
     SetPosition(1,i1);
     SetPosition(3,450);
@@ -148,14 +108,14 @@ void penDown(){
 void readCoordinates(){
   p=0;
   b=0;
-  ack = '0';
   while(Serial.available()>0 && p<5)
     {
         input=Serial.read();
-        if(input == ','){//comma has been reached, convertnumbers from buffer to int
-         points[p] =calc();
+        
+        if(input == ','){//comma has been reached, convert numbers from buffer to int
+         points[p] = calc();
          b=-1;
-       // Serial.println(points[p]);
+         //Serial.println(points[p]);
          p++;
         }
         else{//value is not a comma, add to buffer
@@ -169,14 +129,14 @@ void readCoordinates(){
    
     if(checksum == points[4]){
     //TODO: call draw line method here
-    delay(1000);
+    delay(5000);
+    Serial.print("y\n"); //correct checksum and line is drawn
     ack = 'y';
-    //Serial.print("y\n"); //correct checksum and line is drawn
     }else{
-      ack = 'n'; 
-   // Serial.print("n\n"); //wrong checksum, resend 
+    Serial.print("n"); //wrong checksum, resend 
+    ack = 'n';
     }
-    //Serial.flush();
+    Serial.flush();
    
 }
 
