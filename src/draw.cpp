@@ -19,17 +19,17 @@ const char * RfileName = "/dev/ttyUSB0";//real
 void Draw(Vertex* v)//visit all other vertices associated with current vertex
 {
 	// open serial device for both reading and writing
-	/**/FILE *comm = fopen(RfileName, "r+");
+	/**/FILE *comm = fopen(TfileName, "r+");
 
 	if(!comm){
 		printf("Couldn't open file: Switching ports...\n"); 
-		RfileName = "/dev/ttyUSB1";
-		comm = fopen(RfileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 
+		TfileName = "/dev/ttyUSB1";
+		comm = fopen(TfileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 
 
 		if(!comm){
 			printf("Couldn't open file: Switching ports...\n");
-			RfileName = "dev/ttyS0"; 
-			comm = fopen(RfileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 	
+			TfileName = "dev/ttyS0"; 
+			comm = fopen(TfileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 	
 			if(!comm){
 				printf("Please make sure robot is connected.\n");
 			}
@@ -47,7 +47,7 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 	//Send the vertices coordinates to the robot through its port file
 	sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//for file writing
 	
-	//sim.drawPic(temp);//for simulated robots
+	sim.drawPic(temp);//for simulated robots
 	
 	temp->setVisited(1);//vertex is being processed, used for debugging
 
@@ -55,10 +55,11 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 	bool done  = false; 
 	int c = 0;  
 	while(!done && c<10){
+		break;
 		usleep(5000);//check if drawing is done every 1 second	
 		int response = -5;
 		c++;
-		//response = receiveACKSerial(comm);
+		response = receiveACKSerial(comm);
 		if(response == 0){
 			done = true; //right checksum has been recievedcomm
 		}else if(response == -2){
