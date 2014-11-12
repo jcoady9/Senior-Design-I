@@ -16,7 +16,7 @@ const char * RfileName = "/dev/ttyUSB0";//real
 /*
 **Accepts first vertex and accesses it's other vertex via the Line's next vertex functionality.
 */
-void Draw(Vertex* v)//visit all other vertices associated with current vertex
+void Draw(Vertex* v)
 {
 	// open serial device for both reading and writing
 	FILE *comm = fopen(RfileName, "r+");
@@ -54,7 +54,7 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 	//hold until the last line has been drawn
 	bool done  = false; 
 	int c = 0;  //make sure robot is not stuck on same point for too long
-	while(!done && c<25){
+	while(!done && c<100){
 		usleep(5000);//check if drawing is done every 0.5 seconds	
 		int response = -5;
 		c++;
@@ -68,12 +68,12 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 			printf("Wrong Checksum. Resending...\n");//ack wasrecieved but checksum was wrong
 			sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//resend
 			done = false;
-		}else if(c==24){
-			printf("Communcation time out. Resending...\n");//ack wasrecieved but checksum was wrong
+		}else if(c==99){
+			//printf("Communcation time out. Resending...\n");//waited too long for ack
 			c=0; 
 			sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//resend
 			done = false;
-		}
+		}/**/
 	}
 
 	//current vertex's line array has been completed, therefore this vertex is complete	

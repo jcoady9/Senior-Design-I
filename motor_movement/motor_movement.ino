@@ -10,7 +10,7 @@ BioloidController bioloid = BioloidController(1000000);
 const int NUMBER_OF_FIELDS = 3; // how many comma separated fields we expect
 int fieldIndex = 0;            // the current field being received
 int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
-char input;
+char input, ack;
 char  buff[4];
 int points[5] = {0,0,0,0,0}; 
 int p, b, num, j, i, i1;
@@ -18,6 +18,7 @@ int p, b, num, j, i, i1;
 void setup(){
     i = 700;
     i1 = 300;
+    ack = '0'; 
     SetPosition(3, 450);
     Serial.begin(9600); //start serial communications at 38400bps
 }
@@ -31,8 +32,19 @@ void loop(){
    for(j;j<5;j++){//reset buffer each time new points come in
      buff[j] = '0'; 
    }
-   
-   readCoordinates();
+   if(ack != 'y'){
+     readCoordinates();
+   }
+   /*if(ack != '0'){
+    delay(50);
+    Serial.write(ack); 
+    Serial.flush();
+  }*/
+  }
+  if(ack != '0'){
+    delay(50);
+    Serial.println(ack);
+    Serial.flush(); 
   }
     // SetPosition(1,i);
     // SetPosition(2,i1);
@@ -136,6 +148,7 @@ void penDown(){
 void readCoordinates(){
   p=0;
   b=0;
+  ack = '0';
   while(Serial.available()>0 && p<5)
     {
         input=Serial.read();
@@ -156,12 +169,14 @@ void readCoordinates(){
    
     if(checksum == points[4]){
     //TODO: call draw line method here
-    //delay(1000);
-    Serial.print("y\n"); //correct checksum and line is drawn
+    delay(1000);
+    ack = 'y';
+    //Serial.print("y\n"); //correct checksum and line is drawn
     }else{
-    Serial.print("n\n"); //wrong checksum, resend 
+      ack = 'n'; 
+   // Serial.print("n\n"); //wrong checksum, resend 
     }
-    Serial.flush();
+    //Serial.flush();
    
 }
 

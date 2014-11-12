@@ -21,7 +21,7 @@ void sendCoordinates(int x1, int y1, int x2, int y2, FILE * file){
 	checkSum = x1+y1+y2+x2; 
 	//Writing to the file. Seperate coordinates using commas
 	fprintf(file, "%d,%d,%d,%d,%d,\n",x1,y1,x2,y2, checkSum); 
-	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "\n";
+	//cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "\n";
 	//fprintf(file, "y");
 	fflush(file);//send the message 
 	
@@ -35,11 +35,11 @@ void sendCoordinates(int x1, int y1, int x2, int y2, FILE * file){
 int receiveACKSerial(FILE * file){
 
 	char data[32];  
-	while(fgets(data, 32, file) != NULL){
-		;
-	}
+	fgets(data, 32, file);
+	//while( != NULL){;
+	//}
 	string  ack = data; 
-
+//cout << "Ack = "  << ack <<  "\n"; 
 	//check response for acknowlesgements
 	std::size_t pos1 = ack.find("y");
 	std::size_t pos2 = ack.find("n");
@@ -53,6 +53,19 @@ int receiveACKSerial(FILE * file){
 		return -1; //nothing was written, keep waiting
 	}
 	return -2;//if this is reached, then there was an error in the program. 
+/*
+	int d; 
+	d = fgetc(file);
+
+	if(d == 'y'){//Correct checksum recieved and line drawn
+		cout << "Points recieved!!"  << "\n"; 
+		return 0; //ack recieved 
+	}else if(d == 'n'){
+		return -3; //checksums did not match
+	}else{
+		return -1; //nothing was written, keep waiting
+	}
+	return -2;//if this is reached, then there was an error in the program. */
 }
 
 
