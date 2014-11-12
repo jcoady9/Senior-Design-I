@@ -20,7 +20,7 @@ void sendCoordinates(int x1, int y1, int x2, int y2, FILE * file){
     
 	checkSum = x1+y1+y2+x2; 
 	//Writing to the file. Seperate coordinates using commas
-	fprintf(file, "%d,%d,%d,%d,%d\n",x1,y1,x2,y2, checkSum); 
+	fprintf(file, "%d,%d,%d,%d,%d,\n",x1,y1,x2,y2, checkSum); 
 	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "\n";
 	//fprintf(file, "y");
 	fflush(file);//send the message 
@@ -35,12 +35,11 @@ void sendCoordinates(int x1, int y1, int x2, int y2, FILE * file){
 int receiveACKSerial(FILE * file){
 
 	char data[32];  
-
-	fgets(data, 32, file);
-
+	while(fgets(data, 32, file) != NULL){
+		;
+	}
 	string  ack = data; 
-	cout << "Acknowledgement received: "<< ack  << "\n"; //see what information is being sent from the robot
-	
+
 	//check response for acknowlesgements
 	std::size_t pos1 = ack.find("y");
 	std::size_t pos2 = ack.find("n");

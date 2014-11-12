@@ -11,8 +11,8 @@ int main()
 	printf("-----------------------------------------------\n");
 	
 
-	Vertex* v1 = new Vertex(0.0 , 0.0);
-	Vertex* v2 = new Vertex(0.0 , 1.0);
+	Vertex* v1 = new Vertex(1.0 , 10.0);
+	Vertex* v2 = new Vertex(20.0 , 1.0);
 
 	Line* l1 = new Line(v2);
 

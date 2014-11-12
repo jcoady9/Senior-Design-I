@@ -7,23 +7,17 @@
 // we always need to create an instance of the bioloid control, usually with baud = 1Mbps.
 BioloidController bioloid = BioloidController(1000000);
 
-
-int i, i1;
 const int NUMBER_OF_FIELDS = 3; // how many comma separated fields we expect
 int fieldIndex = 0;            // the current field being received
 int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
-
-int num;
 char input;
-int buff[10]= {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
-int points[5]; 
-int j,p;
-
+char  buff[4];
+int points[5] = {0,0,0,0,0}; 
+int p, b, num, j, i, i1;
 
 void setup(){
     i = 700;
     i1 = 300;
-    j=-1;
     SetPosition(3, 450);
     Serial.begin(9600); //start serial communications at 38400bps
 }
@@ -32,6 +26,12 @@ void loop(){
 
  if(Serial.available()>0){
    delay(20); //wait for all information
+   
+   j=0;
+   for(j;j<5;j++){//reset buffer each time new points come in
+     buff[j] = '0'; 
+   }
+   
    readCoordinates();
   }
     // SetPosition(1,i);
@@ -135,75 +135,49 @@ void penDown(){
 
 void readCoordinates(){
   p=0;
+  b=0;
   while(Serial.available()>0 && p<5)
     {
         input=Serial.read();
-
-        if(input == ','){
+        if(input == ','){//comma has been reached, convertnumbers from buffer to int
+         points[p] =calc();
+         b=-1;
+       // Serial.println(points[p]);
+         p++;
         }
-        else{
-          points[p] =  input - '0'; 
-         /*test current points are recieved */
-         Serial.print("P");
-         Serial.print(p);
-         Serial.print("= ");
-         Serial.println(points[p]);
-          p++; 
+        else{//value is not a comma, add to buffer
+          b++;
+          buff[b]=input;
+         
        }
-    }      
-   int checksum = points[0] + points[1] + points[2] + points[3];
-     if(checksum == points[4]){
-       //TODO: call draw line method here
-       Serial.print("y"); //correct checksum and line is drawn
-     }else{
-        Serial.print("n"); //wrong checksum, resend 
-     }
-      Serial.flush();
+    }     
+    
+    int checksum = points[0] + points[1] + points[2] + points[3];
+   
+    if(checksum == points[4]){
+    //TODO: call draw line method here
+    //delay(1000);
+    Serial.print("y\n"); //correct checksum and line is drawn
+    }else{
+    Serial.print("n\n"); //wrong checksum, resend 
+    }
+    Serial.flush();
    
 }
 
-int determineLineLength(){
-  
+int drawline(){
+  //coordinates are stored in the first four values 
+  //of the points array
 }
+
 //methond to convert char to an int
 int calc()
 {
-  int num=0,x=0;
+    int num=0,x=0;
  
-    for(x;x<=j;x++){
-          num=num+(buff[x]-48)*pow(10,j-x);
-    }     
-     
+    for(x;x<=b;x++){
+          num=num+(buff[x]-48)*pow(10,b-x);
+    }
     return num;
 }
-
-//other test code I (Shane) wrote to try and communicate in a different way
-/* if( Serial.available())
-  {
-    char ch = Serial.read();
-    if(ch >= '0' && ch <= '9') // is this an ascii digit between 0 and 9?
-    {
-      // yes, accumulate the value
-      values[fieldIndex] = (values[fieldIndex] * 10) + (ch - '0'); 
-    }
-    else if (ch == ',')  // comma is our separator, so move on to the next field
-    {
-      if(fieldIndex < NUMBER_OF_FIELDS-1)
-        fieldIndex++;   // increment field index
-    }
-    else
-    {
-      // any character not a digit or comma ends the acquisition of fields
-      // in this example it's the newline character sent by the Serial Monitor
-      Serial.print( fieldIndex +1);
-      Serial.println(" fields received:");
-      for(int i=0; i <= fieldIndex; i++)
-      {
-        Serial.println(values[i]);
-        values[i] = 0; // set the values to zero, ready for the next message
-      }
-      fieldIndex = 0;  // ready to start over
-    }
-  }
-  */
 

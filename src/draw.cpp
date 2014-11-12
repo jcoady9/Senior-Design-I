@@ -54,7 +54,7 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 	//hold until the last line has been drawn
 	bool done  = false; 
 	int c = 0;  //make sure robot is not stuck on same point for too long
-	while(!done){
+	while(!done && c<25){
 		usleep(5000);//check if drawing is done every 0.5 seconds	
 		int response = -5;
 		c++;
@@ -66,6 +66,11 @@ void Draw(Vertex* v)//visit all other vertices associated with current vertex
 			exit(0);//fatal error happened in communication
 		}else if(response == -3){
 			printf("Wrong Checksum. Resending...\n");//ack wasrecieved but checksum was wrong
+			sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//resend
+			done = false;
+		}else if(c==24){
+			printf("Communcation time out. Resending...\n");//ack wasrecieved but checksum was wrong
+			c=0; 
 			sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//resend
 			done = false;
 		}
