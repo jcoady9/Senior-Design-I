@@ -2,7 +2,6 @@
 #include<errno.h>
 #include <opencv2/highgui/highgui.hpp>
 #include "../include/drawImageSimulator.h"
-#include "../src/drawImageSimulator.cpp"
 #include "../include/vertex.h"
 #include "../include/line.h"
 

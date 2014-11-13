@@ -2,7 +2,7 @@
 #define DRAWIMAGESIMULATOR_H
 
 #include "drawImageInterface.h"
-#include "../include/vertex.h"
+#include "vertex.h"
 
 class drawImageSimulator: public drawImageInterface
 {
