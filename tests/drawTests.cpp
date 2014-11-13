@@ -35,10 +35,10 @@ int main()
 	printf("V4: %i\n", v4->getVisited());
 	printf("V5: %i\n", v5->getVisited());		
 
-	//Run Draw
-	Draw(v1);
-	Draw(v3);
-	Draw(v5);
+	//Run Draw for robot
+	Draw(v1,2);
+	Draw(v3,2);
+	Draw(v5,2);
 	
 	printf("-----------------------------------------------\n");
 	printf("\tVisited values after Draw: \n");
