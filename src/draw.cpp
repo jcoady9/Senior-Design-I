@@ -43,6 +43,7 @@ void Draw(Vertex* v, int mode)
 	temp->getLine(0)->getVertex()->getPoint(points2); //next vertex
 	temp->setVisited(1);
 
+
 	if(mode == 1){//simulated
 		drawImageSimulator sim;	
 		sim.drawPic(temp);//for simulated robots
@@ -72,7 +73,8 @@ void Draw(Vertex* v, int mode)
 				c=0; 
 				sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//resend
 				done = false;
-			}/**/
+			}
+
 		}
 	}
 	//current vertex's line array has been completed, therefore this vertex is complete	

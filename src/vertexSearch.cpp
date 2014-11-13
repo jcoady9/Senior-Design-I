@@ -25,11 +25,12 @@ cv::vector<cv::Vec4i> processImage(cv::Mat image){
 	cv::Mat image_copy = image; //copy of the image since lineDetection() will modify the image
 
 	//detect any straight lines in the image
-	cv::vector<cv::Vec4i> lines = lineDetection(image_copy);
+	cv::vector<cv::Vec4i> lines = lineDetection(image);
 
 	//detect contours
 	cv::vector< cv::vector<cv::Point> > contours;
-	contourDetection(image, contours, lines);
+	cv::vector<cv::Vec4i> hierarchy;
+	contourDetection(image, contours, hierarchy);
 
 	//remove contours that are invalid
 	cv::vector< cv::vector<cv::Point> > valid_contours = removeRedundantContours(contours, lines);
@@ -38,7 +39,7 @@ cv::vector<cv::Vec4i> processImage(cv::Mat image){
 
 	//combine vectors containing line and contour coordinates
 	cv::vector<cv::Vec4i> combinedVectors;
-
+	
 	for(int i = 0; i < (int)lines.size(); i++){
 		combinedVectors.push_back(lines[i]);
 	}
@@ -46,7 +47,7 @@ cv::vector<cv::Vec4i> processImage(cv::Mat image){
 	for(int i = 0; i < (int)contour_lines.size(); i++){
 		combinedVectors.push_back(contour_lines[i]);
 	}
-
+	
 	return combinedVectors;
 }
 
@@ -222,7 +223,7 @@ cv::vector< cv::vector<cv::Point> > removeRedundantContours(cv::vector< cv::vect
  * @return the distance between p1 and p2
  *
 */
-double distance(cv::Point p1, cv::Point p2){
+double distance(const cv::Point & p1, const cv::Point & p2){
 	
 	double x_sqr, y_sqr;
 	x_sqr = pow( (double)(p2.x - p1.x), POWER); 	

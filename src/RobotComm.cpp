@@ -35,15 +35,16 @@ void sendCoordinates(int x1, int y1, int x2, int y2, FILE * file){
 int receiveACKSerial(FILE * file){
 
 	char data[32];
-for(int i = 0; i < 32; i++){
-	data[i] = '0'; 
-}  
+	for(int i = 0; i < 32; i++){
+		data[i] = '0'; 
+	}  
 	fgets(data, 32, file);
 	//while( != NULL){;
 	//}
 	string  ack = data; 
-//cout << "Ack = "  << ack <<  "\n"; 
-	//check response for acknowlesgements
+	//cout << "Ack = "  << ack <<  "\n"; 
+
+	//check response for acknowledgements
 	std::size_t pos1 = ack.find("y");
 	std::size_t pos2 = ack.find("n");
 
@@ -56,19 +57,7 @@ for(int i = 0; i < 32; i++){
 		return -1; //nothing was written, keep waiting
 	}
 	return -2;//if this is reached, then there was an error in the program. 
-/*
-	int d; 
-	d = fgetc(file);
 
-	if(d == 'y'){//Correct checksum recieved and line drawn
-		cout << "Points recieved!!"  << "\n"; 
-		return 0; //ack recieved 
-	}else if(d == 'n'){
-		return -3; //checksums did not match
-	}else{
-		return -1; //nothing was written, keep waiting
-	}
-	return -2;//if this is reached, then there was an error in the program. */
 }
 
 

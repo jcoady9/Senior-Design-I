@@ -1,5 +1,7 @@
 //vec2vertex.cpp
-//Convert Vec4i into verticies. 
+
+//Convert Vec4i into two verticies, then append them.
+
 
 #include <stdio.h>
 #include <stddef.h>

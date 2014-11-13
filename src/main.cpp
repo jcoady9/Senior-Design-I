@@ -35,7 +35,7 @@ int main(int argc, char** argv){
 	}
 	
 	//open a window to display the image and enter any key to close the window
-	imshow("Source Image", img);
+	//imshow("Source Image", img);
 
 	//process the image
 	cv::vector<cv::Vec4i> lines = processImage(img);
@@ -54,7 +54,7 @@ int main(int argc, char** argv){
 		
 	}
 
-	imshow("drawn image", img);
+	//imshow("drawn image", img);
 
 	waitKey(0);
 
