@@ -1,7 +1,6 @@
 #include <unistd.h>
 #include "../include/draw.h"
 #include "../include/vertex.h"
-#include "../include/line.h"
 #include "../include/RobotComm.h"
 #include "../include/drawLine.h"
 #include "../include/drawImageSimulator.h"
@@ -39,8 +38,8 @@ void Draw(Vertex* v, int mode)
 	Vertex* temp = v;
 	int points1[2];
 	int points2[2];
-	temp->getPoint(points1);//current vertex
-	temp->getLine(0)->getVertex()->getPoint(points2); //next vertex
+	temp->getPoints(points1);//current vertex
+	temp->getNextVertex()->getPoints(points2); //next vertex
 	temp->setVisited(1);
 
 
@@ -78,7 +77,7 @@ void Draw(Vertex* v, int mode)
 		}
 	}
 	//current vertex's line array has been completed, therefore this vertex is complete	
-	temp->getLine(0)->getVertex()->setVisited(2);
+	temp->getNextVertex()->setVisited(2);
 	temp->setVisited(2);
 	fclose(comm);
 }

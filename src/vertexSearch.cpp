@@ -35,7 +35,7 @@ cv::vector<cv::Vec4i> processImage(cv::Mat image){
 	//remove contours that are invalid
 	cv::vector< cv::vector<cv::Point> > valid_contours = removeRedundantContours(contours, lines);
 
-	cv::vector<cv::Vec4i> contour_lines = pointsToVec4i(contours);
+	cv::vector<cv::Vec4i> contour_lines = pointsToVec4i(valid_contours);
 
 	//combine vectors containing line and contour coordinates
 	cv::vector<cv::Vec4i> combinedVectors;
