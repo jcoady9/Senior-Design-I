@@ -5,6 +5,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+//run all image processing methods
 cv::vector<cv::Vec4i> processImage(cv::Mat image);
 
 //corner detection

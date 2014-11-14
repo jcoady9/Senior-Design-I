@@ -22,7 +22,7 @@ cv::vector<cv::Vec4i> processImage(cv::Mat image){
 		cvtColor(image, image, CV_RGB2GRAY);
 	}
 
-	cv::Mat image_copy = image; //copy of the image since lineDetection() will modify the image
+	//cv::Mat image_copy = image; //copy of the image since lineDetection() will modify the image
 
 	//detect any straight lines in the image
 	cv::vector<cv::Vec4i> lines = lineDetection(image);
@@ -34,8 +34,9 @@ cv::vector<cv::Vec4i> processImage(cv::Mat image){
 
 	//remove contours that are invalid
 	cv::vector< cv::vector<cv::Point> > valid_contours = removeRedundantContours(contours, lines);
-
-	cv::vector<cv::Vec4i> contour_lines = pointsToVec4i(contours);
+	
+	//convert contour cv::Points into cv::Vec4i
+	cv::vector<cv::Vec4i> contour_lines = pointsToVec4i(valid_contours);
 
 	//combine vectors containing line and contour coordinates
 	cv::vector<cv::Vec4i> combinedVectors;
@@ -192,11 +193,16 @@ cv::vector< cv::vector<cv::Point> > removeRedundantContours(cv::vector< cv::vect
 			//compute the distance between each point in the contour and the endpoints of each straight line
 			cv::Point point = contour_vec[k];
 			for(int j = 0; j < (int)lines.size(); j++){
+				//distances of countour point from each endpoint
 				double dist1 = distance(point, cv::Point(lines[j][0], lines[j][1]));
 				double dist2 = distance(point, cv::Point(lines[j][2], lines[j][3]));
+				//distance between both endpoints of line[j]
+				double endpoint_dist = distance(cv::Point(lines[j][0], lines[j][1]), cv::Point(lines[j][2], lines[j][3]));
 				
+				double contour_inLine_dist = dist1 + dist2;
+
 				//if the distance between the contour point and a line endpoint, then increment the number of detected invalid points
-				if(dist1 < MAX_DIST || dist2 < MAX_DIST){
+				if(dist1 < MAX_DIST || dist2 < MAX_DIST || (contour_inLine_dist - endpoint_dist) < 1.0 ){
 					invalid_point_count++;
 					break;
 				}
