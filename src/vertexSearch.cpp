@@ -15,7 +15,7 @@
  * 
  *@return a vector of line and contour coordinates
 */
-cv::vector<cv::Vec4i> processImage(cv::Mat image){
+cv::vector<cv::Vec4i> processImage(cv::Mat & image){
 	
 	//convert image to grayscale if not done already
 	if(image.channels() > 1){
@@ -84,7 +84,7 @@ cv::vector<cv::Vec4i> lineDetection(cv::Mat & src){
  *@param hierarchy - reference to a vector that will store information on the contour hierarchy
  * 
 */
-void contourDetection(cv::Mat src, cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> & hierarchy){
+void contourDetection(const cv::Mat & src, cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> & hierarchy){
 
 	cv::RNG rng(12345);
 
@@ -245,7 +245,7 @@ double distance(const cv::Point & p1, const cv::Point & p2){
  * 
  *@return the contour information as a vector of Vec4i data types
 */
-cv::vector<cv::Vec4i> pointsToVec4i(cv::vector< cv::vector<cv::Point> > contours){
+cv::vector<cv::Vec4i> pointsToVec4i(const cv::vector< cv::vector<cv::Point> > & contours){
 
 	cv::vector<cv::Vec4i> vector;
 
