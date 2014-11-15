@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include "../include/vertex.h"
+#include "../include/scale.h"
 
 Vertex* scale(Vertex* i, int imgH, int imgL)
 {	
