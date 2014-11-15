@@ -7,6 +7,7 @@
 
 #include "../include/vertex.h"
 #include "../include/vec2vertex.h"
+#include "../include/scale.h"
 #include "../include/draw.h"
 
 
@@ -15,13 +16,17 @@ using namespace cv;
 int main(int argc, char** argv){
 	
 	//make sure path to the image was entered
-	if(argc < 2){
-		printf("Missing Arguments. Did you forget to add the path of the image?\n\n");
+	if(argc < 3){
+		printf("Missing Arguments:\n"); 
+		printf("Did you forget to add the path of the image? (images/name-of-image.*) \n\t***Please do not use jpg or jpeg images***\n");
+		printf("Or did you forget the Simulation mode? (1 for Simulation or 2 for robot)\n");
+		printf("Example for robot execution on file 'img.png': ./project images/img.png 2\n");
 		exit(EXIT_FAILURE);
 	}
-
+	
 	//load the image
 	Mat img = imread(argv[1], CV_LOAD_IMAGE_COLOR);
+	int mode = atoi(argv[2]);
 
 	//if the image is not found, exit program
 	if(img.empty()){
@@ -43,12 +48,13 @@ int main(int argc, char** argv){
 		cv::Vec4i l = lines[i];	
 		printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
 		//line( bw, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 1, CV_AA);
-		Vertex* temp = vec2Vertex(l);
-		Draw(temp); 
+		Vertex * temp = vec2Vertex(l);
+		temp = scale(temp, imgSize.width, imgSize.height);
+		Draw(temp, mode); 
 		
 	}
 
-	imshow("drawn image", img);
+	//imshow("drawn image", img);
 
 	waitKey(0);
 

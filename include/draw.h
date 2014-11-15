@@ -3,6 +3,6 @@
 
 #include "vertex.h"
 
-void Draw(Vertex* v);
+void Draw(Vertex* v, int mode);
 
 #endif
