@@ -9,6 +9,8 @@ EXE= project
 
 TEST_EXE= vertextest vec2vertexTest drawtest imageProcTest scaleTest
 
+
+
 #location directory of opencv library files
 LFLAGS= -L /usr/local/lib
 #opencv library files being used

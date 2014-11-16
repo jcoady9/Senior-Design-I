@@ -13,11 +13,18 @@ int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
 char input;
 char  buff[5], ack ='0';
 int points[5] = {0,0,0,0,0}; 
-int p, b, num, j, i, i1;
+int p, b, num, j, backMotor, frontMotor;
+
+
+int topRight[2] = {355, 730}; //IDEA: store all important vertices in arrays for quick access
+int bottomLeft = {995, 100};
+int bottomRight = {815, 100}; //TopLeft is not needed because of the relaxArm() function
+int deadCenter = {765, 230};
+
 
 void setup(){
-    i = 700;
-    i1 = 300; 
+    backMotor = 425; //begin at approx. top left location
+    frontMotor = 730; 
     SetPosition(3, 450);
     Serial.begin(9600); //start serial communications at 38400bps
 }
@@ -38,9 +45,14 @@ void loop(){
   }
   delay(50);
   Serial.print(ack);
+  Serial.println();
+  Serial.print(backMotor);
+  Serial.println();
+  Serial.print(frontMotor);
+  Serial.println();
   Serial.flush();
-    // SetPosition(1,i);
-    // SetPosition(2,i1);
+     SetPosition(1,backMotor);
+     SetPosition(2,frontMotor);
 
         int inByte = Serial.read();
         switch (inByte)
@@ -56,29 +68,41 @@ void loop(){
           
           case 'd':
             penDown();
-            break;   
+            break; 
+            
+         case 't': //experimental case using the stored array points for quick access.
+                   //all four corners should have this for easy maneuvering around the area of drawing
+                   
+           backMotor = topRight[0];
+           frontMotor = topRight[1];
+           SetPosition(1, backMotor);
+           SetPosition(2, frontMotor);
+           break;
+         
+         //TODO (SHANE WILL DO THIS) : finish the last few test cases for important corners/points
+         //also we must better organize the test case letters 
          
          case 'm':
-            i+= 10; //moves down and to rightn
+            backMotor+= 10; //moves down and to rightn
             break; 
             
          case 'n':
-            i-= 10; //moves to left in arch
+            backMotor-= 10; //moves to left in arch
             break; 
           
            case 'b':
-            i1+= 10; //moves down and to rightn
+            frontMotor+= 10; //moves down and to rightn
             break; 
           
            case 'v':
-            i1-= 10; //moves down and to rightn
+            frontMotor-= 10; //moves down and to rightn
             break; 
           
           case 'l':
-           i +=5;
-           SetPosition(1,i);
-           i1-=20;
-            SetPosition(2,i1);
+           backMotor +=5;
+           SetPosition(1,backMotor);
+           frontMotor-=20;
+            SetPosition(2,frontMotor);
             break;  
           
            case 'r':
@@ -88,11 +112,11 @@ void loop(){
   
 }
 
-void relaxArm(){
-    i=700; 
-    i1=300; 
-    SetPosition(2,i);
-    SetPosition(1,i1);
+void relaxArm(){ //relax to top left corner
+    backMotor = 425; 
+    frontMotor = 730; 
+    SetPosition(1,backMotor);
+    SetPosition(2,frontMotor);
     SetPosition(3,450);
 }
 
@@ -155,4 +179,5 @@ int calc()
     }
     return num;
 }
+
 
