@@ -21,7 +21,7 @@ void thinningIteration(cv::Mat& im, int iter);
 void thinning(cv::Mat& im);
 
 cv::vector< cv::vector<cv::Point> > removeRedundantContours(cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> lines);
-double distance(cv::Point p1, cv::Point p2);
+double distance(const cv::Point & p1, const cv::Point & p2);
 
 //converts vector<vector<point>> to vector<vec4i>
 cv::vector<cv::Vec4i> pointsToVec4i(cv::vector< cv::vector<cv::Point> > contours);

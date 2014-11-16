@@ -2,7 +2,6 @@
 
 #include "../include/draw.h"
 #include "../include/vertex.h"
-#include "../include/line.h"
 #include "../include/RobotComm.h"
 
 int main()
@@ -16,14 +15,11 @@ int main()
 	Vertex* v3 = new Vertex(100.0 , 55.0);
 	Vertex* v4 = new Vertex(62.0 , 17.0);
 	Vertex* v5 = new Vertex(72.0 , 89.0);
+	
+	v1->setNextVertex(v2);
+	v2->setNextVertex(v3);
+	v3->setNextVertex(v1);
 
-	Line* l1 = new Line(v2);
-	Line* l2 = new Line(v4);
-	Line* l3 = new Line(v4);
-
-	v1->addLine(l1);
-	v3->addLine(l2);
-	v5->addLine(l3);
 	
 	printf("-----------------------------------------------\n");
 	printf("\tVisited values before Draw: \n");
@@ -35,10 +31,10 @@ int main()
 	printf("V4: %i\n", v4->getVisited());
 	printf("V5: %i\n", v5->getVisited());		
 
-	//Run Draw
-	Draw(v1);
-	Draw(v3);
-	Draw(v5);
+	//Run Draw for robot
+	Draw(v1,2);
+	Draw(v3,2);
+	Draw(v5,2);
 	
 	printf("-----------------------------------------------\n");
 	printf("\tVisited values after Draw: \n");

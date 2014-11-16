@@ -11,7 +11,7 @@ const int NUMBER_OF_FIELDS = 3; // how many comma separated fields we expect
 int fieldIndex = 0;            // the current field being received
 int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
 char input;
-char  buff[4], ack ='0';
+char  buff[5], ack ='0';
 int points[5] = {0,0,0,0,0}; 
 int p, b, num, j, i, i1;
 
@@ -30,12 +30,11 @@ void loop(){
    
    //reset buffer each time new points come in
    j=0;
-   for(j;j<5;j++){
-     buff[j] = '0'; 
+   for(j;j<6;j++){
+     buff[j] = '0';
+     points[j] = -1; 
    }
-   if(ack != 'y'){
      readCoordinates();
-   } 
   }
   delay(50);
   Serial.print(ack);
@@ -108,6 +107,7 @@ void penDown(){
 void readCoordinates(){
   p=0;
   b=0;
+  ack = '0';
   while(Serial.available()>0 && p<5)
     {
         input=Serial.read();
@@ -115,7 +115,7 @@ void readCoordinates(){
         if(input == ','){//comma has been reached, convert numbers from buffer to int
          points[p] = calc();
          b=-1;
-         //Serial.println(points[p]);
+        // Serial.println(points[p]);
          p++;
         }
         else{//value is not a comma, add to buffer

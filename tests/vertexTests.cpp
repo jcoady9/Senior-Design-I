@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 #include "../include/vertex.h"
-#include "../include/line.h"
 
 int main(){
 
@@ -23,66 +22,33 @@ int main(){
 	//the getPoint method is being tested by comparing the x, y-coordinates with the array of int values declared above. 
 	int point[2];	
 
-	v1->getPoint(point);
+	v1->getPoints(point);
 	printf("Correct output is -> x: %i, y: %i\nv1 output is -> x: %i, y: %i\n\n", 0, 0, point[0], point[1]);
 
-	v2->getPoint(point);
+	v2->getPoints(point);
 	printf("Correct output is -> x: %i, y: %i\nv2 output is -> x: %i, y: %i\n\n", 10, 20, point[0], point[1]);
 
-	v3->getPoint(point);
+	v3->getPoints(point);
 	printf("Correct output is -> x: %i, y: %i\nv3 output is -> x: %i, y: %i\n\n", 100, 350, point[0], point[1]);
 
+
 	printf("-----------------------------------------------------\n");
-	printf("\tTesting addLine() & getLine() methods...\n");
+	printf("\tTesting SetNextVertex & getNextVertex() methods...\n");
 	printf("-----------------------------------------------------\n\n");
 
-	//We are testing addLine() and getLine() by comparing the address' of the Line object at initialization and
-	//the address' of the Line pointer returned by the getLine() method
+	v1->setNextVertex(v2);
+	v2->setNextVertex(v3);
+	v3->setNextVertex(v1);
 
-	Line* l1 = new Line(v1);
-	Line* l2 = new Line(v3);
-	Line* l3 = new Line(v2);
-	Line* l4 = new Line(v1);
-	Line* l5 = new Line(v2);
-
-	v1->addLine(l1);
-	v1->addLine(l2);
-	v1->addLine(l3);
-	v1->addLine(l4);
-	v1->addLine(l5);
-
-	printf("line[0] addr: %p\n", v1->getLine(0));
-	printf("line[1] addr: %p\n", v1->getLine(1));
-	printf("line[2] addr: %p\n", v1->getLine(2));
-	printf("line[3] addr: %p\n", v1->getLine(3));
-	printf("line[4] addr: %p\n\n", v1->getLine(4));
 	
+	v1->getNextVertex()->getPoints(point);
+	printf("V1's next vertex is V2. Point output should be %i, %i. \nThe actual output is %i, %i\n ", 10, 20, point[0], point[1]);
 
-	printf("		v1 addr: %p\n", v1);
-	Vertex* tmp = v1->getLine(0)->getVertex();
-	printf("line[0]->next_vertex addr: %p\n\n", tmp);
-	
-	printf("		v3 addr: %p\n", v3);
-	tmp = v1->getLine(1)->getVertex();
-	printf("line[1]->next_vertex addr: %p\n\n", tmp);
-	
-	
-	printf("		v2 addr: %p\n", v2);
-	tmp = v1->getLine(2)->getVertex();
-	printf("line[2]->next_vertex addr: %p\n\n", tmp);	
+	v2->getNextVertex()->getPoints(point);
+	printf("V2's next vertex is V3. Point output should be %i, %i. \nThe actual output is %i, %i\n", 100, 350, point[0], point[1]);
 
-	printf("		v1 addr: %p\n", v2);
-	tmp = v1->getLine(3)->getVertex();
-	printf("line[3]->next_vertex addr: %p\n\n", tmp);
-
-	printf("		v2 addr: %p\n", v2);
-	tmp = v1->getLine(4)->getVertex();
-	printf("line[4]->next_vertex addr: %p\n\n", tmp);
-
-
-	printf("v1 addr: %p\n", v1);
-	printf("v2 addr: %p\n", v2);
-	printf("v3 addr: %p\n\n", v3);
+	v3->getNextVertex()->getPoints(point);
+	printf("V3's next vertex is V1. Point output should be %i, %i. \nThe actual output is %i, %i\n", 0, 0, point[0], point[1]);
 	
 	//getVisited() - setVisited()
 	printf("-------------------------------------------------\n");
@@ -96,36 +62,6 @@ int main(){
 	printf("v1 visited (0 for not, 1 for referenced, 2 for completed) should be 2: %i\n", v1->getVisited());
 	printf("v2 visited (0 for not, 1 for referenced, 2 for completed) should be 1: %i\n", v2->getVisited());
 	printf("v3 visited (0 for not, 1 for referenced, 2 for completed) should be 0: %i\n", v3->getVisited());
-	
-
-	printf("---------------------------------------------------------\n"); 
-	printf("\tTesting refercencing on the next Vertex...\n");
-	printf("---------------------------------------------------------\n");
-	
-	Vertex* t = v1->getLine(0)->getVertex();
-
-	t->getPoint(point);
-	printf("V1 next point output is -> x: %i, y: %i\n\n",point[0], point[1]);
-	printf("V1's next vertex Visited output is -> %i  Should be 2\n\n",t->getVisited());
-	
-	//resize()
-
-	printf("-------------------------------------------\n");
-	printf("\tTesting resize Method...\n");
-	printf("-------------------------------------------\n\n");
-	printf("%i Lines: Size = %i: \n",v1->getNum_Lines(), v1->getSize());
-	int counter = 3; 
-	for(int i = 0; i<25; i++){
-		for(int j = 0; j<=5; j++){
-			Line* line = new Line(v2);
-			v1->addLine(line);
-			counter++;
-		}
-
-		printf("%i Lines for Size = %i: \n",v1->getNum_Lines(), v1->getSize());
-	}
-	
-	
 
 	printf("-------------------------------------------\n");
 	printf("\t\tEnd of Tests...\n");

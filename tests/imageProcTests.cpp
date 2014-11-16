@@ -11,7 +11,7 @@
 int main(){
 
 	//string array of image filenames
-	std::string filename[NUM_IMAGES] = {"images/line.png", "images/diagonal-line.png", "images/horizontal-lines.jpg", "images/wovenlines.jpeg", "images/curved-line.png", "images/two.jpg"};
+	std::string filename[NUM_IMAGES] = {"images/line.png", "images/diagonal-line.png", "images/horizontal-lines.jpg", "images/wovenlines.jpeg", "images/curved-line.png", "images/two2.png"};
 	cv::RNG rng(0); //random number generator so we can make draw each line a different color
 
 
@@ -39,7 +39,7 @@ int main(){
 	
 		printf("\n'%s' Dimensions: %i x %i\n", filename[i].c_str(), imgSize.width, imgSize.height);
 
-		//cv::Mat detected_lines_img = cv::Mat::zeros(src.size(), CV_8UC3);
+		cv::Mat detected_lines_img = cv::Mat::zeros(src.size(), CV_8UC3);
 		//detected_lines_img.copyTo(detected_lines_img, src);
 		for(size_t j = 0; j < lines.size(); j++){
 			cv::Vec4i l = lines[j];	
@@ -48,7 +48,7 @@ int main(){
 			cv::line(src, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), line_color, 1, CV_AA);
 		}
 
-		//cv::imshow(filename[i].c_str(), src);
+		cv::imshow(filename[i].c_str(), src_copy);
 		
 	}
 
@@ -93,7 +93,7 @@ int main(){
 		printf("hierarchy size: %i\n", (int)hierarchy.size());
 		printf("size: %i\n", (int)contours.size());
 
-		cv::imshow(filename[j].c_str(), draw_contours);
+		//cv::imshow(filename[j].c_str(), draw_contours);
 
 	}
 
@@ -143,8 +143,8 @@ int main(){
 
 		printf("%s: num valid contours: %i\n", filename[k].c_str(), (int)valid_contours.size());
 
-		if(filename[k] == filename[2])
-			cv::imshow("valid contours", draw_valid_contours);
+		//if(filename[k] == filename[2])
+			//cv::imshow("valid contours", draw_valid_contours);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
