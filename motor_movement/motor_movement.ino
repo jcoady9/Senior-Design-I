@@ -13,11 +13,11 @@ int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
 char input;
 char  buff[5], ack ='0';
 int points[5] = {0,0,0,0,0}; 
-int p, b, num, j, i, i1;
+int p, b, num, j, backMotor, frontMotor;
 
 void setup(){
-    i = 700;
-    i1 = 300; 
+    backMotor = 425; //begin at approx. top left location
+    frontMotor = 730; 
     SetPosition(3, 450);
     Serial.begin(9600); //start serial communications at 38400bps
 }
@@ -38,9 +38,14 @@ void loop(){
   }
   delay(50);
   Serial.print(ack);
+  Serial.println();
+  Serial.print(backMotor);
+  Serial.println();
+  Serial.print(frontMotor);
+  Serial.println();
   Serial.flush();
-    // SetPosition(1,i);
-    // SetPosition(2,i1);
+     SetPosition(1,backMotor);
+     SetPosition(2,frontMotor);
 
         int inByte = Serial.read();
         switch (inByte)
@@ -59,26 +64,26 @@ void loop(){
             break;   
          
          case 'm':
-            i+= 10; //moves down and to rightn
+            backMotor+= 10; //moves down and to rightn
             break; 
             
          case 'n':
-            i-= 10; //moves to left in arch
+            backMotor-= 10; //moves to left in arch
             break; 
           
            case 'b':
-            i1+= 10; //moves down and to rightn
+            frontMotor+= 10; //moves down and to rightn
             break; 
           
            case 'v':
-            i1-= 10; //moves down and to rightn
+            frontMotor-= 10; //moves down and to rightn
             break; 
           
           case 'l':
-           i +=5;
-           SetPosition(1,i);
-           i1-=20;
-            SetPosition(2,i1);
+           backMotor +=5;
+           SetPosition(1,backMotor);
+           frontMotor-=20;
+            SetPosition(2,frontMotor);
             break;  
           
            case 'r':
@@ -88,11 +93,11 @@ void loop(){
   
 }
 
-void relaxArm(){
-    i=700; 
-    i1=300; 
-    SetPosition(2,i);
-    SetPosition(1,i1);
+void relaxArm(){ //relax to top left corner
+    backMotor = 425; 
+    frontMotor = 730; 
+    SetPosition(1,backMotor);
+    SetPosition(2,frontMotor);
     SetPosition(3,450);
 }
 
@@ -155,4 +160,5 @@ int calc()
     }
     return num;
 }
+
 
