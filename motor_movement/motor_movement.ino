@@ -15,6 +15,13 @@ char  buff[5], ack ='0';
 int points[5] = {0,0,0,0,0}; 
 int p, b, num, j, backMotor, frontMotor;
 
+
+int topRight[2] = {355, 730}; //IDEA: store all important vertices in arrays for quick access
+int bottomLeft = {995, 100};
+int bottomRight = {815, 100}; //TopLeft is not needed because of the relaxArm() function
+int deadCenter = {765, 230};
+
+
 void setup(){
     backMotor = 425; //begin at approx. top left location
     frontMotor = 730; 
@@ -61,7 +68,19 @@ void loop(){
           
           case 'd':
             penDown();
-            break;   
+            break; 
+            
+         case 't': //experimental case using the stored array points for quick access.
+                   //all four corners should have this for easy maneuvering around the area of drawing
+                   
+           backMotor = topRight[0];
+           frontMotor = topRight[1];
+           SetPosition(1, backMotor);
+           SetPosition(2, frontMotor);
+           break;
+         
+         //TODO (SHANE WILL DO THIS) : finish the last few test cases for important corners/points
+         //also we must better organize the test case letters 
          
          case 'm':
             backMotor+= 10; //moves down and to rightn
