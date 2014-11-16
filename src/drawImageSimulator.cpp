@@ -11,7 +11,6 @@
 #include <fcntl.h> 
 #include "../include/drawImageSimulator.h"
 #include "../include/vertex.h"
-#include "../include/line.h"
 
 
 
