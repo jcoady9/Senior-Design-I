@@ -64,7 +64,7 @@ if(mode == 1){
 		//hold until the last line has been drawn
 		bool done  = false; 
 		int c = 0;  //make sure robot is not stuck on same point for too long
-		while(!done && c<100){
+		while(!done && c<200){
 			usleep(5000);//check if drawing is done every 0.5 seconds	
 			int response = -5;
 			c++;
