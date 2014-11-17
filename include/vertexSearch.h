@@ -18,7 +18,10 @@ void contourDetection(const cv::Mat & src, cv::vector< cv::vector<cv::Point> > &
 void thinningIteration(cv::Mat& im, int iter);
 void thinning(cv::Mat& im);
 
+//removes redundant contours
 cv::vector< cv::vector<cv::Point> > removeRedundantContours(cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> lines);
+
+//computes the distance between two points
 double distance(const cv::Point & p1, const cv::Point & p2);
 
 //converts vector<vector<point>> to vector<vec4i>

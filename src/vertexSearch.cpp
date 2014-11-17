@@ -22,8 +22,6 @@ cv::vector<cv::Vec4i> processImage(cv::Mat & image){
 		cvtColor(image, image, CV_RGB2GRAY);
 	}
 
-	//cv::Mat image_copy = image; //copy of the image since lineDetection() will modify the image
-
 	//detect any straight lines in the image
 	cv::vector<cv::Vec4i> lines = lineDetection(image);
 
@@ -62,14 +60,18 @@ cv::vector<cv::Vec4i> processImage(cv::Mat & image){
 */
 cv::vector<cv::Vec4i> lineDetection(cv::Mat & src){
 
+	//convert image to grayscale if not done already
 	if(src.channels() > 1){
 		cv::cvtColor(src, src, CV_RGB2GRAY);
 	}
 
+	//convert image to a binary image
 	cv::threshold(src, src, 10, 255, CV_THRESH_BINARY_INV);
 
+	//thin out the lines
 	thinning(src);
 
+	//detect all straight lines in the image
 	cv::vector<cv::Vec4i> lines;
 	cv::HoughLinesP(src, lines, 1, CV_PI/180, 50, 50, 10 );
 	
