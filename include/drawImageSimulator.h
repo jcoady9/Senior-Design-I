@@ -7,7 +7,7 @@
 class drawImageSimulator: public drawImageInterface
 {
 public:
-	virtual void drawPic(Vertex* vertex); //CHANGE PARAMETER
+	virtual void drawPic(Vertex* vertex);
 
 };
 
