@@ -10,40 +10,31 @@ int main()
 	printf("-----------------------------------------------\n");
 	
 
-	Vertex* v1 = new Vertex(1.0 , 10.0);
-	Vertex* v2 = new Vertex(20.0 , 1.0);
-	Vertex* v3 = new Vertex(100.0 , 55.0);
-	Vertex* v4 = new Vertex(62.0 , 17.0);
-	Vertex* v5 = new Vertex(72.0 , 89.0);
-	
-	v1->setNextVertex(v2);
-	v2->setNextVertex(v3);
-	v3->setNextVertex(v1);
+	Vertex* v1 = new Vertex(475 , 730);//top right 
+	Vertex* v2 = new Vertex(765 , 230);//center
 
 	
+	v1->setNextVertex(v2);
+
 	printf("-----------------------------------------------\n");
 	printf("\tVisited values before Draw: \n");
 	printf("-----------------------------------------------\n");
 
 	printf("V1: %i\n", v1->getVisited());	
 	printf("V2: %i\n", v2->getVisited());
-	printf("V3: %i\n", v3->getVisited());	
-	printf("V4: %i\n", v4->getVisited());
-	printf("V5: %i\n", v5->getVisited());		
+	//printf("V3: %i\n", v3->getVisited());	
+	
 
 	//Run Draw for robot
 	Draw(v1,2);
-	Draw(v3,2);
-	Draw(v5,2);
+	//Draw(v3,2);
 	
 	printf("-----------------------------------------------\n");
 	printf("\tVisited values after Draw: \n");
 	printf("-----------------------------------------------\n");
 	printf("V1: %i\n", v1->getVisited());	
 	printf("V2: %i\n", v2->getVisited());	
-	printf("V3: %i\n", v3->getVisited());	
-	printf("V4: %i\n", v4->getVisited());
-	printf("V5: %i\n", v5->getVisited());			
+	//printf("V3: %i\n", v3->getVisited());			
 
 	printf("-----------------------------------------------\n");
 	printf("\t\tEnd of tests.\n");

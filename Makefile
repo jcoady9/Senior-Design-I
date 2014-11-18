@@ -7,9 +7,7 @@ CFLAGS= -Wall -ggdb
 
 EXE= project
 
-TEST_EXE= vertextest vec2vertexTest drawtest imageProcTest scaleTest
-
-
+TEST_EXE= vertextest vec2vertexTest drawtest imageProcTest scaleTest drawLineTest
 
 #location directory of opencv library files
 LFLAGS= -L /usr/local/lib
@@ -32,4 +30,4 @@ test:
 
 #clean the project directory of all object & executable files
 clean:
-	rm -f *.o *.exe *~ */*.cpp~ */*.h~ $(EXE) $(TEST_EXE)
+	rm -f */*.o */*.exe *~ */*.cpp~ */*.h~ $(EXE) $(TEST_EXE)

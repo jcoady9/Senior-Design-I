@@ -66,7 +66,7 @@ int main(){
 		}
 
 		cv::vector< cv::vector<cv::Point> > contours;
-		cv::vector<cv::Vec4i>hierarchy;
+		cv::vector<cv::Vec4i>hierarchy;		
 
 		contourDetection(img, contours, hierarchy);
 
@@ -118,9 +118,11 @@ int main(){
 		cv::vector< cv::vector<cv::Point> > contours;
 		cv::vector<cv::Vec4i>hierarchy;
 
-		contourDetection(img, contours, hierarchy);
+		
 
 		cv::vector<cv::Vec4i> lines_copy = lineDetection(img);
+
+		contourDetection(img, contours, hierarchy);
 
 		cv::vector< cv::vector<cv::Point> > valid_contours = removeRedundantContours(contours, lines_copy);
 
@@ -144,7 +146,7 @@ int main(){
 		printf("%s: num valid contours: %i\n", filename[k].c_str(), (int)valid_contours.size());
 
 		//if(filename[k] == filename[2])
-			//cv::imshow("valid contours", draw_valid_contours);
+			cv::imshow(filename[k].c_str(), draw_valid_contours);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////

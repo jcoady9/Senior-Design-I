@@ -1,14 +1,15 @@
 #include<stdio.h>
 #include<errno.h>
-
+#include "../include/drawImageSimulator.h"
+#include "../include/drawImageInterface.h"
 #include <opencv2/highgui/highgui.hpp>
 
-#include "../include/vertexSearch.h"
-
+#include "../include/imageProcessor.h"
 #include "../include/vertex.h"
 #include "../include/vec2vertex.h"
 #include "../include/scale.h"
-#include "../include/draw.h"
+#include "../include/RobotComm.h"
+
 
 
 using namespace cv;
@@ -33,30 +34,40 @@ int main(int argc, char** argv){
 	    printf("image is empty.\n\n");
 	    exit(1);
 	}
-	
+	Mat img2 = imread("black.png", CV_LOAD_IMAGE_COLOR);
 	//open a window to display the image and enter any key to close the window
 	imshow("Source Image", img);
 
-	//process the image
-	cv::vector<cv::Vec4i> lines = processImage(img);
-	
-	Size imgSize = img.size();
+	static ImageProcessor imageProcessor;
 
+	//process the image
+	cv::vector<cv::Vec4i> lines = imageProcessor.processImage(img);
+	
+	//write image dimensions to CLI
+	Size imgSize = img.size();
 	printf("Image Dimensions: %i x %i\n", imgSize.width, imgSize.height);
 
 	for( size_t i = 0; i < lines.size(); i++ ){
 		cv::Vec4i l = lines[i];	
 		printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
-		//line( bw, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 1, CV_AA);
+		
 		Vertex * temp = vec2Vertex(l);
 		temp = scale(temp, imgSize.width, imgSize.height);
-		Draw(temp, mode); 
 		
+		if(mode == 1){//simulated
+			drawImageSimulator sim;	
+			sim.drawPic(temp);
+		}else if(mode == 2){//actual robot
+			RobotComm Robot;
+			Robot.RobotCommunication(temp);
+		} 
 	}
 
-	//imshow("drawn image", img);
-
 	waitKey(0);
+	bool wri= cv::imwrite("black.png", img2);
+	if(wri > 0){
+
+	}else
 
 	return 0;
 }
