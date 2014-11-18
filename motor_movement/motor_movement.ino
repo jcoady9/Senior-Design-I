@@ -17,9 +17,9 @@ int p, b, num, j, backMotor, frontMotor;
 
 
 int topRight[2] = {355, 730}; //IDEA: store all important vertices in arrays for quick access
-int bottomLeft = {995, 100};
-int bottomRight = {815, 100}; //TopLeft is not needed because of the relaxArm() function
-int deadCenter = {765, 230};
+int bottomLeft[2] = {995, 100};
+int bottomRight[2] = {815, 100}; //TopLeft is not needed because of the relaxArm() function
+int deadCenter[2] = {765, 230};
 
 
 void setup(){
@@ -45,11 +45,12 @@ void loop(){
   }
   delay(50);
   Serial.print(ack);
-  Serial.println();
+   Serial.print("\n");
+  /*Serial.println();
   Serial.print(backMotor);
   Serial.println();
   Serial.print(frontMotor);
-  Serial.println();
+  Serial.println();*/
   Serial.flush();
      SetPosition(1,backMotor);
      SetPosition(2,frontMotor);
@@ -153,7 +154,7 @@ void readCoordinates(){
    
     if(checksum == points[4]){
     //TODO: call draw line method here
-    delay(5000);
+    //delay(5000);
     Serial.print("y\n"); //correct checksum and line is drawn
     ack = 'y';
     }else{
