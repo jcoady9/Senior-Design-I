@@ -1,3 +1,5 @@
+#include <Robot.h>
+
 #include <BioloidController.h>
 #include <ax12.h>
 #include <Motors2.h>
@@ -13,19 +15,15 @@ int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
 char input;
 char  buff[5], ack ='0';
 int points[5] = {0,0,0,0,0}; 
-int p, b, num, j, backMotor, frontMotor;
+int p, b, num, j;
 
-
-int topRight[2] = {355, 730}; //IDEA: store all important vertices in arrays for quick access
-int bottomLeft = {995, 100};
-int bottomRight = {815, 100}; //TopLeft is not needed because of the relaxArm() function
-int deadCenter = {765, 230};
-
+Robot robot; //TESTING OUT MODEL OBJECT
 
 void setup(){
-    backMotor = 425; //begin at approx. top left location
-    frontMotor = 730; 
-    SetPosition(3, 450);
+    
+  //robot is already set to topLeft coordinates
+    robot.penUp();
+    
     Serial.begin(9600); //start serial communications at 38400bps
 }
 
@@ -46,86 +44,67 @@ void loop(){
   delay(50);
   Serial.print(ack);
   Serial.println();
-  Serial.print(backMotor);
+  Serial.print(robot.backMotor);
   Serial.println();
-  Serial.print(frontMotor);
+  Serial.print(robot.frontMotor);
   Serial.println();
   Serial.flush();
-     SetPosition(1,backMotor);
-     SetPosition(2,frontMotor);
+     SetPosition(1,robot.backMotor);
+     SetPosition(2,robot.frontMotor);
 
         int inByte = Serial.read();
         switch (inByte)
         {
           case 'q':    
-            relaxArm();
+            robot.relaxArm();
             exit(0);
             break;    
           
           case 'u':
-            penUp();
+            robot.penUp();
             break;
           
           case 'd':
-            penDown();
+            robot.penDown();
             break; 
             
          case 't': //experimental case using the stored array points for quick access.
                    //all four corners should have this for easy maneuvering around the area of drawing
                    
-           backMotor = topRight[0];
-           frontMotor = topRight[1];
-           SetPosition(1, backMotor);
-           SetPosition(2, frontMotor);
+           robot.topRightCorner();
            break;
          
          //TODO (SHANE WILL DO THIS) : finish the last few test cases for important corners/points
          //also we must better organize the test case letters 
          
          case 'm':
-            backMotor+= 10; //moves down and to rightn
+            robot.backMotor+= 10; //moves down and to rightn
             break; 
             
          case 'n':
-            backMotor-= 10; //moves to left in arch
+            robot.backMotor-= 10; //moves to left in arch
             break; 
           
            case 'b':
-            frontMotor+= 10; //moves down and to rightn
+            robot.frontMotor+= 10; //moves down and to rightn
             break; 
           
            case 'v':
-            frontMotor-= 10; //moves down and to rightn
+            robot.frontMotor-= 10; //moves down and to rightn
             break; 
           
           case 'l':
-           backMotor +=5;
-           SetPosition(1,backMotor);
-           frontMotor-=20;
-            SetPosition(2,frontMotor);
-            break;  
+           robot.backMotor +=5;
+           SetPosition(1,robot.backMotor);
+           robot.frontMotor-=20;
+           SetPosition(2,robot.frontMotor);
+           break;  
           
            case 'r':
-            relaxArm();
+            robot.relaxArm();
             break;    
       }
   
-}
-
-void relaxArm(){ //relax to top left corner
-    backMotor = 425; 
-    frontMotor = 730; 
-    SetPosition(1,backMotor);
-    SetPosition(2,frontMotor);
-    SetPosition(3,450);
-}
-
-void penUp(){
-    SetPosition(3, 350);
-}
-
-void penDown(){
-    SetPosition(3, 480);
 }
 
 void readCoordinates(){
