@@ -18,7 +18,17 @@ const char * RfileName = "/dev/ttyUSB0";//real
 void Draw(Vertex* v, int mode)
 {
 	// open serial device for both reading and writing
-	FILE *comm = fopen(RfileName, "r+");
+
+	FILE *comm;
+if(mode == 1){
+	comm = fopen(TfileName, "r+");
+
+	if(!comm){
+		printf("Couldn't open file. \n"); 
+		exit(-1);
+	}
+}else{
+	comm = fopen(RfileName, "r+");
 
 	if(!comm){
 		printf("Couldn't open file: Switching ports...\n"); 
@@ -31,10 +41,11 @@ void Draw(Vertex* v, int mode)
 			comm = fopen(RfileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 	
 			if(!comm){
 				printf("Please make sure robot is connected.\n");
+				exit(-1);
 			}
 		}
     	}
-
+}
 	Vertex* temp = v;
 	int points1[2];
 	int points2[2];
@@ -53,7 +64,7 @@ void Draw(Vertex* v, int mode)
 		//hold until the last line has been drawn
 		bool done  = false; 
 		int c = 0;  //make sure robot is not stuck on same point for too long
-		while(!done && c<100){
+		while(!done && c<200){
 			usleep(5000);//check if drawing is done every 0.5 seconds	
 			int response = -5;
 			c++;

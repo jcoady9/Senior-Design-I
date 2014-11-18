@@ -25,7 +25,11 @@ int main()
 	int points[2];
 	rob->getPoints(points);
 	
-	printf("rob.x: %i\nrob.y: %i\n", points[0], points[1]);
+	printf("V1.x: %i\nV1.y: %i\n", points[0], points[1]);
+
+	rob->getNextVertex()->getPoints(points);
+	
+	printf("V2.x: %i\nV2.y: %i\n", points[0], points[1]);
 	
 	printf("-----------------------------------------------\n");
 	printf("\t\tEnd of test.\n");

@@ -35,7 +35,7 @@ int main(int argc, char** argv){
 	}
 	
 	//open a window to display the image and enter any key to close the window
-	//imshow("Source Image", img);
+	imshow("Source Image", img);
 
 	//process the image
 	cv::vector<cv::Vec4i> lines = processImage(img);
@@ -49,7 +49,7 @@ int main(int argc, char** argv){
 		printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
 		//line( bw, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 1, CV_AA);
 		Vertex * temp = vec2Vertex(l);
-		//temp = scale(temp, 256, 256);
+		temp = scale(temp, imgSize.width, imgSize.height);
 		Draw(temp, mode); 
 		
 	}

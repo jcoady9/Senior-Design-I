@@ -3,7 +3,6 @@
 #include <opencv2/highgui/highgui.hpp>
 #include "../include/drawImageSimulator.h"
 #include "../include/vertex.h"
-#include "../include/line.h"
 
 
 using namespace std;

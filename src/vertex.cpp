@@ -3,7 +3,6 @@
 
 #include <stddef.h>
 #include "../include/vertex.h"
-#include "../include/line.h"
 
 //constructor
 Vertex::Vertex(int x_coord, int y_coord){
