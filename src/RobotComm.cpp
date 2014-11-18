@@ -8,8 +8,6 @@
 
 using namespace std;
 
-const char * filenametest = "test.txt";//simulation
-const char * filename = "/dev/ttyUSB0";//real
 int checkSum;
 
 /*
@@ -20,28 +18,11 @@ returns -1 if an error occurs
 */
 void sendCoordinates(int x1, int y1, int x2, int y2, FILE * file){
     
-  /* FILE *file;
-   file = fopen(filename,"r+");  //Opening device file(/dev/ttyUSB0)
-
-   if(!file){
-	cout << "Couldn't open file: Switching ports..." << "\n"; 
-	filename = "/dev/ttyUSB1";
-	file = fopen(filename,"r+");  //Opening device file(/dev/ttyUSB0or1) 
-
-	if(!file){
-		cout << "Couldn't open file: Switching ports..." << "\n";
-		filename = "dev/ttyS0"; 
-		file = fopen(filename,"r+");  //Opening device file(/dev/ttyUSB0or1) 	
-		if(!file){
-			cout << "Please make sure robot is connected." << "\n";
-		}
-	}
-
-    } */ 
 	checkSum = x1+y1+y2+x2; 
-	fprintf(file, "%d,%d,%d,%d,%d\n",x1,y1,x2,y2, checkSum); //Writing to the file. Seperate coordinates using commas
+	//Writing to the file. Seperate coordinates using commas
+	fprintf(file, "%d,%d,%d,%d,%d,\n",x1,y1,x2,y2, checkSum); 
 	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "\n";
-	fprintf(file, "y");
+	//fprintf(file, "y");
 	fflush(file);//send the message 
 	
 }
@@ -53,65 +34,20 @@ void sendCoordinates(int x1, int y1, int x2, int y2, FILE * file){
 */
 int receiveACKSerial(FILE * file){
 
-	char data[32];  
-
-	fgets(data, 32, file);//{while( != NULL)
-		
+	char data[32];
+	for(int i = 0; i < 32; i++){
+		data[i] = '0'; 
+	}  
+	fgets(data, 32, file);
+	//while( != NULL){;
 	//}
-	/*int file = open(filename, O_RDONLY);
-
-	if(file < 0){
-		cout << "Error opening file"  << "\n"; 
-		return -2; 
-	}
-
-
-	int e = read(file, data, 32);
-	if(e<0){
-		cout << "Error reading file"  << "\n"; 
-		return -2; 
-	}
 	string  ack = data; 
+	//cout << "Ack = "  << ack <<  "\n"; 
 
-	cout << "Acknowledgement received: "<< ack  << "\n"; //see what information is being sent from the robot
-	if(close(file) < 0){
-		cout << "Error closing file"  << "\n"; 
-		return -2; 
-	}
-*/
-	string  ack = data; 
-	cout << "Acknowledgement received: "<< ack  << "\n"; //see what information is being sent from the robot
-	
-	//convert checkSum to a string so it can be checked
-	/*ostringstream convert; 
-	convert << checkSum; 
-	string checkint = convert.str();
-	string check = "DONE(";
-	check.append(checkint); 
-	check.append(")");
-
-	
-	//locate DONE(checksum) in the out put from robot
-	std::size_t pos = ack.find(check);
-	
-
-	if(pos == std::string::npos){//DONE(checksum) not found
-		std::size_t pos2 = ack.find("DONE(");
-		if(pos2 == std::string::npos){
-			return -1;//DONE has not written yet
-		}else{
-			return -3; //DONE was written, with the wrong checksum
-		}
-		
-   	}else if(pos != std::string::npos){
-			cout << "Points recieved!!"  << "\n"; 
-			return 0; //ack recieved
-	}else{
-		return -2;//if this is reached, then there was an error in the program. 
-	}*/
-
+	//check response for acknowledgements
 	std::size_t pos1 = ack.find("y");
 	std::size_t pos2 = ack.find("n");
+
 	if(pos1 != std::string::npos){//Correct checksum recieved and line drawn
 		cout << "Points recieved!!"  << "\n"; 
 		return 0; //ack recieved 
@@ -121,6 +57,7 @@ int receiveACKSerial(FILE * file){
 		return -1; //nothing was written, keep waiting
 	}
 	return -2;//if this is reached, then there was an error in the program. 
+
 }
 
 

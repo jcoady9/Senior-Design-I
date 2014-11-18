@@ -7,41 +7,53 @@
 // we always need to create an instance of the bioloid control, usually with baud = 1Mbps.
 BioloidController bioloid = BioloidController(1000000);
 
-
-int i, i1;
 const int NUMBER_OF_FIELDS = 3; // how many comma separated fields we expect
 int fieldIndex = 0;            // the current field being received
 int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
-
-int num;
 char input;
-int buff[10]= {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
-int points[5]; 
-int j,p;
+char  buff[5], ack ='0';
+int points[5] = {0,0,0,0,0}; 
+int p, b, num, j, backMotor, frontMotor;
+
+
+int topRight[2] = {355, 730}; //IDEA: store all important vertices in arrays for quick access
+int bottomLeft = {995, 100};
+int bottomRight = {815, 100}; //TopLeft is not needed because of the relaxArm() function
+int deadCenter = {765, 230};
 
 
 void setup(){
-    i = 700;
-    i1 = 300;
-    j=-1;
-    p=0;
+    backMotor = 425; //begin at approx. top left location
+    frontMotor = 730; 
     SetPosition(3, 450);
     Serial.begin(9600); //start serial communications at 38400bps
 }
 
 void loop(){
 
- //if(Serial.available()>0){
- //  readCoordinates();
-// }
-     SetPosition(1,i);
-     SetPosition(2,i1);
+ if(Serial.available()>0){
+   //wait for all information
+   delay(50); 
+   
+   //reset buffer each time new points come in
+   j=0;
+   for(j;j<6;j++){
+     buff[j] = '0';
+     points[j] = -1; 
+   }
+     readCoordinates();
+  }
+  delay(50);
+  Serial.print(ack);
+  Serial.println();
+  Serial.print(backMotor);
+  Serial.println();
+  Serial.print(frontMotor);
+  Serial.println();
+  Serial.flush();
+     SetPosition(1,backMotor);
+     SetPosition(2,frontMotor);
 
-  /*while(i<600){
-     delay(35);
-     SetPosition(1,i);
-     SetPosition(2,i);
-     i++;*/
         int inByte = Serial.read();
         switch (inByte)
         {
@@ -56,72 +68,55 @@ void loop(){
           
           case 'd':
             penDown();
-            break;   
+            break; 
+            
+         case 't': //experimental case using the stored array points for quick access.
+                   //all four corners should have this for easy maneuvering around the area of drawing
+                   
+           backMotor = topRight[0];
+           frontMotor = topRight[1];
+           SetPosition(1, backMotor);
+           SetPosition(2, frontMotor);
+           break;
+         
+         //TODO (SHANE WILL DO THIS) : finish the last few test cases for important corners/points
+         //also we must better organize the test case letters 
          
          case 'm':
-            i+= 10; //moves down and to rightn
+            backMotor+= 10; //moves down and to rightn
             break; 
             
          case 'n':
-            i-= 10; //moves to left in arch
+            backMotor-= 10; //moves to left in arch
             break; 
           
            case 'b':
-            i1+= 10; //moves down and to rightn
+            frontMotor+= 10; //moves down and to rightn
             break; 
           
            case 'v':
-            i1-= 10; //moves down and to rightn
+            frontMotor-= 10; //moves down and to rightn
             break; 
           
           case 'l':
-           i +=5;
-           SetPosition(1,i);
-           i1-=20;
-            SetPosition(2,i1);
+           backMotor +=5;
+           SetPosition(1,backMotor);
+           frontMotor-=20;
+            SetPosition(2,frontMotor);
             break;  
           
            case 'r':
             relaxArm();
             break;    
       }
-      /* Serial.print("motor 1 = ");
-       Serial.println(i);
-       Serial.print("motor 2 = ");
-       Serial.println(i1);*/
-   /*}
-   
-   while(i>400){
-       int inByte = Serial.read();
-       switch (inByte)
-        {
-          case 'q':    
-            relaxArm();
-            exit(0);
-          break; 
-       
-          case 'u':
-            penUp();
-            break;
-        
-          case 'd':
-            penDown();
-            break;
-            
-        }
-        
-       delay(50);
-       SetPosition(1,i);
-       SetPosition(2,i);
-       i--;
-     }*/
+  
 }
 
-void relaxArm(){
-    i=700; 
-   i1=300; 
-    SetPosition(2,i);
-    SetPosition(1,i1);
+void relaxArm(){ //relax to top left corner
+    backMotor = 425; 
+    frontMotor = 730; 
+    SetPosition(1,backMotor);
+    SetPosition(2,frontMotor);
     SetPosition(3,450);
 }
 
@@ -134,75 +129,55 @@ void penDown(){
 }
 
 void readCoordinates(){
-  
+  p=0;
+  b=0;
+  ack = '0';
   while(Serial.available()>0 && p<5)
     {
         input=Serial.read();
-   
-        if(input == ','){
-           num = calc();
-          j=-1;
+        
+        if(input == ','){//comma has been reached, convert numbers from buffer to int
+         points[p] = calc();
+         b=-1;
+        // Serial.println(points[p]);
+         p++;
         }
-        else{
-          j++;
-          buff[j]= input;
-          points[p] =  input - '0'; 
-          //Serial.print("P= ");
-         // Serial.println(points[p]);
-          p++; 
+        else{//value is not a comma, add to buffer
+          b++;
+          buff[b]=input;
+         
        }
-          
+    }     
+    
     int checksum = points[0] + points[1] + points[2] + points[3];
-    Serial.write("DONE(");
-    Serial.print(checksum);
-    Serial.print(")\n");
+   
+    if(checksum == points[4]){
+    //TODO: call draw line method here
+    delay(5000);
+    Serial.print("y\n"); //correct checksum and line is drawn
+    ack = 'y';
+    }else{
+    Serial.print("n"); //wrong checksum, resend 
+    ack = 'n';
+    }
     Serial.flush();
-
- }
+   
 }
 
-int determineLineLength(){
-  
+int drawline(){
+  //coordinates are stored in the first four values 
+  //of the points array
 }
+
 //methond to convert char to an int
 int calc()
 {
-  int num=0,x=0;
+    int num=0,x=0;
  
-    for(x;x<=j;x++){
-          num=num+(buff[x]-48)*pow(10,j-x);
-    }     
-     
+    for(x;x<=b;x++){
+          num=num+(buff[x]-48)*pow(10,b-x);
+    }
     return num;
 }
 
-//other test code I (Shane) wrote to try and communicate in a different way
-/* if( Serial.available())
-  {
-    char ch = Serial.read();
-    if(ch >= '0' && ch <= '9') // is this an ascii digit between 0 and 9?
-    {
-      // yes, accumulate the value
-      values[fieldIndex] = (values[fieldIndex] * 10) + (ch - '0'); 
-    }
-    else if (ch == ',')  // comma is our separator, so move on to the next field
-    {
-      if(fieldIndex < NUMBER_OF_FIELDS-1)
-        fieldIndex++;   // increment field index
-    }
-    else
-    {
-      // any character not a digit or comma ends the acquisition of fields
-      // in this example it's the newline character sent by the Serial Monitor
-      Serial.print( fieldIndex +1);
-      Serial.println(" fields received:");
-      for(int i=0; i <= fieldIndex; i++)
-      {
-        Serial.println(values[i]);
-        values[i] = 0; // set the values to zero, ready for the next message
-      }
-      fieldIndex = 0;  // ready to start over
-    }
-  }
-  */
 

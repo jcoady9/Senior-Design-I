@@ -4,7 +4,6 @@
 #include <stddef.h>
 #include "../include/vertex.h"
 #include "../include/scale.h"
-
 int main()
 {
 	printf("-----------------------------------------------\n");
@@ -12,7 +11,10 @@ int main()
 	printf("-----------------------------------------------\n");
 	
 	//image values
-	Vertex* img = new Vertex(100, 100);
+	Vertex* img = new Vertex(150, 100);
+	Vertex* imgnext = new Vertex(250, 400);
+	img->setNextVertex(imgnext);
+
 	int imgH = 500;
 	int imgL = 500;
 	
@@ -21,9 +23,13 @@ int main()
 	
 	//Results
 	int points[2];
-	rob->getPoint(points);
+	rob->getPoints(points);
 	
-	printf("rob.x: %i\nrob.y: %i\n", points[0], points[1]);
+	printf("V1.x: %i\nV1.y: %i\n", points[0], points[1]);
+
+	rob->getNextVertex()->getPoints(points);
+	
+	printf("V2.x: %i\nV2.y: %i\n", points[0], points[1]);
 	
 	printf("-----------------------------------------------\n");
 	printf("\t\tEnd of test.\n");

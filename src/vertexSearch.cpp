@@ -49,7 +49,7 @@ cv::vector<cv::Vec4i> processImage(cv::Mat & image){
 	
 	return combinedVectors;
 }
-
+,
 /**
  * detects straight lines in an image
  *

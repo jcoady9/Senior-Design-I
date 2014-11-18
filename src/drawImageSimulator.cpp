@@ -11,7 +11,6 @@
 #include <fcntl.h> 
 #include "../include/drawImageSimulator.h"
 #include "../include/vertex.h"
-#include "../include/line.h"
 
 
 
@@ -80,8 +79,8 @@ void drawImageSimulator::drawPic(Vertex* vertex)
 	//receive the points from the vertex(model class) parameter
 	int points[2];
 	int points2[2];
-	vertex->getPoint(points);
-	vertex->getLine(0)->getVertex()->getPoint(points2);	
+	vertex->getPoints(points);
+	vertex->getNextVertex()->getPoints(points2);	
 	
 	//store the points in the vector to be used later
 	vect[0] = points[0];
