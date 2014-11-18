@@ -15,14 +15,12 @@
  * 
  *@return a vector of line and contour coordinates
 */
-cv::vector<cv::Vec4i> processImage(cv::Mat image){
+cv::vector<cv::Vec4i> processImage(cv::Mat & image){
 	
 	//convert image to grayscale if not done already
 	if(image.channels() > 1){
 		cvtColor(image, image, CV_RGB2GRAY);
 	}
-
-	cv::Mat image_copy = image; //copy of the image since lineDetection() will modify the image
 
 	//detect any straight lines in the image
 	cv::vector<cv::Vec4i> lines = lineDetection(image);
@@ -34,7 +32,8 @@ cv::vector<cv::Vec4i> processImage(cv::Mat image){
 
 	//remove contours that are invalid
 	cv::vector< cv::vector<cv::Point> > valid_contours = removeRedundantContours(contours, lines);
-
+	
+	//convert contour cv::Points into cv::Vec4i
 	cv::vector<cv::Vec4i> contour_lines = pointsToVec4i(valid_contours);
 
 	//combine vectors containing line and contour coordinates
@@ -50,7 +49,7 @@ cv::vector<cv::Vec4i> processImage(cv::Mat image){
 	
 	return combinedVectors;
 }
-
+,
 /**
  * detects straight lines in an image
  *
@@ -61,14 +60,18 @@ cv::vector<cv::Vec4i> processImage(cv::Mat image){
 */
 cv::vector<cv::Vec4i> lineDetection(cv::Mat & src){
 
+	//convert image to grayscale if not done already
 	if(src.channels() > 1){
 		cv::cvtColor(src, src, CV_RGB2GRAY);
 	}
 
+	//convert image to a binary image
 	cv::threshold(src, src, 10, 255, CV_THRESH_BINARY_INV);
 
+	//thin out the lines
 	thinning(src);
 
+	//detect all straight lines in the image
 	cv::vector<cv::Vec4i> lines;
 	cv::HoughLinesP(src, lines, 1, CV_PI/180, 50, 50, 10 );
 	
@@ -83,7 +86,7 @@ cv::vector<cv::Vec4i> lineDetection(cv::Mat & src){
  *@param hierarchy - reference to a vector that will store information on the contour hierarchy
  * 
 */
-void contourDetection(cv::Mat src, cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> & hierarchy){
+void contourDetection(const cv::Mat & src, cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> & hierarchy){
 
 	cv::RNG rng(12345);
 
@@ -192,11 +195,16 @@ cv::vector< cv::vector<cv::Point> > removeRedundantContours(cv::vector< cv::vect
 			//compute the distance between each point in the contour and the endpoints of each straight line
 			cv::Point point = contour_vec[k];
 			for(int j = 0; j < (int)lines.size(); j++){
+				//distances of countour point from each endpoint
 				double dist1 = distance(point, cv::Point(lines[j][0], lines[j][1]));
 				double dist2 = distance(point, cv::Point(lines[j][2], lines[j][3]));
+				//distance between both endpoints of line[j]
+				double endpoint_dist = distance(cv::Point(lines[j][0], lines[j][1]), cv::Point(lines[j][2], lines[j][3]));
 				
+				double contour_inLine_dist = dist1 + dist2;
+
 				//if the distance between the contour point and a line endpoint, then increment the number of detected invalid points
-				if(dist1 < MAX_DIST || dist2 < MAX_DIST){
+				if(dist1 < MAX_DIST || dist2 < MAX_DIST || (contour_inLine_dist - endpoint_dist) < 1.0 ){
 					invalid_point_count++;
 					break;
 				}
@@ -239,7 +247,7 @@ double distance(const cv::Point & p1, const cv::Point & p2){
  * 
  *@return the contour information as a vector of Vec4i data types
 */
-cv::vector<cv::Vec4i> pointsToVec4i(cv::vector< cv::vector<cv::Point> > contours){
+cv::vector<cv::Vec4i> pointsToVec4i(const cv::vector< cv::vector<cv::Point> > & contours){
 
 	cv::vector<cv::Vec4i> vector;
 

@@ -40,8 +40,8 @@ int main(int argc, char** argv){
 	//process the image
 	cv::vector<cv::Vec4i> lines = processImage(img);
 	
+	//write image dimensions to CLI
 	Size imgSize = img.size();
-
 	printf("Image Dimensions: %i x %i\n", imgSize.width, imgSize.height);
 
 	for( size_t i = 0; i < lines.size(); i++ ){
@@ -51,10 +51,7 @@ int main(int argc, char** argv){
 		Vertex * temp = vec2Vertex(l);
 		temp = scale(temp, imgSize.width, imgSize.height);
 		Draw(temp, mode); 
-		
 	}
-
-	//imshow("drawn image", img);
 
 	waitKey(0);
 
