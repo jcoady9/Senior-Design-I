@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include "../include/vertex.h"
 #include "../include/scale.h"
+#include <assert.h>
+
 int main()
 {
 	printf("-----------------------------------------------\n");
@@ -19,7 +21,9 @@ int main()
 	int imgL = 500;
 	
 	//Run scale
-	Vertex* rob = scale(img, imgH, imgL);
+	Vertex* rob = NULL;
+	
+	assert(rob == scale(img, imgH, imgL));
 	
 	//Results
 	int points[2];

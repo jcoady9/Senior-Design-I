@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
-
+#include "../include/vertex.h"
 #include "../include/imageProcessor.h"
 
 #define POWER 2
@@ -20,7 +20,7 @@ ImageProcessor::~ImageProcessor(){}
  * 
  *@return a vector of line and contour coordinates
 */
-cv::vector<cv::Vec4i> ImageProcessor::processImage(cv::Mat & image){
+cv::vector<Vertex> ImageProcessor::processImage(cv::Mat & image){
 	
 	//convert image to grayscale if not done already
 	if(image.channels() > 1){
@@ -52,7 +52,14 @@ cv::vector<cv::Vec4i> ImageProcessor::processImage(cv::Mat & image){
 		combinedVectors.push_back(contour_lines[i]);
 	}
 	
-	return combinedVectors;
+	cv::vector<Vertex> vertexVector;
+	
+	for(int i=0; i<int(combinedVectors.size()); i++)
+	{
+		vertexVector.push_back(vec2Vertex(combinedVectors[i]));
+	}
+	
+	return vertexVector;
 }
 
 /**
@@ -273,6 +280,18 @@ cv::vector<cv::Vec4i> ImageProcessor::pointsToVec4i(const cv::vector< cv::vector
 	
 	return vector;
 }
+
+Vertex ImageProcessor::vec2Vertex(cv::Vec4i vec){
+	
+	Vertex* v1 = new Vertex(vec[0], vec[1]);
+	
+	Vertex* v2 = new Vertex(vec[2], vec[3]);
+
+	v1->setNextVertex(v2);
+	
+	return *v1;
+}
+
 
 
 

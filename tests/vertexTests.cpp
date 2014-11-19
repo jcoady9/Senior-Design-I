@@ -1,14 +1,15 @@
 #include <stdio.h>
 
 #include "../include/vertex.h"
+#include <assert.h>
 
-int main(){
+/*int main(){
 
 	int arr[] = {0, 0, 10, 20, 100, 350};	
 	
 	Vertex* v1 = new Vertex(arr[0] , arr[1]);
 	Vertex* v2 = new Vertex(arr[2] , arr[3]);
-	Vertex* v3 = new Vertex(arr[4], arr[5]);
+	Vertex* v3 = new Vertex(arr[4] , arr[5]);
 
 	printf("-------------------------------------------\n");
 	printf("\tTesting Vertex class...\n");
@@ -68,4 +69,110 @@ int main(){
 	printf("-------------------------------------------\n");
 
 	return 0;
+	test_Vertex();
+}*/
+
+int test_Vertex(Vertex* v1)
+{
+	int point[2];
+
+	v1->getPoints(point);
+	
+	assert(point[0] == 5);
+	assert(point[1] == 3);
+	assert(v1->getVisited() == 0);
+	assert(v1->getNextVertex() == NULL);
+	
+	return 0;
 }
+
+int test_getPoints(Vertex* v1)
+{
+	int point[2];
+	
+	v1->getPoints(point);
+	
+	assert(point[0] == 5);
+	assert(point[1] == 3);
+	
+	return 0;
+}
+
+int test_setPoints(Vertex* v1)
+{
+	int point[2];
+	
+	v1->setPoints(6, 7);
+	v1->getPoints(point);
+	
+	assert(point[0] == 6);
+	assert(point[1] == 7);	
+	
+	return 0;
+}
+
+int	test_getVisited(Vertex* v1)
+{
+	assert(v1->getVisited() == 0);
+	
+	return 0;
+}
+
+int	test_setVisited(Vertex* v1)
+{
+	v1->setVisited(2);
+	
+	assert(v1->getVisited() == 2);
+	
+	return 0;
+}
+
+int	test_getNextVertex(Vertex* v1)
+{
+	assert(v1->getNextVertex() == NULL);
+	
+	return 0;
+}
+
+int	test_setNextVertex(Vertex* v1, Vertex* v2)
+{
+	v1->setNextVertex(v2);
+	
+	assert(v1->getNextVertex() == v2);
+	
+	return 0;
+}
+
+int main()
+{
+	Vertex* v1 = new Vertex(5, 3);
+	Vertex* v2 = new Vertex(10, 9);
+	
+	test_Vertex(v1);
+	test_getPoints(v1);
+	test_setPoints(v1);
+	test_getVisited(v1);
+	test_setVisited(v1);
+	test_getNextVertex(v1);
+	test_setNextVertex(v1, v2);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

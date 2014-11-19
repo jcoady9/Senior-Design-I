@@ -41,9 +41,9 @@ void drawImageSimulator::drawPic(Vertex* vertex)
 	cout << "Points sent: = " << points[0] << "," << points[1] << "," << points2[0] << "," << points2[1] << 	"\n"; 
 
 	img = cv::imread("black.png", CV_LOAD_IMAGE_COLOR);
-	cv::line(img,cv::Point(vect[0],vect[1]),cv::Point(vect[2],vect[3]),cv::Scalar(0,0,255), 2,CV_AA);
+	cv::line(img,cv::Point(vect[0],vect[1]),cv::Point(vect[2],vect[3]),cv::Scalar(0,0,255),2,CV_AA);
 	
-	bool wri= cv::imwrite("black.png", img);
+	bool wri = cv::imwrite("black.png", img);
 	if(wri){
 		cv::imshow("Robot Simulated Image", img);
 	}
