@@ -30,4 +30,4 @@ test:
 
 #clean the project directory of all object & executable files
 clean:
-	rm -f *.o *.exe *~ */*.cpp~ */*.h~ $(EXE) $(TEST_EXE)
+	rm -f */*.o */*.exe *~ */*.cpp~ */*.h~ $(EXE) $(TEST_EXE)

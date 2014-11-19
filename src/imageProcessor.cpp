@@ -2,11 +2,16 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "../include/vertexSearch.h"
+#include "../include/imageProcessor.h"
 
 #define POWER 2
 #define MAX_DIST 10.0
 #define PERCENTAGE 0.1
+
+
+ImageProcessor::ImageProcessor(){}
+
+ImageProcessor::~ImageProcessor(){}
 
 /*
  * performs all neccessary processing on an image to detect lines and contours
@@ -15,7 +20,7 @@
  * 
  *@return a vector of line and contour coordinates
 */
-cv::vector<cv::Vec4i> processImage(cv::Mat & image){
+cv::vector<cv::Vec4i> ImageProcessor::processImage(cv::Mat & image){
 	
 	//convert image to grayscale if not done already
 	if(image.channels() > 1){
@@ -49,7 +54,7 @@ cv::vector<cv::Vec4i> processImage(cv::Mat & image){
 	
 	return combinedVectors;
 }
-,
+
 /**
  * detects straight lines in an image
  *
@@ -58,7 +63,7 @@ cv::vector<cv::Vec4i> processImage(cv::Mat & image){
  * @return a vector with the cartesian coordinates of any detected line segments' endpoints
  *
 */
-cv::vector<cv::Vec4i> lineDetection(cv::Mat & src){
+cv::vector<cv::Vec4i> ImageProcessor::lineDetection(cv::Mat & src){
 
 	//convert image to grayscale if not done already
 	if(src.channels() > 1){
@@ -86,7 +91,7 @@ cv::vector<cv::Vec4i> lineDetection(cv::Mat & src){
  *@param hierarchy - reference to a vector that will store information on the contour hierarchy
  * 
 */
-void contourDetection(const cv::Mat & src, cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> & hierarchy){
+void ImageProcessor::contourDetection(const cv::Mat & src, cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> & hierarchy){
 
 	cv::RNG rng(12345);
 
@@ -113,7 +118,7 @@ void contourDetection(const cv::Mat & src, cv::vector< cv::vector<cv::Point> > &
  * @param  im    Binary image with range = 0-1
  * @param  iter  0=even, 1=odd
  */
-void thinningIteration(cv::Mat& im, int iter)
+void ImageProcessor::thinningIteration(cv::Mat& im, int iter)
 {
     cv::Mat marker = cv::Mat::zeros(im.size(), CV_8UC1);
 
@@ -155,7 +160,7 @@ void thinningIteration(cv::Mat& im, int iter)
  *
  * @param  im  Binary image with range = 0-255
  */
-void thinning(cv::Mat& im)
+void ImageProcessor::thinning(cv::Mat& im)
 {
     im /= 255;
 
@@ -182,7 +187,7 @@ void thinning(cv::Mat& im)
  * 
  *@return - a vector of valid contours
 */
-cv::vector< cv::vector<cv::Point> > removeRedundantContours(cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> lines){
+cv::vector< cv::vector<cv::Point> > ImageProcessor::removeRedundantContours(cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> lines){
 	
 	cv::vector< cv::vector<cv::Point> > valid_contours; //a vector to contain all contours that are determined to be valid
 
@@ -231,7 +236,7 @@ cv::vector< cv::vector<cv::Point> > removeRedundantContours(cv::vector< cv::vect
  * @return the distance between p1 and p2
  *
 */
-double distance(const cv::Point & p1, const cv::Point & p2){
+double ImageProcessor::distance(const cv::Point & p1, const cv::Point & p2){
 	
 	double x_sqr, y_sqr;
 	x_sqr = pow( (double)(p2.x - p1.x), POWER); 	
@@ -247,7 +252,7 @@ double distance(const cv::Point & p1, const cv::Point & p2){
  * 
  *@return the contour information as a vector of Vec4i data types
 */
-cv::vector<cv::Vec4i> pointsToVec4i(const cv::vector< cv::vector<cv::Point> > & contours){
+cv::vector<cv::Vec4i> ImageProcessor::pointsToVec4i(const cv::vector< cv::vector<cv::Point> > & contours){
 
 	cv::vector<cv::Vec4i> vector;
 
