@@ -3,12 +3,12 @@
   Created by Shane Bonner, November 17, 2014
   Released into the public domain.
 */
-
+/*
 #include <BioloidController.h>
 #include <ax12.h>
 #include <Motors2.h>
 #include <stdlib.h>
-#include "Robot.h"
+#include "../include/Robot.h"
 
 Robot::Robot()
 //vertice arrays for important coordinates on the plane of drawing
@@ -21,11 +21,11 @@ Robot::Robot()
  frontMotor =  730;
  
  //vertices for important coordinates on the plane of drawing
-/* topRight = {355, 730}; 
- bottomLeft = {995, 100};
- bottomRight = {815, 100}; //TopLeft is not needed because of the relaxArm() function
- deadCenter = {765, 230};
- */
+ //topRight = {355, 730}; 
+ //bottomLeft = {995, 100};
+ //bottomRight = {815, 100}; //TopLeft is not needed because of the relaxArm() function
+ //deadCenter = {765, 230};
+
 }
 
 void Robot::penUp()
@@ -79,5 +79,5 @@ void Robot::toDeadCenter()
  SetPosition(2, frontMotor); 
 }
 
-
+*/
 
