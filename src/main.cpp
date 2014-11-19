@@ -41,18 +41,18 @@ int main(int argc, char** argv){
 	static ImageProcessor imageProcessor;
 
 	//process the image
-	cv::vector<cv::Vec4i> lines = imageProcessor.processImage(img);
+	cv::vector<Vertex> vertices = imageProcessor.processImage(img);
 	
 	//write image dimensions to CLI
 	Size imgSize = img.size();
 	printf("Image Dimensions: %i x %i\n", imgSize.width, imgSize.height);
 
-	for( size_t i = 0; i < lines.size(); i++ ){
-		cv::Vec4i l = lines[i];	
-		printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
+	for( size_t i = 0; i < vertices.size(); i++ ){
+		//cv::Vec4i l = lines[i];	
+		//printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
 		
-		Vertex * temp = vec2Vertex(l);
-		temp = scale(temp, imgSize.width, imgSize.height);
+		//Vertex * temp = vec2Vertex(l);
+		Vertex * temp = scale((Vertex*) &vertices[i], imgSize.width, imgSize.height);
 		
 		if(mode == 1){//simulated
 			drawImageSimulator sim;	
