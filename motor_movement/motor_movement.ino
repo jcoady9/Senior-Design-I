@@ -43,11 +43,11 @@ void loop(){
   }
   delay(50);
   Serial.print(ack);
-  /*Serial.println();
-  Serial.print(backMotor);
   Serial.println();
-  Serial.print(frontMotor);
-  Serial.println();*/
+  Serial.print(robot.backMotor);
+  Serial.println();
+  Serial.print(robot.frontMotor);
+  Serial.println();
   Serial.flush();
      SetPosition(1,robot.backMotor);
      SetPosition(2,robot.frontMotor);
@@ -92,6 +92,10 @@ void loop(){
            case 'v':
             robot.frontMotor-= 10; //moves down and to rightn
             break; 
+            
+           case 'a':
+            robot.drawLine(points[0],points[1],points[2],points[3]);
+            break;
           
           case 'l':
            robot.backMotor +=5;
@@ -132,7 +136,7 @@ void readCoordinates(){
    
     if(checksum == points[4]){
     //TODO: call draw line method here
-    //delay(5000);
+    delay(5000);
     Serial.print("y\n"); //correct checksum and line is drawn
     ack = 'y';
     }else{
