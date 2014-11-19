@@ -33,7 +33,14 @@ int main(int argc, char** argv){
 	    printf("image is empty.\n\n");
 	    exit(1);
 	}
+
+	//Store the black image so it can be reset later
 	Mat img2 = imread("black.png", CV_LOAD_IMAGE_COLOR);
+	if(img2.empty()){
+	    printf("Please supply a blank image.\n\n");
+	    exit(1);
+	}
+
 	//open a window to display the image and enter any key to close the window
 	imshow("Source Image", img);
 
@@ -62,11 +69,13 @@ int main(int argc, char** argv){
 		} 
 	}
 
-	waitKey(0);
+	//clear the black image for next run
 	bool wri= cv::imwrite("black.png", img2);
-	if(wri > 0){
+	if(wri < 0){
+		printf("Error clearing black image.\n");
+	}
 
-	}else
+	waitKey(0);
 
 	return 0;
 }
