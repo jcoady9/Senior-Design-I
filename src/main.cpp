@@ -3,7 +3,7 @@
 #include "../include/drawImageSimulator.h"
 #include "../include/drawImageInterface.h"
 #include <opencv2/highgui/highgui.hpp>
-#include "../include/vertexSearch.h"
+#include "../include/imageProcessor.h"
 #include "../include/vertex.h"
 #include "../include/vec2vertex.h"
 #include "../include/scale.h"
@@ -37,8 +37,10 @@ int main(int argc, char** argv){
 	//open a window to display the image and enter any key to close the window
 	imshow("Source Image", img);
 
+	static ImageProcessor imageProcessor;
+
 	//process the image
-	cv::vector<cv::Vec4i> lines = processImage(img);
+	cv::vector<cv::Vec4i> lines = imageProcessor.processImage(img);
 	
 	//write image dimensions to CLI
 	Size imgSize = img.size();
