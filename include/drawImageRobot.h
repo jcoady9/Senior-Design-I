@@ -1,4 +1,7 @@
 
+#ifndef _DRAWIMAGEROBOT_H_
+#define _DRAWIMAGEROBOT_H_
+
 #include "drawImageInterface.h"
 #include "RobotComm.h"
 
@@ -9,9 +12,11 @@ public:
 	DrawImageRobot();
 	~DrawImageRobot();
 
-	void drawPic(Vertex* vertex);
+	virtual void drawPic(Vertex* vertex);
 
 private: 
 	RobotComm roboComm;
 
 };
+
+#endif //_DRAWIMAGEROBOT_H_

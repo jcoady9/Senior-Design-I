@@ -6,7 +6,6 @@
 
 #include "../include/imageProcessor.h"
 #include "../include/vertex.h"
-#include "../include/vec2vertex.h"
 #include "../include/scale.h"
 #include "../include/RobotComm.h"
 

@@ -8,4 +8,4 @@ DrawImageRobot::DrawImageRobot(){}
 DrawImageRobot::~DrawImageRobot(){}
 
 //implementation of drawPic() for the drawing image with Arbotix robot
-DrawImageRobot::drawPic(Vertex* vertex){}
+void DrawImageRobot::drawPic(Vertex* vertex){}
