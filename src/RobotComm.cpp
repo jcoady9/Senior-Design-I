@@ -11,8 +11,8 @@ using namespace std;
 
 //constructor
 RobotComm::RobotComm(){
-	TfileName = "coordinates.txt";//test
-	RfileName = "/dev/ttyUSB0";//real
+	TfileName = "coordinates.txt";//test file
+	RfileName = "/dev/ttyUSB0";//robot file
 	checkSum = -1;
 
 }
@@ -31,7 +31,7 @@ void RobotComm::sendCoordinates(int x1, int y1, int x2, int y2, FILE * file){
 
 	//Writing to the file. Seperate coordinates using commas
 	fprintf(file, "%d,%d,%d,%d,%d,\n",x1,y1,x2,y2, checkSum); 
-	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "\n";
+	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "," << checkSum<< "\n";
 	fflush(file);//send the message 
 	
 }
@@ -46,8 +46,8 @@ int RobotComm::receiveACKSerial(FILE * file){
 	char data[32];
 	for(int i = 0; i < 32; i++){
 		data[i] = '0'; 
-	}  
-	fgets(data, 32, file);
+	}data[31] = '\n';  
+	fgets(data, 31, file);
 	string  ack = data; 
 	//cout << "Ack = "  << ack <<  "\n"; 
 
@@ -70,7 +70,7 @@ int RobotComm::receiveACKSerial(FILE * file){
 /*
 **Accepts first vertex and accesses it's other vertex via nextVertex() functionality.
 */
-void RobotComm::RobotCommunication(Vertex* v)
+void RobotComm::RobotCommunication(Line * l)
 {
 	// open serial device for both reading and writing
 	FILE *comm;
@@ -92,13 +92,16 @@ void RobotComm::RobotCommunication(Vertex* v)
 			}
 		}
     	}
+	Vertex * v = new Vertex(0,0);
+	int points1[2], points2[2];
 
-	Vertex* temp = v;
-	int points1[2];
-	int points2[2];
-	temp->getPoints(points1);//current vertex
-	temp->getNextVertex()->getPoints(points2); //next vertex
-	temp->setVisited(1);
+	v = l->getCurrentVertex();
+	v->getPoints(points1);
+	v->setVisited(1);
+
+	v = l->getNextVertex();
+	v->getPoints(points2);
+	v->setVisited(1);
 		
 	//Send the vertices coordinates to the robot through its port file
 	sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);
@@ -117,21 +120,21 @@ void RobotComm::RobotCommunication(Vertex* v)
 			exit(0);//fatal error happened in communication
 		}else if(response == -3){
 			printf("Wrong Checksum. Resending...\n");//ack wasrecieved but checksum was wrong
+			c = 0;
 			sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//resend
-			c= 0;
 			done = false;
 		}else if(c==199){
 			//printf("Communcation time out. Resending...\n");//waited too long for ack
-			c=0; 
-			sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//resend
+			c = 0; 
+			//sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//resend
 			done = false;
 		}
 
 	}
 
-	//current vertex's line array has been completed, therefore this vertex is complete	
-	temp->getNextVertex()->setVisited(2);
-	temp->setVisited(2);
+	//current vertex's line array has been completed, therefore this vertex is 
+	l->getCurrentVertex()->setVisited(2);	
+	l->getNextVertex()->setVisited(2);
 	fclose(comm);
 }
 

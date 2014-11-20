@@ -19,6 +19,7 @@ class Robot
   void bottomLeftCorner();
   void bottomRightCorner();
   void toDeadCenter();
+  void drawLine(int x1, int y1, int x2, int y2);
     
   int frontMotor;
   int backMotor;

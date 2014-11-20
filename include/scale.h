@@ -3,8 +3,8 @@
 #ifndef _SCALE_H__
 #define _SCALE_H__
 
-#include "../include/vertex.h"
+#include "Line.h"
 
-Vertex* scale(Vertex* i, int imgH, int imgL);
+Line* scale(Line* i, int imgH, int imgL, int robH, int robW);
 
 #endif

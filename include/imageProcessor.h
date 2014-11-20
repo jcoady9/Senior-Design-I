@@ -4,8 +4,11 @@
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+
 #include "drawing.h"
 #include "vertex.h"
+#include "Line.h"
+
 
 class ImageProcessor {
 
@@ -38,7 +41,7 @@ private:
 	cv::vector<cv::Vec4i> pointsToVec4i(const cv::vector< cv::vector<cv::Point> > & contours);
 
 	//Convert Vec4i into two verticies, then append them.
-	Vertex vec2Vertex(cv::Vec4i vec);
+	Line vec2Vertex(cv::Vec4i vec);
 };
 
 

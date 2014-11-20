@@ -9,7 +9,6 @@ Vertex::Vertex(int x_coord, int y_coord){
 	x = x_coord;
 	y = y_coord;
 	visited = 0;
-	next_vert = NULL;
 }
 
 //destructor
@@ -31,17 +30,12 @@ void Vertex::setPoints(int xcord, int ycord){
 int Vertex::getVisited(){
 	return visited; 
 }
+
+
 //Sets whether or not a vertex has been visited
 void Vertex::setVisited(int vis){
 	visited = vis; 
 }
 
-//Gets the next vertex assoicated with the current one
-Vertex* Vertex::getNextVertex(){
-	return next_vert;
-}
-//Sets the next vertex assoicated with the current one
-void Vertex::setNextVertex(Vertex* next){
-	next_vert = next; 
-}
+
 

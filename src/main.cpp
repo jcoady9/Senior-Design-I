@@ -29,20 +29,29 @@ int main(int argc, char** argv){
 	//load the image
 	Mat img = imread(argv[1], CV_LOAD_IMAGE_COLOR);
 	int mode = atoi(argv[2]);
+	int robotHeight = 100, robotWidth = 150; 
+
 
 	//if the image is not found, exit program
 	if(img.empty()){
 	    printf("image is empty.\n\n");
 	    exit(1);
 	}
+
+	//Store the black image so it can be reset later
 	Mat img2 = imread("black.png", CV_LOAD_IMAGE_COLOR);
+	if(img2.empty()){
+	    printf("Please supply a blank image.\n\n");
+	    exit(1);
+	}
+
 	//open a window to display the image and enter any key to close the window
 	imshow("Source Image", img);
 
 	static ImageProcessor imageProcessor;
 
 	//process the image
-	cv::vector<Vertex> vertices = imageProcessor.processImage(img);
+	cv::vector<Line> vertices = imageProcessor.processImage(img);
 	
 	//write image dimensions to CLI
 	Size imgSize = img.size();
@@ -52,9 +61,10 @@ int main(int argc, char** argv){
 		//cv::Vec4i l = lines[i];	
 		//printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
 		
-		//Vertex * temp = vec2Vertex(l);
-		Vertex * temp = scale((Vertex*) &vertices[i], imgSize.width, imgSize.height);
-		
+		//Line * temp = vec2Vertex(l);
+		//temp = scale(temp, imgSize.width, imgSize.height, robotHeight, robotWidth);
+		//Line * line = new Line(temp->, temp->getNextVertex());
+		Line * temp = scale((Line*) &vertices[i], imgSize.width, imgSize.height, robotHeight, robotWidth);
 		if(mode == 1){//simulated
 			drawImageSimulator sim;	
 			sim.drawPic(temp);
@@ -64,11 +74,13 @@ int main(int argc, char** argv){
 		} 
 	}
 
-	waitKey(0);
+	//clear the black image for next run
 	bool wri= cv::imwrite("black.png", img2);
-	if(wri > 0){
+	if(wri < 0){
+		printf("Error clearing black image.\n");
+	}
 
-	}else
+	waitKey(0);
 
 	return 0;
 }

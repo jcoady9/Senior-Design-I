@@ -2,7 +2,7 @@
 #define _ROBOTCOMM_H__
 
 #include <stdio.h>
-#include "../include/vertex.h"
+#include "../include/Line.h"
 
 class RobotComm {
 	private:
@@ -32,7 +32,7 @@ class RobotComm {
 			**Send the coordinates to the robot. 
 			**Wait for the acknowledgement to come back. 
 		*/
-		void RobotCommunication(Vertex* v);
+		void RobotCommunication(Line * l);
 
 };
 #endif
