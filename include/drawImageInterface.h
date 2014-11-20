@@ -3,13 +3,13 @@
 
 
 #include <stdio.h>
-#include "vertex.h"
+#include "Line.h"
 
 
 class drawImageInterface
 {
 	public:
-		virtual void drawPic(Vertex* vertex) = 0;
+		virtual void drawPic(Line * l) = 0;
 	
 
 };

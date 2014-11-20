@@ -16,8 +16,6 @@ class Vertex {
 		void setPoints(int xcord, int ycord);		//returns the coordinates of the vertex
 		void setVisited(int vis);			//set the visited state of the vertex
 		int getVisited();				//returns the visited state of the vertex
-		Vertex* getNextVertex();		//returns the next vertex assoicated with the current one
-		void setNextVertex(Vertex* next);		//Sets the next vertex assoicated with the current one
 
 };
 

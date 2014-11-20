@@ -4,6 +4,7 @@
 #include "../include/drawImageInterface.h"
 #include <opencv2/highgui/highgui.hpp>
 #include "../include/imageProcessor.h"
+#include "../include/Line.h"
 #include "../include/vertex.h"
 #include "../include/vec2vertex.h"
 #include "../include/scale.h"
@@ -57,9 +58,9 @@ int main(int argc, char** argv){
 		cv::Vec4i l = lines[i];	
 		printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
 		
-		Vertex * temp = vec2Vertex(l);
+		Line * temp = vec2Vertex(l);
 		temp = scale(temp, imgSize.width, imgSize.height);
-		
+		//Line * line = new Line(temp->, temp->getNextVertex());
 		if(mode == 1){//simulated
 			drawImageSimulator sim;	
 			sim.drawPic(temp);

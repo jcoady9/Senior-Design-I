@@ -32,23 +32,6 @@ int main(){
 	printf("Correct output is -> x: %i, y: %i\nv3 output is -> x: %i, y: %i\n\n", 100, 350, point[0], point[1]);
 
 
-	printf("-----------------------------------------------------\n");
-	printf("\tTesting SetNextVertex & getNextVertex() methods...\n");
-	printf("-----------------------------------------------------\n\n");
-
-	v1->setNextVertex(v2);
-	v2->setNextVertex(v3);
-	v3->setNextVertex(v1);
-
-	
-	v1->getNextVertex()->getPoints(point);
-	printf("V1's next vertex is V2. Point output should be %i, %i. \nThe actual output is %i, %i\n ", 10, 20, point[0], point[1]);
-
-	v2->getNextVertex()->getPoints(point);
-	printf("V2's next vertex is V3. Point output should be %i, %i. \nThe actual output is %i, %i\n", 100, 350, point[0], point[1]);
-
-	v3->getNextVertex()->getPoints(point);
-	printf("V3's next vertex is V1. Point output should be %i, %i. \nThe actual output is %i, %i\n", 0, 0, point[0], point[1]);
 	
 	//getVisited() - setVisited()
 	printf("-------------------------------------------------\n");

@@ -13,23 +13,30 @@ int main()
 	//image values
 	Vertex* img = new Vertex(150, 100);
 	Vertex* imgnext = new Vertex(250, 400);
-	img->setNextVertex(imgnext);
+	Line * l = new Line(img, imgnext);
 
 	int imgH = 500;
 	int imgL = 500;
+	int points[2];
+	
+	//print values before scaling happens
+	img->getPoints(points);
+	printf("Before: V1.x: %i. V1.y: %i\n", points[0], points[1]);
+	
+	imgnext->getPoints(points);
+	printf("Before: V2.x: %i. V2.y: %i\n\n", points[0], points[1]);
 	
 	//Run scale
-	Vertex* rob = scale(img, imgH, imgL);
+	Line* rob = scale(l, imgH, imgL);
 	
 	//Results
-	int points[2];
-	rob->getPoints(points);
+	rob->getCurrentVertex()->getPoints(points);
 	
-	printf("V1.x: %i\nV1.y: %i\n", points[0], points[1]);
+	printf("After: V1.x: %i. V1.y: %i\n", points[0], points[1]);
 
 	rob->getNextVertex()->getPoints(points);
 	
-	printf("V2.x: %i\nV2.y: %i\n", points[0], points[1]);
+	printf("After: V2.x: %i. V2.y: %i\n", points[0], points[1]);
 	
 	printf("-----------------------------------------------\n");
 	printf("\t\tEnd of test.\n");

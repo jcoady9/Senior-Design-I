@@ -21,11 +21,11 @@ all :
 #compile all test code
 test:
 	$(CC) $(CFLAGS) src/vertex.cpp tests/vertexTests.cpp -o vertextest
-	$(CC) $(CFLAGS) src/vertex.cpp src/draw.cpp src/drawImageSimulator.cpp src/vec2vertex.cpp tests/vec2vertexTest.cpp src/RobotComm.cpp -o vec2vertexTest $(LIBS) $(LFLAGS)
-	$(CC) $(CFLAGS) src/vertex.cpp src/drawImageSimulator.cpp tests/drawLineTest.cpp -o drawLineTest $(LIBS) $(LFLAGS)
-	$(CC) $(CFLAGS) src/vertex.cpp src/drawImageSimulator.cpp src/RobotComm.cpp src/draw.cpp tests/drawTests.cpp  -o drawtest  $(LIBS) $(LFLAGS)
-	$(CC) $(CFLAGS) src/vertexSearch.cpp tests/imageProcTests.cpp  -o imageProcTest $(LIBS) $(LFLAGS)
-	$(CC) $(CFLAGS) src/vertex.cpp src/scale.cpp tests/scaleTest.cpp -o scaleTest
+	$(CC) $(CFLAGS) src/vertex.cpp src/Line.cpp src/vec2vertex.cpp tests/vec2vertexTest.cpp -o vec2vertexTest $(LIBS) $(LFLAGS)
+	$(CC) $(CFLAGS) src/vertex.cpp src/Line.cpp src/drawImageSimulator.cpp tests/drawLineTest.cpp -o drawLineTest $(LIBS) $(LFLAGS)
+	$(CC) $(CFLAGS) src/vertex.cpp src/Line.cpp src/RobotComm.cpp tests/drawTests.cpp  -o drawtest  $(LIBS) $(LFLAGS)
+	$(CC) $(CFLAGS) src/imageProcessor.cpp tests/imageProcTests.cpp  -o imageProcTest $(LIBS) $(LFLAGS)
+	$(CC) $(CFLAGS) src/vertex.cpp src/Line.cpp src/scale.cpp tests/scaleTest.cpp -o scaleTest
 	
 
 #clean the project directory of all object & executable files

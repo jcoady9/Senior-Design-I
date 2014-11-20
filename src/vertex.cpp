@@ -35,12 +35,4 @@ void Vertex::setVisited(int vis){
 int Vertex::getVisited(){
 	return visited; 
 }
-//Gets the next vertex assoicated with the current one
-Vertex* Vertex::getNextVertex(){
-	return next_vert;
-}
-//Sets the next vertex assoicated with the current one
-void Vertex::setNextVertex(Vertex* next){
-	next_vert = next; 
-}
 

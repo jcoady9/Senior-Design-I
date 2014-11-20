@@ -5,16 +5,17 @@
 
 #include <stdio.h>
 #include <stddef.h>
+#include "../include/Line.h"
 #include "../include/vertex.h"
 #include "../include/vec2vertex.h"
 
-Vertex* vec2Vertex(cv::Vec4i vec)
+Line * vec2Vertex(cv::Vec4i vec)
 {
 	Vertex* v1 = new Vertex(vec[0], vec[1]);
 	
 	Vertex* v2 = new Vertex(vec[2], vec[3]);
 
-	v1->setNextVertex(v2);
+	Line * l = new Line(v1,v2); 
 	
-	return v1;
+	return l;
 }

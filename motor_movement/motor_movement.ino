@@ -1,19 +1,14 @@
-#include <Robot.h>
-
 #include <BioloidController.h>
 #include <ax12.h>
 #include <Motors2.h>
 #include <stdlib.h>
-
+#include <Robot.h>
 
 // we always need to create an instance of the bioloid control, usually with baud = 1Mbps.
 BioloidController bioloid = BioloidController(1000000);
 
-const int NUMBER_OF_FIELDS = 3; // how many comma separated fields we expect
-int fieldIndex = 0;            // the current field being received
-int values[NUMBER_OF_FIELDS];   // array holding values for all the fields
 char input;
-char  buff[5], ack ='0';
+char buff[5], ack ='0';
 int points[5] = {0,0,0,0,0}; 
 int p, b, num, j;
 
@@ -43,12 +38,13 @@ void loop(){
   }
   delay(50);
   Serial.print(ack);
-  Serial.println();
-  Serial.print(robot.backMotor);
+   Serial.flush();
+ // Serial.print("\n");
+  /*Serial.print(robot.backMotor);
   Serial.println();
   Serial.print(robot.frontMotor);
-  Serial.println();
-  Serial.flush();
+  Serial.println();*/
+  
      SetPosition(1,robot.backMotor);
      SetPosition(2,robot.frontMotor);
 
@@ -113,22 +109,21 @@ void loop(){
 
 void readCoordinates(){
   p=0;
-  b=0;
+  b=-1;
   ack = '0';
   while(Serial.available()>0 && p<5)
     {
         input=Serial.read();
         
-        if(input == ','){//comma has been reached, convert numbers from buffer to int
+        if(input == ','){//comma has been reached, convert numbers from buffer to in
          points[p] = calc();
          b=-1;
-        // Serial.println(points[p]);
+       // Serial.println(points[p]);
          p++;
         }
         else{//value is not a comma, add to buffer
           b++;
           buff[b]=input;
-         
        }
     }     
     
@@ -136,7 +131,8 @@ void readCoordinates(){
    
     if(checksum == points[4]){
     //TODO: call draw line method here
-    delay(5000);
+    robot.drawLine(points[0],points[1],points[2],points[3]);
+    //delay(5000);
     Serial.print("y\n"); //correct checksum and line is drawn
     ack = 'y';
     }else{
@@ -158,7 +154,10 @@ int calc()
     int num=0,x=0;
  
     for(x;x<=b;x++){
-          num=num+(buff[x]-48)*pow(10,b-x);
+          num=num+(buff[x]-'0')*pow(10,b-x);
+    }
+    if(num > 100){
+     num=num+1;  
     }
     return num;
 }

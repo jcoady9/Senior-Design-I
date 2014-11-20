@@ -2,13 +2,13 @@
 #include<errno.h>
 #include <opencv2/highgui/highgui.hpp>
 #include "../include/drawImageSimulator.h"
+#include "../include/Line.h"
 #include "../include/vertex.h"
 
 
 using namespace std;
 using namespace cv;
 
-//const char * Filename1 = "test.txt";
 
 int main(){
 	printf("-----------------------------------------------\n");
@@ -18,16 +18,13 @@ int main(){
 	drawImageSimulator sim;	
 	
 	Vertex* vertex1 = new Vertex(50,100);
-	Vertex* vertex2 = new Vertex(100, 250);
+	Vertex* vertex2 = new Vertex(200, 450);
 	
-	vertex1->setNextVertex(vertex2);
+	Line* line = new Line(vertex1,vertex2);
 		
-	//open the file
-	//FILE* file = open(filename1, O_RDWR);
-	 
 	
 	//Run it
-	sim.drawPic(vertex1); 
+	sim.drawPic(line); 
 	
 	waitKey(0);
 }
