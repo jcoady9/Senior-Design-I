@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "../include/vertex.h"
+#include "../include/drawing.h"
 #include "../include/imageProcessor.h"
 
 #define POWER 2

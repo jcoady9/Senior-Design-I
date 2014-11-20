@@ -1,11 +1,13 @@
 #include<stdio.h>
 #include<errno.h>
-#include "../include/drawImageSimulator.h"
-#include "../include/drawImageInterface.h"
+
 #include <opencv2/highgui/highgui.hpp>
 
+#include "../include/drawImageSimulator.h"
+#include "../include/drawImageInterface.h"
 #include "../include/imageProcessor.h"
-#include "../include/vertex.h"
+#include "../include/drawing.h"
+#include "../include/vertex.h" //need to remove
 #include "../include/scale.h"
 #include "../include/RobotComm.h"
 
