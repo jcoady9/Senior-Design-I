@@ -2,20 +2,19 @@
   Robot.cpp - Library for Robot object to control arm outside of main
   Created by Shane Bonner, November 17, 2014
   Released into the public domain.
-*/
+
 
 #include <BioloidController.h>
 #include <ax12.h>
 #include <Motors2.h>
 #include <stdlib.h>
-
 #include <math.h>
 #include "Robot.h"
 
 
 
 Robot::Robot()
-//vertice arrays for important coordinates on the plane of drawing
+//vertice arrays for important coordinates on the plane of drawingHello
 : topRight {355, 730},
   bottomLeft {995, 100},
   bottomRight {815, 100},
@@ -24,6 +23,7 @@ Robot::Robot()
  //starting coordinates for the motors to position to top left of drawing area
  backMotor = 425;
  frontMotor =  730;
+
 
 }
 
@@ -115,6 +115,5 @@ void Robot::drawLine(int x1, int y1, int x2, int y2)
  
 
 }
-
-
+*/
 

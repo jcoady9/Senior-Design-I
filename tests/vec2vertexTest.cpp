@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stddef.h>
-#include "../include/vertex.h"
+#include "../include/Line.h"
 #include "../include/vec2vertex.h"
 
 
@@ -19,11 +19,11 @@ int main()
 	printf("Vector = : %i , %i, %i, %i\n", vec[0], vec[1], vec[2], vec[3]);
 
 	//Run vec2vertex
-	Vertex* test = vec2Vertex(vec);
+	Line* test = vec2Vertex(vec);
 
 	int points1[2];
 	int points2[2];
-	test->getPoints(points1);//current vertex
+	test->getCurrentVertex()->getPoints(points1);//current vertex
 	test->getNextVertex()->getPoints(points2); //next vertex
 	
 	printf("v1: %i , %i\n", points1[0], points1[1]);

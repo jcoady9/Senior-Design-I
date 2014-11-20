@@ -4,12 +4,12 @@
 
 #include <opencv2/highgui/highgui.hpp>
 
-#include "../include/vertexSearch.h"
+#include "../include/imageProcessor.h"
 
 #define NUM_IMAGES 6 //number of images we are using for testing
 
 int main(){
-
+/*
 	//string array of image filenames
 	std::string filename[NUM_IMAGES] = {"images/line.png", "images/diagonal-line.png", "images/horizontal-lines.jpg", "images/wovenlines.jpeg", "images/curved-line.png", "images/two2.png"};
 	cv::RNG rng(0); //random number generator so we can make draw each line a different color
@@ -151,7 +151,7 @@ int main(){
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	cv::waitKey(0);
-
+*/
 	return 0 ;
 }
 

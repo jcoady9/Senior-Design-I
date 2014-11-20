@@ -10,6 +10,7 @@
 #include <string>
 #include <fcntl.h> 
 #include "../include/drawImageSimulator.h"
+#include "../include/Line.h"
 #include "../include/vertex.h"
 
 
@@ -20,18 +21,23 @@ using namespace std;
 
 //const char * FILE_NAME = "test.txt"; 
 
-void drawImageSimulator::drawPic(Vertex* vertex)
+void drawImageSimulator::drawPic(Line * l)
 {
 
 	cv::Mat img;
 
 	cv::Vec4i vect;
-	
-	//receive the points from the vertex(model class) parameter
-	int points[2];
-	int points2[2];
-	vertex->getPoints(points);
-	vertex->getNextVertex()->getPoints(points2);	
+
+	//pull vertices from the Line
+	Vertex * v = new Vertex(0,0);
+	int points[2], points2[2];
+
+	v = l->getCurrentVertex();
+	v->getPoints(points);
+
+	v = l->getNextVertex();
+	v->getPoints(points2);
+
 	
 	//store the points in the vector to be used later
 	vect[0] = points[0];

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
+#include "../include/Line.h"
 #include "../include/vertex.h"
 #include "../include/imageProcessor.h"
 
@@ -20,7 +21,7 @@ ImageProcessor::~ImageProcessor(){}
  * 
  *@return a vector of line and contour coordinates
 */
-cv::vector<Vertex> ImageProcessor::processImage(cv::Mat & image){
+cv::vector<Line> ImageProcessor::processImage(cv::Mat & image){
 	
 	//convert image to grayscale if not done already
 	if(image.channels() > 1){
@@ -52,7 +53,7 @@ cv::vector<Vertex> ImageProcessor::processImage(cv::Mat & image){
 		combinedVectors.push_back(contour_lines[i]);
 	}
 	
-	cv::vector<Vertex> vertexVector;
+	cv::vector<Line> vertexVector;
 	
 	for(int i=0; i<int(combinedVectors.size()); i++)
 	{
@@ -281,15 +282,16 @@ cv::vector<cv::Vec4i> ImageProcessor::pointsToVec4i(const cv::vector< cv::vector
 	return vector;
 }
 
-Vertex ImageProcessor::vec2Vertex(cv::Vec4i vec){
+Line ImageProcessor::vec2Vertex(cv::Vec4i vec){
 	
 	Vertex* v1 = new Vertex(vec[0], vec[1]);
 	
 	Vertex* v2 = new Vertex(vec[2], vec[3]);
-
-	v1->setNextVertex(v2);
 	
-	return *v1;
+	Line * line  = new Line(v1, v2);
+	//v1->setNextVertex(v2);
+	
+	return *line;
 }
 
 

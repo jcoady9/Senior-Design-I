@@ -33,23 +33,6 @@
 	printf("Correct output is -> x: %i, y: %i\nv3 output is -> x: %i, y: %i\n\n", 100, 350, point[0], point[1]);
 
 
-	printf("-----------------------------------------------------\n");
-	printf("\tTesting SetNextVertex & getNextVertex() methods...\n");
-	printf("-----------------------------------------------------\n\n");
-
-	v1->setNextVertex(v2);
-	v2->setNextVertex(v3);
-	v3->setNextVertex(v1);
-
-	
-	v1->getNextVertex()->getPoints(point);
-	printf("V1's next vertex is V2. Point output should be %i, %i. \nThe actual output is %i, %i\n ", 10, 20, point[0], point[1]);
-
-	v2->getNextVertex()->getPoints(point);
-	printf("V2's next vertex is V3. Point output should be %i, %i. \nThe actual output is %i, %i\n", 100, 350, point[0], point[1]);
-
-	v3->getNextVertex()->getPoints(point);
-	printf("V3's next vertex is V1. Point output should be %i, %i. \nThe actual output is %i, %i\n", 0, 0, point[0], point[1]);
 	
 	//getVisited() - setVisited()
 	printf("-------------------------------------------------\n");
@@ -81,7 +64,7 @@ int test_Vertex(Vertex* v1)
 	assert(point[0] == 5);
 	assert(point[1] == 3);
 	assert(v1->getVisited() == 0);
-	assert(v1->getNextVertex() == NULL);
+	//assert(v1->getNextVertex() == NULL);
 	
 	return 0;
 }
@@ -127,7 +110,7 @@ int	test_setVisited(Vertex* v1)
 	return 0;
 }
 
-int	test_getNextVertex(Vertex* v1)
+/*int	test_getNextVertex(Vertex* v1)
 {
 	assert(v1->getNextVertex() == NULL);
 	
@@ -141,7 +124,7 @@ int	test_setNextVertex(Vertex* v1, Vertex* v2)
 	assert(v1->getNextVertex() == v2);
 	
 	return 0;
-}
+}*/
 
 int main()
 {
@@ -153,8 +136,8 @@ int main()
 	test_setPoints(v1);
 	test_getVisited(v1);
 	test_setVisited(v1);
-	test_getNextVertex(v1);
-	test_setNextVertex(v1, v2);
+	//test_getNextVertex(v1);
+	//test_setNextVertex(v1, v2);
 }
 
 

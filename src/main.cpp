@@ -4,8 +4,8 @@
 #include "../include/drawImageInterface.h"
 #include <opencv2/highgui/highgui.hpp>
 #include "../include/imageProcessor.h"
+#include "../include/Line.h"
 #include "../include/vertex.h"
-#include "../include/vec2vertex.h"
 #include "../include/scale.h"
 #include "../include/RobotComm.h"
 
@@ -27,6 +27,8 @@ int main(int argc, char** argv){
 	//load the image
 	Mat img = imread(argv[1], CV_LOAD_IMAGE_COLOR);
 	int mode = atoi(argv[2]);
+	int robotHeight = 100, robotWidth = 150; 
+
 
 	//if the image is not found, exit program
 	if(img.empty()){
@@ -47,7 +49,7 @@ int main(int argc, char** argv){
 	static ImageProcessor imageProcessor;
 
 	//process the image
-	cv::vector<Vertex> vertices = imageProcessor.processImage(img);
+	cv::vector<Line> vertices = imageProcessor.processImage(img);
 	
 	//write image dimensions to CLI
 	Size imgSize = img.size();
@@ -57,9 +59,10 @@ int main(int argc, char** argv){
 		//cv::Vec4i l = lines[i];	
 		//printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
 		
-		//Vertex * temp = vec2Vertex(l);
-		Vertex * temp = scale((Vertex*) &vertices[i], imgSize.width, imgSize.height);
-		
+		//Line * temp = vec2Vertex(l);
+		//temp = scale(temp, imgSize.width, imgSize.height, robotHeight, robotWidth);
+		//Line * line = new Line(temp->, temp->getNextVertex());
+		Line * temp = scale((Line*) &vertices[i], imgSize.width, imgSize.height, robotHeight, robotWidth);
 		if(mode == 1){//simulated
 			drawImageSimulator sim;	
 			sim.drawPic(temp);

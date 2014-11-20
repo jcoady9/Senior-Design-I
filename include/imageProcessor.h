@@ -4,7 +4,9 @@
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include "../include/Line.h"
 #include "../include/vertex.h"
+
 
 class ImageProcessor {
 
@@ -14,7 +16,7 @@ public:
 	~ImageProcessor();
 
 	//run all image processing methods
-	cv::vector<Vertex> processImage(cv::Mat & image);
+	cv::vector<Line> processImage(cv::Mat & image);
 
 private:
 	//line detection
@@ -37,7 +39,7 @@ private:
 	cv::vector<cv::Vec4i> pointsToVec4i(const cv::vector< cv::vector<cv::Point> > & contours);
 
 	//Convert Vec4i into two verticies, then append them.
-	Vertex vec2Vertex(cv::Vec4i vec);
+	Line vec2Vertex(cv::Vec4i vec);
 };
 
 
