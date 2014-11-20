@@ -17,8 +17,8 @@ int main()
 	Vertex* imgnext = new Vertex(250, 400);
 	Line * l = new Line(img, imgnext);
 
-	int imgH = 500;
-	int imgL = 500;
+	int imgH = 500, robH = 100;
+	int imgL = 500, robL = 100;
 	int points[2];
 	
 	//print values before scaling happens
@@ -29,9 +29,9 @@ int main()
 	printf("Before: V2.x: %i. V2.y: %i\n\n", points[0], points[1]);
 	
 	//Run scale
-	Line* rob = scale(l, imgH, imgL);
+	Line* rob = scale(l, imgH, imgL, robH, robL);
 	
-	assert(rob == scale(l, imgH, imgL));
+	assert(rob == scale(l, imgH, imgL, robH, robL));
 	
 	//Results
 	rob->getCurrentVertex()->getPoints(points);

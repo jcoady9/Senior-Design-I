@@ -8,6 +8,7 @@ class drawImageSimulator: public drawImageInterface
 {
 public:
 	virtual void drawPic(Line * l);
+	virtual Line* scale(Line* i, int imgH, int imgL, int robH, int robW); 
 };
 
 #endif // DRAWIMAGESIMULATOR_H

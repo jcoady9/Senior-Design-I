@@ -7,8 +7,6 @@
 #include "../include/drawImageInterface.h"
 #include "../include/imageProcessor.h"
 #include "../include/drawing.h"
-#include "../include/vertex.h" //need to remove
-#include "../include/scale.h"
 #include "../include/RobotComm.h"
 
 
@@ -29,7 +27,7 @@ int main(int argc, char** argv){
 	//load the image
 	Mat img = imread(argv[1], CV_LOAD_IMAGE_COLOR);
 	int mode = atoi(argv[2]);
-	int robotHeight = 100, robotWidth = 150; 
+	int robotHeight = 512, robotWidth = 512; 
 
 
 	//if the image is not found, exit program
@@ -63,13 +61,14 @@ int main(int argc, char** argv){
 		//cv::Vec4i l = lines[i];	
 		//printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
 
-		Line * temp = scale((Line*) &lines[i], imgSize.width, imgSize.height, robotHeight, robotWidth);
+		//Line * temp = scale((Line*) &lines[i], imgSize.width, imgSize.height, robotHeight, robotWidth);
 		if(mode == 1){//simulated
 			drawImageSimulator sim;	
-			sim.drawPic(temp);
+			sim.scale((Line*) &lines[i],imgSize.width, imgSize.height, robotHeight, robotWidth);
+			sim.drawPic((Line*) &lines[i]);
 		}else if(mode == 2){//actual robot
 			RobotComm Robot;
-			Robot.RobotCommunication(temp);
+			Robot.RobotCommunication((Line*) &lines[i]);
 		} 
 	}
 
