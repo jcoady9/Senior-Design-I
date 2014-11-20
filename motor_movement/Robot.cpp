@@ -12,7 +12,6 @@
 #include <math.h>
 #include "Robot.h"
 
-#include "../include/Robot.h"
 
 
 Robot::Robot()
@@ -26,7 +25,15 @@ Robot::Robot()
  backMotor = 425;
  frontMotor =  730;
 
+}
 
+Robot::~Robot()
+{
+ //Deallocate memory
+ delete[] topRight;
+ delete[] bottomLeft;
+ delete[] bottomRight;
+ delete[] deadCenter;
 }
 
 //lift the pen
