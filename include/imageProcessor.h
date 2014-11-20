@@ -4,19 +4,23 @@
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include "../include/Line.h"
-#include "../include/vertex.h"
 
+#include "drawing.h"
+#include "vertex.h"
+#include "Line.h"
 
+/*
+ *
+*/
 class ImageProcessor {
 
 public:
 
-	ImageProcessor();
-	~ImageProcessor();
+	ImageProcessor(); //constructor
+	~ImageProcessor(); //destructor
 
 	//run all image processing methods
-	cv::vector<Line> processImage(cv::Mat & image);
+	Drawing* processImage(cv::Mat & image);
 
 private:
 	//line detection
