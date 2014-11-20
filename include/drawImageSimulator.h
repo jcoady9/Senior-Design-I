@@ -7,8 +7,7 @@
 class drawImageSimulator: public drawImageInterface
 {
 public:
-	virtual void drawPic(Line * l); //CHANGE PARAMETER
-
+	virtual void drawPic(Line * l);
 };
 
 #endif // DRAWIMAGESIMULATOR_H

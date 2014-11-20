@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include "../include/vertex.h"
 #include "../include/scale.h"
+#include <assert.h>
+
 int main()
 {
 	printf("-----------------------------------------------\n");
@@ -28,6 +30,8 @@ int main()
 	
 	//Run scale
 	Line* rob = scale(l, imgH, imgL);
+	
+	assert(rob == scale(l, imgH, imgL));
 	
 	//Results
 	rob->getCurrentVertex()->getPoints(points);
