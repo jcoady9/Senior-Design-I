@@ -27,7 +27,7 @@ int main(int argc, char** argv){
 	//load the image
 	Mat img = imread(argv[1], CV_LOAD_IMAGE_COLOR);
 	int mode = atoi(argv[2]);
-	int robotHeight = 100, robotWidth = 150; 
+	int robotHeight = 512, robotWidth = 512; 
 
 
 	//if the image is not found, exit program
@@ -62,13 +62,14 @@ int main(int argc, char** argv){
 		//Line * temp = vec2Vertex(l);
 		//temp = scale(temp, imgSize.width, imgSize.height, robotHeight, robotWidth);
 		//Line * line = new Line(temp->, temp->getNextVertex());
-		Line * temp = scale((Line*) &vertices[i], imgSize.width, imgSize.height, robotHeight, robotWidth);
+
 		if(mode == 1){//simulated
 			drawImageSimulator sim;	
-			sim.drawPic(temp);
+			sim.scale((Line*) &vertices[i],imgSize.width, imgSize.height, robotHeight, robotWidth);
+			sim.drawPic((Line*) &vertices[i]);
 		}else if(mode == 2){//actual robot
 			RobotComm Robot;
-			Robot.RobotCommunication(temp);
+			Robot.RobotCommunication((Line*) &vertices[i]);
 		} 
 	}
 
