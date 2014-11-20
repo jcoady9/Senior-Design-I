@@ -29,9 +29,9 @@ int main()
 	printf("Before: V2.x: %i. V2.y: %i\n\n", points[0], points[1]);
 	
 	//Run scale
-	Line* rob = scale(l, imgH, imgL);
+	Line* rob = scale(l, imgH, imgL, 5, 7);
 	
-	assert(rob == scale(l, imgH, imgL));
+	assert(rob == scale(l, imgH, imgL, 5, 7));
 	
 	//Results
 	rob->getCurrentVertex()->getPoints(points);

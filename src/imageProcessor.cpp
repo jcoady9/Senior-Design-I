@@ -289,7 +289,6 @@ Line ImageProcessor::vec2Vertex(cv::Vec4i vec){
 	Vertex* v2 = new Vertex(vec[2], vec[3]);
 	
 	Line * line  = new Line(v1, v2);
-	//v1->setNextVertex(v2);
 	
 	return *line;
 }

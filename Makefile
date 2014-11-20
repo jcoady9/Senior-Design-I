@@ -21,10 +21,10 @@ all :
 #compile all test code
 test:
 	$(CC) $(CFLAGS) src/vertex.cpp tests/vertexTests.cpp -o vertextest
-	$(CC) $(CFLAGS) src/vertex.cpp src/Line.cpp src/vec2vertex.cpp tests/vec2vertexTest.cpp -o vec2vertexTest $(LIBS) $(LFLAGS)
+	$(CC) $(CFLAGS) src/vertex.cpp src/Line.cpp tests/LineTests.cpp -o LineTests
 	$(CC) $(CFLAGS) src/vertex.cpp src/Line.cpp src/drawImageSimulator.cpp tests/drawLineTest.cpp -o drawLineTest $(LIBS) $(LFLAGS)
 	$(CC) $(CFLAGS) src/vertex.cpp src/Line.cpp src/RobotComm.cpp tests/drawTests.cpp  -o drawtest  $(LIBS) $(LFLAGS)
-	$(CC) $(CFLAGS) src/imageProcessor.cpp tests/imageProcTests.cpp  -o imageProcTest $(LIBS) $(LFLAGS)
+	$(CC) $(CFLAGS) src/imageProcessor.cpp tests/imageProcTests.cpp src/Line.cpp src/vertex.cpp -o imageProcTest $(LIBS) $(LFLAGS)
 	$(CC) $(CFLAGS) src/vertex.cpp src/Line.cpp src/scale.cpp tests/scaleTest.cpp -o scaleTest
 	
 
