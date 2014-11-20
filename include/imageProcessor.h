@@ -4,7 +4,8 @@
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include "../include/vertex.h"
+#include "drawing.h"
+#include "vertex.h"
 
 class ImageProcessor {
 
@@ -14,7 +15,7 @@ public:
 	~ImageProcessor();
 
 	//run all image processing methods
-	cv::vector<Vertex> processImage(cv::Mat & image);
+	Drawing processImage(cv::Mat & image);
 
 private:
 	//line detection

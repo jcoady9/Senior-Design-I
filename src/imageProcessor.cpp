@@ -1,8 +1,8 @@
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
-#include "../include/vertex.h"
-#include "../include/drawing.h"
+//#include "../include/vertex.h"
+//#include "../include/drawing.h"
 #include "../include/imageProcessor.h"
 
 #define POWER 2
@@ -21,7 +21,7 @@ ImageProcessor::~ImageProcessor(){}
  * 
  *@return a vector of line and contour coordinates
 */
-cv::vector<Vertex> ImageProcessor::processImage(cv::Mat & image){
+Drawing ImageProcessor::processImage(cv::Mat & image){
 	
 	//convert image to grayscale if not done already
 	if(image.channels() > 1){
@@ -59,8 +59,10 @@ cv::vector<Vertex> ImageProcessor::processImage(cv::Mat & image){
 	{
 		vertexVector.push_back(vec2Vertex(combinedVectors[i]));
 	}
-	
-	return vertexVector;
+
+	Drawing newDrawing = new Drawing(/*insert line vector here*/);
+
+	return newDrawing;
 }
 
 /**
