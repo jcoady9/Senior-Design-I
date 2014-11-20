@@ -9,9 +9,9 @@ DrawImageRobot::~DrawImageRobot(){}
 
 //implementation of drawPic() for the drawing image with Arbotix robot
 void DrawImageRobot::drawPic(Vertex* vertex){
-
+	/*
 	for(int i = 0; i < (int)lines.size(); i++){
-		if(/*user presses 'quit' key*/){
+		if(i == 0){
 			Command quitComm = new QuitCommand();
 			roboComm.runCommand(quitComm);
 			break;
@@ -22,8 +22,8 @@ void DrawImageRobot::drawPic(Vertex* vertex){
 		Command sendCoords = new SendCommand(lines[i]);
 		roboComm.runCommand(sendCoords);
 
-		/*wait until response from robot*/
-
-	}
-
+		
+	
+	}*/
+	
 }

@@ -14,7 +14,7 @@ Drawing::Drawing(std::vector<Line> lines){
  * destructor
 */
 Drawing::~Drawing(){
-	lines.clear();
+	dLines.clear();
 }
 
 /*

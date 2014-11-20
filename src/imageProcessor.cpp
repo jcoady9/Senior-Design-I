@@ -1,13 +1,9 @@
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
-<<<<<<< HEAD
-//#include "../include/vertex.h"
-//#include "../include/drawing.h"
-=======
+#include "../include/drawing.h"
 #include "../include/Line.h"
 #include "../include/vertex.h"
->>>>>>> ee0f2930b34defa39ff6f0d150ad20bbf62ee8e3
 #include "../include/imageProcessor.h"
 
 #define POWER 2
@@ -26,11 +22,7 @@ ImageProcessor::~ImageProcessor(){}
  * 
  *@return a vector of line and contour coordinates
 */
-<<<<<<< HEAD
-Drawing ImageProcessor::processImage(cv::Mat & image){
-=======
-cv::vector<Line> ImageProcessor::processImage(cv::Mat & image){
->>>>>>> ee0f2930b34defa39ff6f0d150ad20bbf62ee8e3
+Drawing* ImageProcessor::processImage(cv::Mat & image){
 	
 	//convert image to grayscale if not done already
 	if(image.channels() > 1){
@@ -61,15 +53,19 @@ cv::vector<Line> ImageProcessor::processImage(cv::Mat & image){
 	for(int i = 0; i < (int)contour_lines.size(); i++){
 		combinedVectors.push_back(contour_lines[i]);
 	}
-	
-	cv::vector<Line> vertexVector;
-	
-	for(int i=0; i<int(combinedVectors.size()); i++)
-	{
-		vertexVector.push_back(vec2Vertex(combinedVectors[i]));
+
+	//convert vector of vec4i to vector of lines
+	std::vector<Line> lines_vec4i;
+	for(int i = 0; i < (int)combinedVectors.size(); i++){
+		cv::Vec4i vec = combinedVectors[i];
+		Vertex* v1 = new Vertex(vec[0], vec[1]);
+		Vertex* v2 = new Vertex(vec[2], vec[3]);
+		Line* line = new Line(v1, v2);
+		lines_vec4i.push_back(*line);
 	}
 
-	Drawing newDrawing = new Drawing(/*insert line vector here*/);
+	//create new Drawing object to store detected lines
+	Drawing* newDrawing = new Drawing(lines_vec4i);
 
 	return newDrawing;
 }

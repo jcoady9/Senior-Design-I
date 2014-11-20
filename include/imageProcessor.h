@@ -9,16 +9,18 @@
 #include "vertex.h"
 #include "Line.h"
 
-
+/*
+ *
+*/
 class ImageProcessor {
 
 public:
 
-	ImageProcessor();
-	~ImageProcessor();
+	ImageProcessor(); //constructor
+	~ImageProcessor(); //destructor
 
 	//run all image processing methods
-	Drawing processImage(cv::Mat & image);
+	Drawing* processImage(cv::Mat & image);
 
 private:
 	//line detection

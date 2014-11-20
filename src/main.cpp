@@ -51,20 +51,19 @@ int main(int argc, char** argv){
 	static ImageProcessor imageProcessor;
 
 	//process the image
-	cv::vector<Line> vertices = imageProcessor.processImage(img);
-	
+	Drawing* drawing = imageProcessor.processImage(img);
+
 	//write image dimensions to CLI
 	Size imgSize = img.size();
 	printf("Image Dimensions: %i x %i\n", imgSize.width, imgSize.height);
-
-	for( size_t i = 0; i < vertices.size(); i++ ){
+	
+	//get vector of lines from lines
+	std::vector<Line> lines = drawing->getLines();
+	for( size_t i = 0; i < lines.size(); i++ ){
 		//cv::Vec4i l = lines[i];	
 		//printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
-		
-		//Line * temp = vec2Vertex(l);
-		//temp = scale(temp, imgSize.width, imgSize.height, robotHeight, robotWidth);
-		//Line * line = new Line(temp->, temp->getNextVertex());
-		Line * temp = scale((Line*) &vertices[i], imgSize.width, imgSize.height, robotHeight, robotWidth);
+
+		Line * temp = scale((Line*) &lines[i], imgSize.width, imgSize.height, robotHeight, robotWidth);
 		if(mode == 1){//simulated
 			drawImageSimulator sim;	
 			sim.drawPic(temp);
