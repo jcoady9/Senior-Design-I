@@ -1,5 +1,5 @@
-#ifndef ROBOT_h
-#define ROBOT_h
+#ifndef Robot_h
+#define Robot_h
 
 /*
   Robot.h - Library header file for Robot object to control arm movements
@@ -12,7 +12,6 @@ class Robot
 {
  public:
   Robot();
-  ~Robot();
   void penUp();
   void penDown();
   void relaxArm();

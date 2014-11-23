@@ -2,19 +2,19 @@
   Robot.cpp - Library for Robot object to control arm outside of main
   Created by Shane Bonner, November 17, 2014
   Released into the public domain.
-
+*/
 
 #include <BioloidController.h>
 #include <ax12.h>
 #include <Motors2.h>
 #include <stdlib.h>
+
 #include <math.h>
 #include "Robot.h"
 
 
-
 Robot::Robot()
-//vertice arrays for important coordinates on the plane of drawingHello
+//vertice arrays for important coordinates on the plane of drawing
 : topRight {355, 730},
   bottomLeft {995, 100},
   bottomRight {815, 100},
@@ -25,15 +25,6 @@ Robot::Robot()
  frontMotor =  730;
 
 
-}
-
-Robot::~Robot()
-{
- //Deallocate memory
- delete[] topRight;
- delete[] bottomLeft;
- delete[] bottomRight;
- delete[] deadCenter;
 }
 
 //lift the pen
@@ -97,23 +88,31 @@ void Robot::toDeadCenter()
 void Robot::drawLine(int x1, int y1, int x2, int y2)
 {
  penUp();
+
+ delay(1000);
  backMotor = x1;
  frontMotor = y1;
  SetPosition(1, backMotor);
+ delay(1000);
  SetPosition(2, frontMotor);
 
  //as x increases on the plane, y decreases
  //double xDiff = x2 - x1;
  //double distance = sqrt(((pow(xDiff, 2)) + (pow(yDiff,2))); 
-// delay(100);
+ delay(1000);
 
+ SetPosition(1, backMotor);
+ 
  penDown();
+ delay(1000);
  backMotor = x2;
  frontMotor = y2;
- SetPosition(1, backMotor);
  SetPosition(2, frontMotor);
+ 
+ 
  
 
 }
-*/
+
+
 

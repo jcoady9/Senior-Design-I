@@ -6,11 +6,12 @@ coordinates it has been sent to draw a straight line
 */
 
 #include "../include/drawLineCommand.h"
+#include "string.h"
 
 //constructor
 drawLineCommand::drawLineCommand()
 {
-	char name = 'a'; //CHANGE THIS WHEN NECESSARY. a is the current command on the arduino side. 
+	str::string name = "a"; //CHANGE THIS WHEN NECESSARY. a is the current command on the arduino side. 
 
 }
 
@@ -20,7 +21,7 @@ drawLineCommand::~drawLineCommand()
 
 }
 
-drawLineCommand::toString()
+str::string drawLineCommand::toString()
 {
 	return name;
 }
