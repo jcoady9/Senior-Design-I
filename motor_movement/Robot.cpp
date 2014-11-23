@@ -87,7 +87,7 @@ void Robot::toDeadCenter()
 
 void Robot::drawLine(int x1, int y1, int x2, int y2)
 {
- penUp();
+// penUp();
 
  delay(1000);
  backMotor = x1;
@@ -97,19 +97,53 @@ void Robot::drawLine(int x1, int y1, int x2, int y2)
  SetPosition(2, frontMotor);
 
  //as x increases on the plane, y decreases
- //double xDiff = x2 - x1;
- //double distance = sqrt(((pow(xDiff, 2)) + (pow(yDiff,2))); 
- delay(1000);
+ penDown();
+ double xDiff = (double) x2 - (double) x1;
+ double yDiff = (double) y2 - (double) y1;
+ double distance = sqrt((xDiff * xDiff)+(yDiff*yDiff)); //distance formula
 
- SetPosition(1, backMotor);
+ double slope = yDiff / xDiff;
+ double distanceMoved = 0;
+ double hypotenuse;
+ int slopeMod = ((-5)*slope); //modified value of slope to add 
+
+ while(distanceMoved < distance && backMotor >= 355 && backMotor <= 995 && frontMotor <= 730 && frontMotor >= 100){
+  if(slope < 0){
+	delay(50);
+	backMotor -= 5;
+	frontMotor += slopeMod;
+ 	Serial.println(backMotor);
+	Serial.println(frontMotor);
+	SetPosition(1,backMotor);
+  	SetPosition(2,frontMotor); 
+  	hypotenuse += sqrt((frontMotor*frontMotor)+(backMotor * backMotor));
+	Serial.println(hypotenuse);  	
+	distanceMoved += hypotenuse;
+
+  }else{
+	delay(50);
+	backMotor += 5; 
+	SetPosition(1,backMotor);
+	frontMotor += (5 * slope);
+	SetPosition(2,frontMotor); 
+	hypotenuse += sqrt((frontMotor*frontMotor)+(backMotor * backMotor));
+	distanceMoved += hypotenuse;
+  }
+ }
+
+ penUp();
+/*delay(1000);
+
+
  
  penDown();
  delay(1000);
  backMotor = x2;
  frontMotor = y2;
+ SetPosition(1, backMotor);
  SetPosition(2, frontMotor);
  
- 
+ */
  
 
 }
