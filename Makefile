@@ -7,7 +7,7 @@ CFLAGS= -Wall -ggdb
 
 EXE= project
 
-TEST_EXE= vertextest vec2vertexTest drawtest imageProcTest scaleTest drawLineTest
+TEST_EXE= vertextest vec2vertexTest drawtest imageProcTest scaleTest drawLineTest imageProcUnitTests
 
 #location directory of opencv library files
 LFLAGS= -L /usr/local/lib
@@ -21,11 +21,9 @@ all :
 #compile all test code
 test:
 	$(CC) $(CFLAGS) src/vertex.cpp tests/vertexTests.cpp -o vertextest
-	$(CC) $(CFLAGS) src/vertex.cpp src/Line.cpp src/drawImageSimulator.cpp tests/drawLineTest.cpp -o drawLineTest $(LIBS) $(LFLAGS)
 	$(CC) $(CFLAGS) src/vertex.cpp  src/Line.cpp src/RobotComm.cpp tests/drawTests.cpp  -o drawtest  $(LIBS) $(LFLAGS)
-	$(CC) $(CFLAGS) src/imageProcessor.cpp src/vertex.cpp src/Line.cpp tests/imageProcTests.cpp  -o imageProcTest $(LIBS) $(LFLAGS)
-	$(CC) $(CFLAGS) src/vertex.cpp src/Line.cpp src/scale.cpp tests/scaleTest.cpp -o scaleTest
-	
+	$(CC) $(CFLAGS) src/imageProcessor.cpp src/drawing.cpp src/vertex.cpp src/Line.cpp tests/imageProcTests.cpp  -o imageProcTest $(LIBS) $(LFLAGS)
+	$(CC) $(CFLAGS) src/imageProcessor.cpp src/drawing.cpp src/vertex.cpp src/Line.cpp tests/imageProcUnitTests.cpp  -o imageProcUnitTests $(LIBS) $(LFLAGS)
 
 #clean the project directory of all object & executable files
 clean:

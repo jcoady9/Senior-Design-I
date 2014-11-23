@@ -11,23 +11,25 @@ DrawImageRobot::~DrawImageRobot(){
 }
 
 //implementation of drawPic() for the drawing image with Arbotix robot
-void DrawImageRobot::drawPic(Line * line){
-	/*
-	for(int i = 0; i < (int)lines.size(); i++){
-		if(i == 0){
-			Command quitComm = new QuitCommand();
-			roboComm.runCommand(quitComm);
-			break;
-		}
+void DrawImageRobot::drawPic(Drawing* drawing){
+	
+	std::vector<Line> lines = drawing->getLines();
 
-		lines[i] = scale(lines[i]);
+	for(int i = 0; i < (int)lines.size(); i++){
+		//if(i == 0){
+		//	Command quitComm = new QuitCommand();
+		//	roboComm.runCommand(quitComm);
+		//	break;
+		//}
+
+		//lines[i] = scale(lines[i]);
 		
-		Command sendCoords = new SendCommand(lines[i]);
-		roboComm.runCommand(sendCoords);
+		//Command sendCoords = new SendCommand(lines[i]);
+		//roboComm.runCommand(sendCoords);
 
 		
 	
-	}*/
+	}
 }
 
 Line* DrawImageRobot::scale(Line* i, int imgH, int imgL, int robH, int robW)
