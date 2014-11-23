@@ -6,11 +6,12 @@ relax back to its starting position and quit the program
 */
 
 #include "../include/quitCommand.h"
+#include "string.h"
 
 //constructor
 quitCommand::quitCommand()
 {
-	char comm = 'q';
+	str::string comm = 'q';
 }
 
 //destructor
@@ -19,7 +20,7 @@ quitCommand::~quitCommand()
 
 }
 
-quitCommand::toString()
+str::string quitCommand::toString()
 {
 	return comm;
 }

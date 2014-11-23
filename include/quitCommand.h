@@ -9,13 +9,14 @@ relax back to its starting position and quit the program
 
 
 #include "commandInterface.h"
+#include "string.h"
 
 class quitCommand:public commandInterface
 {
 	public:
 		quitCommand();
 		~quitCommand();
-		virtual char toString();
+		virtual str::string toString();
 
 };
 

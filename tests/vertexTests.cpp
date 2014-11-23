@@ -129,7 +129,7 @@ int	test_setNextVertex(Vertex* v1, Vertex* v2)
 int main()
 {
 	Vertex* v1 = new Vertex(5, 3);
-	Vertex* v2 = new Vertex(10, 9);
+	//Vertex* v2 = new Vertex(10, 9);
 	
 	test_Vertex(v1);
 	test_getPoints(v1);

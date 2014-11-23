@@ -8,6 +8,7 @@ relax back to its starting position
 
 
 #include "commandInterface.h"
+#include "string.h"
 
 
 class relaxCommand:public commandInterface
@@ -15,7 +16,7 @@ class relaxCommand:public commandInterface
 	public:
 		relaxCommand();
 		~relaxCommand();
-		virtual char toString();
+		virtual str::string toString();
 
 };
 

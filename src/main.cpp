@@ -1,12 +1,12 @@
 #include<stdio.h>
 #include<errno.h>
+
+#include <opencv2/highgui/highgui.hpp>
+
 #include "../include/drawImageSimulator.h"
 #include "../include/drawImageInterface.h"
-#include <opencv2/highgui/highgui.hpp>
 #include "../include/imageProcessor.h"
-#include "../include/Line.h"
-#include "../include/vertex.h"
-#include "../include/scale.h"
+#include "../include/drawing.h"
 #include "../include/RobotComm.h"
 
 
@@ -27,7 +27,7 @@ int main(int argc, char** argv){
 	//load the image
 	Mat img = imread(argv[1], CV_LOAD_IMAGE_COLOR);
 	int mode = atoi(argv[2]);
-	int robotHeight = 100, robotWidth = 150; 
+	int robotHeight = 512, robotWidth = 512; 
 
 
 	//if the image is not found, exit program
@@ -49,26 +49,26 @@ int main(int argc, char** argv){
 	static ImageProcessor imageProcessor;
 
 	//process the image
-	cv::vector<Line> vertices = imageProcessor.processImage(img);
-	
+	Drawing* drawing = imageProcessor.processImage(img);
+
 	//write image dimensions to CLI
 	Size imgSize = img.size();
 	printf("Image Dimensions: %i x %i\n", imgSize.width, imgSize.height);
-
-	for( size_t i = 0; i < vertices.size(); i++ ){
+	
+	//get vector of lines from lines
+	std::vector<Line> lines = drawing->getLines();
+	for( size_t i = 0; i < lines.size(); i++ ){
 		//cv::Vec4i l = lines[i];	
 		//printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
-		
-		//Line * temp = vec2Vertex(l);
-		//temp = scale(temp, imgSize.width, imgSize.height, robotHeight, robotWidth);
-		//Line * line = new Line(temp->, temp->getNextVertex());
-		Line * temp = scale((Line*) &vertices[i], imgSize.width, imgSize.height, robotHeight, robotWidth);
+
+		//Line * temp = scale((Line*) &lines[i], imgSize.width, imgSize.height, robotHeight, robotWidth);
 		if(mode == 1){//simulated
 			drawImageSimulator sim;	
-			sim.drawPic(temp);
+			sim.scale((Line*) &lines[i],imgSize.width, imgSize.height, robotHeight, robotWidth);
+			sim.drawPic((Line*) &lines[i]);
 		}else if(mode == 2){//actual robot
 			RobotComm Robot;
-			Robot.RobotCommunication(temp);
+			Robot.RobotCommunication((Line*) &lines[i]);
 		} 
 	}
 
