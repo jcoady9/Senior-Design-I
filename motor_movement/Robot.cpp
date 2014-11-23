@@ -11,6 +11,8 @@
 #include <math.h>
 #include "Robot.h"
 
+
+
 Robot::Robot()
 //vertice arrays for important coordinates on the plane of drawingHello
 : topRight {355, 730},
@@ -21,7 +23,17 @@ Robot::Robot()
  //starting coordinates for the motors to position to top left of drawing area
  backMotor = 425;
  frontMotor =  730;
- 
+
+
+}
+
+Robot::~Robot()
+{
+ //Deallocate memory
+ delete[] topRight;
+ delete[] bottomLeft;
+ delete[] bottomRight;
+ delete[] deadCenter;
 }
 
 //lift the pen
