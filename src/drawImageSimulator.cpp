@@ -13,7 +13,11 @@
 #include "../include/Line.h"
 #include "../include/vertex.h"
 
+/**
+Simulator class to simulate the full functionality of our project. Processes the points received
+from the line object, and outputs them to a drawing.
 
+*/
 
 using namespace std;
 //using namespace cv;
