@@ -60,7 +60,8 @@ Drawing* ImageProcessor::processImage(cv::Mat & image){
 	}
 
 	//create new Drawing object to store detected lines
-	Drawing* newDrawing = new Drawing(lines_vec4i);
+	cv::Size imgSize = image.size();
+	Drawing* newDrawing = new Drawing(lines_vec4i, imgSize.width, imgSize.height);
 
 	return newDrawing;
 }

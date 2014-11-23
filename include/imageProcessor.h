@@ -10,7 +10,7 @@
 #include "Line.h"
 
 /*
- *
+ *class for processing an image
 */
 class ImageProcessor {
 
@@ -28,10 +28,6 @@ public:
 	//detect contours (curved lines)
 	void contourDetection(const cv::Mat & src, cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> & hierarchy);
 
-	//thins thicker lines to reduce detection of invalid lines
-	void thinningIteration(cv::Mat& im, int iter);
-	void thinning(cv::Mat& im);
-
 	//removes redundant contours
 	cv::vector< cv::vector<cv::Point> > removeRedundantContours(cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> lines);
 
@@ -43,6 +39,12 @@ public:
 
 	//Convert Vec4i into two verticies, then append them.
 	Line vec2Vertex(cv::Vec4i vec);
+
+private:
+
+	//thins thicker lines to reduce detection of invalid lines
+	void thinningIteration(cv::Mat& im, int iter);
+	void thinning(cv::Mat& im);
 
 };
 
