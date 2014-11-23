@@ -22,7 +22,6 @@ public:
 	//run all image processing methods
 	Drawing* processImage(cv::Mat & image);
 
-private:
 	//line detection
 	cv::vector<cv::Vec4i> lineDetection(cv::Mat & src);
 
@@ -44,6 +43,7 @@ private:
 
 	//Convert Vec4i into two verticies, then append them.
 	Line vec2Vertex(cv::Vec4i vec);
+
 };
 
 

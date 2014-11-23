@@ -43,16 +43,11 @@ Drawing* ImageProcessor::processImage(cv::Mat & image){
 	//convert contour cv::Points into cv::Vec4i
 	cv::vector<cv::Vec4i> contour_lines = pointsToVec4i(valid_contours);
 
-	//combine vectors containing line and contour coordinates
+	//concatenate vectors containing straight line and contour coordinates
 	cv::vector<cv::Vec4i> combinedVectors;
-	
-	for(int i = 0; i < (int)lines.size(); i++){
-		combinedVectors.push_back(lines[i]);
-	}
-	
-	for(int i = 0; i < (int)contour_lines.size(); i++){
-		combinedVectors.push_back(contour_lines[i]);
-	}
+	combinedVectors.reserve(lines.size() + contour_lines.size());
+	combinedVectors.insert(combinedVectors.end(), lines.begin(), lines.end());
+	combinedVectors.insert(combinedVectors.end(), contour_lines.begin(), contour_lines.end());
 
 	//convert vector of vec4i to vector of lines
 	std::vector<Line> lines_vec4i;

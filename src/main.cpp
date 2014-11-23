@@ -4,7 +4,6 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "../include/drawImageSimulator.h"
-#include "../include/drawImageInterface.h"
 #include "../include/imageProcessor.h"
 #include "../include/drawing.h"
 #include "../include/RobotComm.h"
@@ -61,7 +60,6 @@ int main(int argc, char** argv){
 		//cv::Vec4i l = lines[i];	
 		//printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
 
-		//Line * temp = scale((Line*) &lines[i], imgSize.width, imgSize.height, robotHeight, robotWidth);
 		if(mode == 1){//simulated
 			drawImageSimulator sim;	
 			sim.scale((Line*) &lines[i],imgSize.width, imgSize.height, robotHeight, robotWidth);
