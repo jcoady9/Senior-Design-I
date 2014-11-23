@@ -32,6 +32,24 @@ void testLineDetection(){
 }
 
 /*
+ * tests the contourDetection() function
+*/
+void testContourDetection(){
+	cv::Mat img = cv::imread("images/two2.png", CV_LOAD_IMAGE_COLOR);
+
+	cv::vector<cv::Vec4i> lines = imageProcessor.lineDetection(img);
+
+	cv::vector< cv::vector<cv::Point> > contours;
+	cv::vector<cv::Vec4i> hierarchy;
+	imageProcessor.contourDetection(img, contours, hierarchy);
+
+	assert(!contours.empty());
+	assert(!hierarchy.empty());
+
+	printf("contourDetection() test passed.\n");
+}
+
+/*
  * tests the distance() function
 */
 void testDistance(){
@@ -52,6 +70,7 @@ int main(){
 	printf("\nImageProcessor Unit Tests\n");
 
 	testLineDetection();
+	testContourDetection();
 	testDistance();
 	
 	printf("all tests passed!\n");
