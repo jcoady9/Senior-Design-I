@@ -124,9 +124,9 @@ void RobotComm::drawLineWork(string coords, FILE * comm)
 void RobotComm::RobotCommunication(commandInterface* c){
 // open serial device for both reading and writing
 	FILE *comm;
-cout << "Command is:" << c->toString() << "\n";
-	comm = fopen(RfileName, "r+");
 
+	comm = fopen(RfileName, "r+");
+cout << "Command is:" << c->toString() << "\n";
 	if(!comm){
 		printf("Couldn't open file: Switching ports...\n"); 
 		RfileName = "/dev/ttyUSB1";
@@ -143,13 +143,13 @@ cout << "Command is:" << c->toString() << "\n";
 		}
     	}
 	
-	if(c->GETString().compare("r") == 0 || c->GETString().compare("q") == 0){
+	if(c->toString().compare("r") == 0 || c->toString().compare("q") == 0){
 		//send the relax or quit command to the robot.		
-		fprintf(comm, "%s", c->GETString().c_str());
+		fprintf(comm, "%s", c->toString().c_str());
 		fflush(comm);
 	}else{
 		//Send a line to the robot
-		drawLineWork(c->GETString(), comm);
+		drawLineWork(c->toString(), comm);
 	}
 	fclose(comm);
 

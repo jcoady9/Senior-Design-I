@@ -17,38 +17,47 @@
 
 using namespace std;
 
-void drawImageSimulator::drawPic(Line * l)
+void drawImageSimulator::drawPic(Drawing* drawing, int robotHeight, int robotWidth)
 {
 
-	cv::Mat img;
+	std::vector<Line> lines = drawing->getLines();
 
-	cv::Vec4i vect;
+	for(int i = 0; i < (int)lines.size(); i++){
 
-	//pull vertices from the Line
-	Vertex * v = new Vertex(0,0);
-	int points[2], points2[2];
+		cv::Mat img;
 
-	v = l->getCurrentVertex();
-	v->getPoints(points);
+		cv::Vec4i vect;
 
-	v = l->getNextVertex();
-	v->getPoints(points2);
+		//pull vertices from the Line
+		Vertex * v = new Vertex(0,0);
+		int points[2], points2[2];
+
+		scale((Line*) &lines[i], drawing->getDrawingWidth(), drawing->getDrawingHeight(), robotHeight, robotWidth);
+
+		v = lines[i].getCurrentVertex();
+		v->getPoints(points);
+
+		v = lines[i].getNextVertex();
+		v->getPoints(points2);
 
 	
-	//store the points in the vector to be used later
-	vect[0] = points[0];
-	vect[1] = points[1];
-	vect[2] = points2[0];
-	vect[3] = points2[1];
-	cout << "Points sent: = " << points[0] << "," << points[1] << "," << points2[0] << "," << points2[1] << 	"\n"; 
+		//store the points in the vector to be used later
+		vect[0] = points[0];
+		vect[1] = points[1];
+		vect[2] = points2[0];
+		vect[3] = points2[1];
+		cout << "Points sent: = " << points[0] << "," << points[1] << "," << points2[0] << "," << points2[1] << 	"\n"; 
 
-	img = cv::imread("black.png", CV_LOAD_IMAGE_COLOR);
-	cv::line(img,cv::Point(vect[0],vect[1]),cv::Point(vect[2],vect[3]),cv::Scalar(0,0,255),2,CV_AA);
+		img = cv::imread("black.png", CV_LOAD_IMAGE_COLOR);
+		cv::line(img,cv::Point(vect[0],vect[1]),cv::Point(vect[2],vect[3]),cv::Scalar(0,0,255),2,CV_AA);
 	
-	bool wri = cv::imwrite("black.png", img);
-	if(wri){
-		cv::imshow("Robot Simulated Image", img);
+		bool wri = cv::imwrite("black.png", img);
+		if(wri){
+			cv::imshow("Robot Simulated Image", img);
+		}
+
 	}
+
 }
 
 Line* drawImageSimulator::scale(Line* i, int imgH, int imgL, int robH, int robW)

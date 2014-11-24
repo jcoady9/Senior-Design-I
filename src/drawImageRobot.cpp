@@ -17,28 +17,26 @@ DrawImageRobot::~DrawImageRobot(){
 }
 
 //implementation of drawPic() for the drawing image with Arbotix robot
-void DrawImageRobot::drawPic(Line * line){
-	
-	/*for(int i = 0; i < (int)lines.size(); i++){
-		if(i == 0){
-			Command quitComm = new QuitCommand();
-			roboComm.runCommand(quitComm);
-			break;
-		}
 
-		lines[i] = scale(lines[i]);
-		
-		Command sendCoords = new SendCommand(lines[i]);
-		roboComm.runCommand(sendCoords);
-	}*/
-
-	int point1[2], point2[2];
-	line->getCurrentVertex()->getPoints(point1);
-	line->getNextVertex()->getPoints(point2);
-	drawLineCommand * drawLineComm = new drawLineCommand(point1[0], point1[1], point2[0], point2[1]);
-	RobotComm robotcomm;
-	robotcomm.RobotCommunication(drawLineComm);
+void DrawImageRobot::drawPic(Drawing* drawing, int robotHeight, int robotWidth){
 	
+	std::vector<Line> lines = drawing->getLines();
+
+	for(int i = 0; i < (int)lines.size(); i++){
+		//if(i == 0){
+		//	Command quitComm = new QuitCommand();
+		//	roboComm.runCommand(quitComm);
+		//	break;
+		//}
+		Line * l = scale((Line*) &lines[i],drawing->getDrawingWidth(), drawing->getDrawingHeight(), robotHeight, robotWidth);
+		int point1[2], point2[2];
+		l->getCurrentVertex()->getPoints(point1);
+		l->getNextVertex()->getPoints(point2);
+		drawLineCommand * drawLineComm = new drawLineCommand(point1[0], point1[1], point2[0], point2[1]);
+		RobotComm robotcomm;
+		robotcomm.RobotCommunication(drawLineComm);
+	}
+
 }
 
 Line* DrawImageRobot::scale(Line* i, int imgH, int imgL, int robH, int robW)

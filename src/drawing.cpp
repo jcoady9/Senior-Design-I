@@ -6,8 +6,10 @@
  *
  *@param lines - vector of Line objects to store in this instance of the Drawing object
 */
-Drawing::Drawing(std::vector<Line> lines){
+Drawing::Drawing(std::vector<Line> lines, int width, int height){
 	dLines = lines;
+	dimWidth = width;
+	dimHeight = height;
 }
 
 /*
@@ -24,4 +26,22 @@ Drawing::~Drawing(){
 */
 std::vector<Line> Drawing::getLines(){
 	return dLines;
+}
+
+/*
+ * getter method for the width of the drawable image
+ *
+ *@return - the width of the drawable image
+*/
+int Drawing::getDrawingWidth(){
+	return this->dimWidth;
+}
+
+/*
+ *getter for the height of the drawable image
+ *
+ *@return - the height of the drawable image
+*/
+int Drawing::getDrawingHeight(){
+	return this->dimHeight;
 }
