@@ -103,7 +103,7 @@ void RobotComm::drawLineWork(string coords, FILE * comm)
 			printf("Robot has timed out\n");
 			exit(0);//fatal error happened in communication
 		}else if(response == -3){
-			printf("Wrong Checksum. Resending...\n");//ack wasrecieved but checksum was wrong
+			printf("Wrong Checksum. Resending...\n");//ack wasrecieved but checksum was wrong`
 			c = 0;
 			sendCoordinates(coords, comm);//resend
 			done = false;

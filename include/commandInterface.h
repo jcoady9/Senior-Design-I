@@ -16,10 +16,9 @@ sent through by the toString() method.
 class commandInterface
 {
 	public:
-		std::string toString(){
-			return "";
-		}
-
+		commandInterface();
+		virtual ~commandInterface();
+		virtual std::string toString() =0;
 
 };
 

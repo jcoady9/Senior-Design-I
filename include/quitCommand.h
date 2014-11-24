@@ -18,8 +18,8 @@ class quitCommand:public commandInterface
 		std::string command;
 	public:
 		quitCommand();
-		~quitCommand();
-		std::string toString();
+		virtual ~quitCommand();
+		virtual std::string toString();
 
 };
 

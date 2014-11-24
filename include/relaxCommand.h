@@ -17,8 +17,8 @@ class relaxCommand:public commandInterface
 		std::string command;
 	public:
 		relaxCommand();
-		~relaxCommand();
-		std::string toString();
+		virtual ~relaxCommand();
+		virtual std::string toString();
 
 };
 

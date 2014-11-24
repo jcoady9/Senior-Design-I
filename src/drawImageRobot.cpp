@@ -21,19 +21,17 @@ DrawImageRobot::~DrawImageRobot(){
 void DrawImageRobot::drawPic(Drawing* drawing, int robotHeight, int robotWidth){
 	
 	std::vector<Line> lines = drawing->getLines();
-
+	RobotComm robotcomm;
 	for(int i = 0; i < (int)lines.size(); i++){
-		//if(i == 0){
-		//	Command quitComm = new QuitCommand();
-		//	roboComm.runCommand(quitComm);
-		//	break;
-		//}
+	
 		Line * l = scale((Line*) &lines[i],drawing->getDrawingWidth(), drawing->getDrawingHeight(), robotHeight, robotWidth);
 		int point1[2], point2[2];
+		
 		l->getCurrentVertex()->getPoints(point1);
 		l->getNextVertex()->getPoints(point2);
+		std::cout << point1[0] << "," << point1[1] << "," << point2[0] << "," << point2[1] << "\n";
 		drawLineCommand * drawLineComm = new drawLineCommand(point1[0], point1[1], point2[0], point2[1]);
-		RobotComm robotcomm;
+		
 		robotcomm.RobotCommunication(drawLineComm);
 	}
 

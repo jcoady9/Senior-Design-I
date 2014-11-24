@@ -17,8 +17,8 @@ class drawLineCommand:public commandInterface
 		int checksum; 
 	public:
 		drawLineCommand(int x1, int y1, int x2, int y2);
-		~drawLineCommand();
-		std::string toString();
+		virtual ~drawLineCommand();
+		virtual std::string toString();
 
 };
 
