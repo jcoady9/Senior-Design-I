@@ -20,6 +20,9 @@ relaxCommand::~relaxCommand()
 
 }
 
+/**
+	**@return the command
+**/
 std::string relaxCommand::toString()
 {
 	return command;

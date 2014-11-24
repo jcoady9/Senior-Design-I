@@ -15,12 +15,17 @@ Vertex::Vertex(int x_coord, int y_coord){
 Vertex::~Vertex(){
 }
 
-//returns the coordinates of the vertex
+/**
+	**Getter for a Vertex's x and y points
+	**writes the points to a presupplied array
+**/
 void Vertex::getPoints(int point[2]){
 	point[0] = x;
 	point[1] = y;
 }
-//sets the coordinates of the vertex
+/**
+	**sets the x and y coordinates of the vertex
+**/
 void Vertex::setPoints(int xcord, int ycord){
 	x = xcord;
 	y = ycord;

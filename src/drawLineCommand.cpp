@@ -14,14 +14,16 @@ coordinates it has been sent to draw a straight line
 drawLineCommand::drawLineCommand(int x1, int y1, int x2, int y2)
 {
 	checksum = x1 + y1 + x2 + y2;
-	//write the ints to a char * so they can be 
-	//converted to string
+	
+	//convert ints to string objects for string operations
 	std::stringstream ssx,ssy,ssxx,ssyy,ssc;
 	ssx << x1;
 	ssy << y1;
 	ssxx << x2;
 	ssyy << y2;
 	ssc << checksum;
+	
+	//build the command string
 	command = "a,";
 	command.append(ssx.str());
 	command.append(",");
@@ -40,6 +42,9 @@ drawLineCommand::~drawLineCommand()
 
 }
 
+/**
+	**@return the command
+**/
 std::string drawLineCommand::toString()
 {
 	return command;

@@ -19,7 +19,9 @@ quitCommand::~quitCommand()
 {
 
 }
-
+/**
+	**@return the command
+**/
 std::string quitCommand::toString()
 {
 	return command;
