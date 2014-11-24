@@ -1,5 +1,11 @@
 #include "../include/drawImageRobot.h"
 #include "../include/RobotComm.h"
+#include "../include/commandInterface.h"
+#include "../include/drawLineCommand.h"
+#include "../include/quitCommand.h"
+#include <unistd.h>
+#include <iostream>
+
 
 //constructor
 DrawImageRobot::DrawImageRobot(){
@@ -12,8 +18,8 @@ DrawImageRobot::~DrawImageRobot(){
 
 //implementation of drawPic() for the drawing image with Arbotix robot
 void DrawImageRobot::drawPic(Line * line){
-	/*
-	for(int i = 0; i < (int)lines.size(); i++){
+	
+	/*for(int i = 0; i < (int)lines.size(); i++){
 		if(i == 0){
 			Command quitComm = new QuitCommand();
 			roboComm.runCommand(quitComm);
@@ -24,10 +30,15 @@ void DrawImageRobot::drawPic(Line * line){
 		
 		Command sendCoords = new SendCommand(lines[i]);
 		roboComm.runCommand(sendCoords);
-
-		
-	
 	}*/
+
+	int point1[2], point2[2];
+	line->getCurrentVertex()->getPoints(point1);
+	line->getNextVertex()->getPoints(point2);
+	drawLineCommand * drawLineComm = new drawLineCommand(point1[0], point1[1], point2[0], point2[1]);
+	RobotComm robotcomm;
+	robotcomm.RobotCommunication(drawLineComm);
+	
 }
 
 Line* DrawImageRobot::scale(Line* i, int imgH, int imgL, int robH, int robW)

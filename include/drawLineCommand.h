@@ -8,14 +8,17 @@ to the robot to use to draw a straight line
 */
 
 #include "commandInterface.h"
-#include "string.h"
+#include <string>
 
 class drawLineCommand:public commandInterface
 {
+	private: 
+		std::string command;
+		int checksum; 
 	public:
-		drawLineCommand();
+		drawLineCommand(int x1, int y1, int x2, int y2);
 		~drawLineCommand();
-		virtual str::string toString();
+		std::string toString();
 
 };
 

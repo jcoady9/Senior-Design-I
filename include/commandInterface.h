@@ -11,12 +11,14 @@ sent through by the toString() method.
 */
 
 #include <stdio.h>
-#include "string.h"
+#include <string>
 
 class commandInterface
 {
 	public:
-		virtual str::string toString() = 0;
+		std::string toString(){
+			return "";
+		}
 
 
 };

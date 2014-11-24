@@ -8,15 +8,17 @@ relax back to its starting position
 
 
 #include "commandInterface.h"
-#include "string.h"
+#include <string>
 
 
 class relaxCommand:public commandInterface
 {
+	private: 
+		std::string command;
 	public:
 		relaxCommand();
 		~relaxCommand();
-		virtual str::string toString();
+		std::string toString();
 
 };
 

@@ -7,16 +7,19 @@ Header file for the command that will tell the main function to tell the robot t
 relax back to its starting position and quit the program
 */
 
-
+#include <stdlib.h>
+#include <string>
 #include "commandInterface.h"
-#include "string.h"
+
 
 class quitCommand:public commandInterface
 {
+	private: 
+		std::string command;
 	public:
 		quitCommand();
 		~quitCommand();
-		virtual str::string toString();
+		std::string toString();
 
 };
 

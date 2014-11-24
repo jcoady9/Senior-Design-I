@@ -4,6 +4,7 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "../include/drawImageSimulator.h"
+#include "../include/drawImageRobot.h"
 #include "../include/drawImageInterface.h"
 #include "../include/imageProcessor.h"
 #include "../include/drawing.h"
@@ -57,18 +58,16 @@ int main(int argc, char** argv){
 	
 	//get vector of lines from lines
 	std::vector<Line> lines = drawing->getLines();
-	for( size_t i = 0; i < lines.size(); i++ ){
-		//cv::Vec4i l = lines[i];	
-		//printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
 
-		//Line * temp = scale((Line*) &lines[i], imgSize.width, imgSize.height, robotHeight, robotWidth);
+	for( size_t i = 0; i < lines.size(); i++ ){
 		if(mode == 1){//simulated
 			drawImageSimulator sim;	
-			sim.scale((Line*) &lines[i],imgSize.width, imgSize.height, robotHeight, robotWidth);
-			sim.drawPic((Line*) &lines[i]);
-		}else if(mode == 2){//actual robot
-			RobotComm Robot;
-			Robot.RobotCommunication((Line*) &lines[i]);
+			Line * l = sim.scale((Line*) &lines[i],imgSize.width, imgSize.height, robotHeight, robotWidth);
+			sim.drawPic(l);
+		}else if(mode == 2){//actual robot		
+			DrawImageRobot Robot;
+			Line * l =Robot.scale((Line*) &lines[i],imgSize.width, imgSize.height, robotHeight, robotWidth);
+			Robot.drawPic(l);
 		} 
 	}
 

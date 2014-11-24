@@ -16,10 +16,6 @@
 
 
 using namespace std;
-//using namespace cv;
-
-
-//const char * FILE_NAME = "test.txt"; 
 
 void drawImageSimulator::drawPic(Line * l)
 {

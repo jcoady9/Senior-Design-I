@@ -4,15 +4,34 @@
 coordinates it has been sent to draw a straight line
 
 */
-
+#include <sstream>
 #include "../include/drawLineCommand.h"
-#include "string.h"
+#include <string>
+#include <stdio.h>
+
 
 //constructor
-drawLineCommand::drawLineCommand()
+drawLineCommand::drawLineCommand(int x1, int y1, int x2, int y2)
 {
-	str::string name = "a"; //CHANGE THIS WHEN NECESSARY. a is the current command on the arduino side. 
-
+	checksum = x1 + y1 + x2 + y2;
+	//write the ints to a char * so they can be 
+	//converted to string
+	std::stringstream ssx,ssy,ssxx,ssyy,ssc;
+	ssx << x1;
+	ssy << y1;
+	ssxx << x2;
+	ssyy << y2;
+	ssc << checksum;
+	command = "a,";
+	command.append(ssx.str());
+	command.append(",");
+	command.append(ssy.str());
+	command.append(",");
+	command.append(ssxx.str());
+	command.append(",");
+	command.append(ssyy.str());
+	command.append(",");
+	command.append(ssc.str());/**/
 }
 
 //destructor
@@ -21,7 +40,7 @@ drawLineCommand::~drawLineCommand()
 
 }
 
-str::string drawLineCommand::toString()
+std::string drawLineCommand::toString()
 {
-	return name;
+	return command;
 }

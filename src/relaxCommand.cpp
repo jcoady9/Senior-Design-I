@@ -6,12 +6,12 @@ relax back to its starting position
 */
 
 #include "../include/relaxCommand.h"
-#include "string.h"
+#include <string>
 
 //constructor
 relaxCommand::relaxCommand()
 {
-	str::string comm = "r";
+	 command = "r";
 }
 
 //destructor
@@ -20,8 +20,8 @@ relaxCommand::~relaxCommand()
 
 }
 
-str::string relaxCommand::toString()
+std::string relaxCommand::toString()
 {
-	return comm;
+	return command;
 }
 
