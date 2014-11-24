@@ -21,7 +21,9 @@ all :
 #compile all test code
 test:
 	$(CC) $(CFLAGS) src/vertex.cpp tests/vertexTests.cpp -o vertextest
-	$(CC) $(CFLAGS) src/vertex.cpp  src/Line.cpp src/RobotComm.cpp tests/drawTests.cpp  -o drawtest  $(LIBS) $(LFLAGS)
+	$(CC) $(CFLAGS) src/relaxCommand.cpp src/RobotComm.cpp src/commandInterface.cpp tests/robotRelaxTest.cpp -o relaxtest
+	$(CC) $(CFLAGS) src/quitCommand.cpp src/RobotComm.cpp src/commandInterface.cpp tests/robotQuitTest.cpp -o quittest
+	$(CC) $(CFLAGS) src/vertex.cpp  src/Line.cpp src/RobotComm.cpp src/commandInterface.cpp src/drawLineCommand.cpp tests/drawTests.cpp  -o drawtest  $(LIBS) $(LFLAGS)
 	$(CC) $(CFLAGS) src/imageProcessor.cpp src/drawing.cpp src/vertex.cpp src/Line.cpp tests/imageProcTests.cpp  -o imageProcTest $(LIBS) $(LFLAGS)
 	$(CC) $(CFLAGS) src/imageProcessor.cpp src/drawing.cpp src/vertex.cpp src/Line.cpp tests/imageProcUnitTests.cpp  -o imageProcUnitTests $(LIBS) $(LFLAGS)
 

@@ -24,7 +24,7 @@ drawLineCommand::drawLineCommand(int x1, int y1, int x2, int y2)
 	ssc << checksum;
 	
 	//build the command string
-	command = "a,";
+	command = "a";
 	command.append(ssx.str());
 	command.append(",");
 	command.append(ssy.str());
@@ -33,7 +33,8 @@ drawLineCommand::drawLineCommand(int x1, int y1, int x2, int y2)
 	command.append(",");
 	command.append(ssyy.str());
 	command.append(",");
-	command.append(ssc.str());/**/
+	command.append(ssc.str());
+	command.append(",");
 }
 
 //destructor

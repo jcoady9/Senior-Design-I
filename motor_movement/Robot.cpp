@@ -1,8 +1,8 @@
-/*
+
   Robot.cpp - Library for Robot object to control arm outside of main
   Created by Shane Bonner, November 17, 2014
   Released into the public domain.
-*/
+
 
 #include <BioloidController.h>
 #include <ax12.h>
@@ -143,10 +143,10 @@ void Robot::drawLine(int x1, int y1, int x2, int y2)
  SetPosition(1, backMotor);
  SetPosition(2, frontMotor);
  
- */
- 
 
-}
+
+
+} 
 
 
 

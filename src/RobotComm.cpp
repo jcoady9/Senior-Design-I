@@ -30,7 +30,7 @@ RobotComm::~RobotComm(){
 void RobotComm::sendCoordinates(string coords, FILE * file){
 
 	fprintf(file, "%s", coords.c_str());
-	cout << "Points sent: " << coords << "\n";
+	cout << "Points sent: " << coords.c_str() << "\n";
 	fflush(file);
 	
 }
@@ -48,7 +48,6 @@ int RobotComm::receiveACKSerial(FILE * file){
 	}data[31] = '\n';  
 	fgets(data, 31, file);
 	string  ack = data; 
-	//cout << "Ack = "  << ack <<  "\n"; 
 
 	//check response for acknowledgements
 	std::size_t pos1 = ack.find("y");
