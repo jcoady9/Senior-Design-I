@@ -10,6 +10,7 @@ BioloidController bioloid = BioloidController(1000000);
 char input;
 char buff[5], ack ='0';
 int points[5] = {0,0,0,0,0}; 
+int testPoints[5] = {355,730,765,230,2080};
 int p, b, num, j;
 
 Robot robot; //TESTING OUT MODEL OBJECT
@@ -90,7 +91,8 @@ void loop(){
             break; 
             
            case 'a':
-            robot.drawLine(points[0],points[1],points[2],points[3]);
+            //robot.drawLine(points[0],points[1],points[2],points[3]);
+            robot.drawLine(testPoints[0],testPoints[1],testPoints[2],testPoints[3]); //TEST LINE WITHOUT PROCESSING
             break;
           
           case 'l':
