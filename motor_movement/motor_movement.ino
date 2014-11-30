@@ -71,8 +71,6 @@ void loop(){
            robot.topRightCorner();
            break;
          
-         //TODO (SHANE WILL DO THIS) : finish the last few test cases for important corners/points
-         //also we must better organize the test case letters 
          
          case 'm':
             robot.backMotor+= 10; //moves down and to rightn
