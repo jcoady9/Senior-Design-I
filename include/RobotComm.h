@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include "../include/Line.h"
+#include "../include/commandInterface.h"
+#include <string>
 
 class RobotComm {
 	private:
@@ -19,7 +21,7 @@ class RobotComm {
 			**x1 and y1 are the current vertex's coordinates
 			**x2 and y2 are the next vertex's coordinates. 
 		*/
-		void sendCoordinates(int x1, int y1, int x2, int y2, FILE * file);  
+		void sendCoordinates(std::string coords, FILE * file);  
 
 		/*
 			**Method prototype for checking if coordinates were recieved properly through a serialStream. 
@@ -32,7 +34,12 @@ class RobotComm {
 			**Send the coordinates to the robot. 
 			**Wait for the acknowledgement to come back. 
 		*/
-		void RobotCommunication(Line * l);
+		void drawLineWork(std::string coords, FILE * comm);
+		
+		/*
+			**Based on what command was entered, send command to robot
+		*/
+		void RobotCommunication(commandInterface* c);
 
 };
 #endif

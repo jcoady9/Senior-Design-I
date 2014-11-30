@@ -1,4 +1,4 @@
-/*
+
   Robot.cpp - Library for Robot object to control arm outside of main
   Created by Shane Bonner, November 17, 2014
   Released into the public domain.
@@ -8,11 +8,13 @@
 #include <ax12.h>
 #include <Motors2.h>
 #include <stdlib.h>
+
 #include <math.h>
 #include "Robot.h"
 
+
 Robot::Robot()
-//vertice arrays for important coordinates on the plane of drawingHello
+//vertice arrays for important coordinates on the plane of drawing
 : topRight {355, 730},
   bottomLeft {995, 100},
   bottomRight {815, 100},
@@ -21,7 +23,8 @@ Robot::Robot()
  //starting coordinates for the motors to position to top left of drawing area
  backMotor = 425;
  frontMotor =  730;
- 
+
+
 }
 
 //lift the pen
@@ -84,24 +87,66 @@ void Robot::toDeadCenter()
 
 void Robot::drawLine(int x1, int y1, int x2, int y2)
 {
- penUp();
+// penUp();
+
+ delay(1000);
  backMotor = x1;
  frontMotor = y1;
  SetPosition(1, backMotor);
+ delay(1000);
  SetPosition(2, frontMotor);
 
  //as x increases on the plane, y decreases
- //double xDiff = x2 - x1;
- //double distance = sqrt(((pow(xDiff, 2)) + (pow(yDiff,2))); 
-// delay(100);
-
  penDown();
+ double xDiff = (double) x2 - (double) x1;
+ double yDiff = (double) y2 - (double) y1;
+ double distance = sqrt((xDiff * xDiff)+(yDiff*yDiff)); //distance formula
+
+ double slope = yDiff / xDiff;
+ double distanceMoved = 0;
+ double hypotenuse;
+ int slopeMod = ((-5)*slope); //modified value of slope to add 
+
+ while(distanceMoved < distance && backMotor >= 355 && backMotor <= 995 && frontMotor <= 730 && frontMotor >= 100){
+  if(slope < 0){
+	delay(50);
+	backMotor -= 5;
+	frontMotor += slopeMod;
+ 	Serial.println(backMotor);
+	Serial.println(frontMotor);
+	SetPosition(1,backMotor);
+  	SetPosition(2,frontMotor); 
+  	hypotenuse += sqrt((frontMotor*frontMotor)+(backMotor * backMotor));
+	Serial.println(hypotenuse);  	
+	distanceMoved += hypotenuse;
+
+  }else{
+	delay(50);
+	backMotor += 5; 
+	SetPosition(1,backMotor);
+	frontMotor += (5 * slope);
+	SetPosition(2,frontMotor); 
+	hypotenuse += sqrt((frontMotor*frontMotor)+(backMotor * backMotor));
+	distanceMoved += hypotenuse;
+  }
+ }
+
+ penUp();
+/*delay(1000);
+
+
+ 
+ penDown();
+ delay(1000);
  backMotor = x2;
  frontMotor = y2;
  SetPosition(1, backMotor);
  SetPosition(2, frontMotor);
  
 
-}
-*/
+
+
+} 
+
+
 

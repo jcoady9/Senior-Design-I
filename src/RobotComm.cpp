@@ -1,5 +1,6 @@
 #include "../include/RobotComm.h"
-#include<stdlib.h>
+#include "../include/commandInterface.h"
+#include <stdlib.h>
 #include <iostream>
 #include <fcntl.h> 
 #include <fstream>
@@ -13,33 +14,31 @@ using namespace std;
 RobotComm::RobotComm(){
 	TfileName = "coordinates.txt";//test file
 	RfileName = "/dev/ttyUSB0";//robot file
-	checkSum = -1;
+	//checkSum = -1;
 
 }
+//destructor
 RobotComm::~RobotComm(){
 }
 
 /*
-**method for sending coordinates to the robocontroller
-**x1 and y1 are the current vertex's coordinates
-**x2 and y2 are the next vertex's coordinates. 
-returns -1 if an error occurs
+	**method for sending coordinates to the robocontroller
+	**@params string representing the coordinates command 
+	**@params file in which information is written to (port file)
+	**@return -1 if an error occurs
 */
-void RobotComm::sendCoordinates(int x1, int y1, int x2, int y2, FILE * file){
-    
-	checkSum = x1+y1+y2+x2; 
+void RobotComm::sendCoordinates(string coords, FILE * file){
 
-	//Writing to the file. Seperate coordinates using commas
-	fprintf(file, "%d,%d,%d,%d,%d,\n",x1,y1,x2,y2, checkSum); 
-	cout << "Points sent: " << x1 << "," << y1 << "," << x2 << "," << y2 << "," << checkSum<< "\n";
-	fflush(file);//send the message 
+	fprintf(file, "%s", coords.c_str());
+	cout << "Points sent: " << coords.c_str() << "\n";
+	fflush(file);
 	
 }
 
 
 /*
-**Method prototype for checking if coordinates were recieved properly through a serialStream. 
-**returns -1 if coordinates did not match, -2 if robot disconnected, -3 if wrong coordinates
+	**Method prototype for checking if coordinates were recieved properly through a serialStream. 
+	**@return -1 if coordinates did not match, -2 if robot disconnected, -3 if wrong coordinates
 */
 int RobotComm::receiveACKSerial(FILE * file){
 
@@ -49,7 +48,6 @@ int RobotComm::receiveACKSerial(FILE * file){
 	}data[31] = '\n';  
 	fgets(data, 31, file);
 	string  ack = data; 
-	//cout << "Ack = "  << ack <<  "\n"; 
 
 	//check response for acknowledgements
 	std::size_t pos1 = ack.find("y");
@@ -68,43 +66,13 @@ int RobotComm::receiveACKSerial(FILE * file){
 }
 
 /*
-**Accepts first vertex and accesses it's other vertex via nextVertex() functionality.
+**
 */
-void RobotComm::RobotCommunication(Line * l)
-{
-	// open serial device for both reading and writing
-	FILE *comm;
-
-	comm = fopen(RfileName, "r+");
-
-	if(!comm){
-		printf("Couldn't open file: Switching ports...\n"); 
-		RfileName = "/dev/ttyUSB1";
-		comm = fopen(RfileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 
-
-		if(!comm){
-			printf("Couldn't open file: Switching ports...\n");
-			RfileName = "dev/ttyS0"; 
-			comm = fopen(RfileName,"r+");  //Opening device file(/dev/ttyUSB0or1) 	
-			if(!comm){
-				printf("Please make sure robot is connected.\n");
-				exit(-1);
-			}
-		}
-    	}
-	Vertex * v = new Vertex(0,0);
-	int points1[2], points2[2];
-
-	v = l->getCurrentVertex();
-	v->getPoints(points1);
-	v->setVisited(1);
-
-	v = l->getNextVertex();
-	v->getPoints(points2);
-	v->setVisited(1);
-		
+void RobotComm::drawLineWork(string coords, FILE * comm)
+{	
 	//Send the vertices coordinates to the robot through its port file
-	sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);
+	sendCoordinates(coords, comm);
+
 	//hold until the last line has been drawn
 	bool done  = false; 
 	int c = 0;  //make sure robot is not stuck on same point for too long
@@ -113,28 +81,62 @@ void RobotComm::RobotCommunication(Line * l)
 		int response = -5;
 		c++;
 		response = receiveACKSerial(comm);
-		if(response == 0){
-			done = true; //right checksum has been recieved
-		}else if(response == -2){
+		if(response == 0){//right checksum has been recieved
+			done = true; 
+		}else if(response == -2){//fatal error happened in communication
 			printf("Robot has timed out\n");
-			exit(0);//fatal error happened in communication
-		}else if(response == -3){
-			printf("Wrong Checksum. Resending...\n");//ack wasrecieved but checksum was wrong
+			exit(0);
+		}else if(response == -3){//ack was recieved but checksum was wrong`
+			printf("Wrong Checksum. Resending...\n");
 			c = 0;
-			sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//resend
+			sendCoordinates(coords, comm);//resend
 			done = false;
-		}else if(c==199){
-			//printf("Communcation time out. Resending...\n");//waited too long for ack
+		}else if(c==199){//waited too long for ack
+			printf("Communcation time out. Resending...\n");
 			c = 0; 
-			//sendCoordinates(points1[0], points1[1], points2[0], points2[1], comm);//resend
+			sendCoordinates(coords, comm);//resend
 			done = false;
 		}
 
 	}
 
-	//current vertex's line array has been completed, therefore this vertex is 
-	l->getCurrentVertex()->setVisited(2);	
-	l->getNextVertex()->setVisited(2);
+}
+/**
+	**@param the commade which you wish to send to Robot
+	**Open the serial port file and write the appropiate command to it
+**/
+void RobotComm::RobotCommunication(commandInterface* c){
+	// open serial device for both reading and writing
+	FILE *comm;
+
+	comm = fopen(RfileName, "r+");
+
+	if(!comm){
+		printf("Couldn't open file: Switching ports...\n"); 
+		RfileName = "/dev/ttyUSB1";
+		comm = fopen(RfileName,"r+");  //Opening device file(/dev/ttyUSB1) 
+
+		if(!comm){
+			printf("Couldn't open file: Switching ports...\n");
+			RfileName = "dev/ttyS0"; 
+			comm = fopen(RfileName,"r+");  //Opening device file(/dev/ttys0) 	
+			if(!comm){
+				printf("Please make sure robot is connected.\n");
+				exit(-1);
+			}
+		}
+    	}
+	
+	//process command and write appropriate information to port file
+	if(c->toString().compare("r") == 0 || c->toString().compare("q") == 0){
+		//send the relax or quit command to the robot.		
+		fprintf(comm, "%s", c->toString().c_str());
+		fflush(comm);
+	}else{
+		//Send a line to the robot
+		drawLineWork(c->toString(), comm);
+	}
 	fclose(comm);
+
 }
 

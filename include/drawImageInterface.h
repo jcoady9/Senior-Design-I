@@ -10,7 +10,9 @@
 class drawImageInterface
 {
 	public:
-		virtual void drawPic(Drawing* drawing) = 0;
+		drawImageInterface();
+		virtual ~drawImageInterface();
+		virtual void drawPic(Drawing* drawing, int robotHeight, int robotWidth) = 0;
 		virtual Line* scale(Line* i, int imgH, int imgL, int robH, int robW) = 0; 
 	
 

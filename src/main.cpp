@@ -5,6 +5,7 @@
 
 #include "../include/drawImageSimulator.h"
 #include "../include/drawImageRobot.h"
+#include "../include/drawImageInterface.h"
 #include "../include/imageProcessor.h"
 #include "../include/drawing.h"
 #include "../include/RobotComm.h"
@@ -25,6 +26,7 @@ int main(int argc, char** argv){
 	//load the image
 	Mat img = imread(argv[1], CV_LOAD_IMAGE_COLOR);
 	int mode = atoi(argv[2]); 
+	int robotHeight = 256, robotWidth = 256;
 
 
 	//if the image is not found, exit program
@@ -57,13 +59,13 @@ int main(int argc, char** argv){
 	DrawImageRobot drawingRobot;
 	switch(mode){
 		case 1 : //use drawImageSimulator
-			sim.drawPic(drawing);
+			sim.drawPic(drawing, robotHeight, robotWidth);
 			break;
 		case 2 : //use drawImageRobot
-			drawingRobot.drawPic(drawing);
+			drawingRobot.drawPic(drawing,robotHeight, robotWidth);
 			break;
 		default : //default: use drawImageSimulator
-			sim.drawPic(drawing);
+			sim.drawPic(drawing, robotHeight, robotWidth);
 	}
 	
 	//clear the black image for next run

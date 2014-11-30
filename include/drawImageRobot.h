@@ -14,7 +14,7 @@ public:
 	DrawImageRobot();
 	~DrawImageRobot();
 
-	virtual void drawPic(Drawing* drawing);
+	virtual void drawPic(Drawing* drawing, int robotHeight, int robotWidth);
 	virtual Line* scale(Line* i, int imgH, int imgL, int robH, int robW); 
 
 private: 

@@ -2,6 +2,8 @@
 #include "../include/Line.h"
 #include "../include/vertex.h"
 #include "../include/RobotComm.h"
+#include "../include/commandInterface.h"
+#include "../include/drawLineCommand.h"
 
 int main()
 {	printf("-----------------------------------------------\n");
@@ -16,6 +18,15 @@ int main()
 	
 	RobotComm robot;
 
+	//pull points from the the line to pass to robot
+	int point1[2], point2[2];
+	line->getCurrentVertex()->getPoints(point1);
+	line->getNextVertex()->getPoints(point2);
+	
+	//Create and send Command
+	drawLineCommand * drawLineComm = new drawLineCommand(point1[0], point1[1], point2[0], point2[1]);
+	
+
 	printf("-----------------------------------------------\n");
 	printf("\tVisited values before Draw: \n");
 	printf("-----------------------------------------------\n");
@@ -24,8 +35,8 @@ int main()
 	printf("V2: %i\n", v2->getVisited());
 	
 	//Run Draw for robot
-	robot.RobotCommunication(line);
-	
+	robot.RobotCommunication(drawLineComm);
+
 	printf("-----------------------------------------------\n");
 	printf("\tVisited values after Draw: \n");
 	printf("-----------------------------------------------\n");
