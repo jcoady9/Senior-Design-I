@@ -28,6 +28,9 @@ public:
 	//detect contours (curved lines)
 	void contourDetection(const cv::Mat & src, cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> & hierarchy);
 
+	//thins lines to help reduce detecting invalid lines
+	void thinning(cv::Mat& im);
+
 	//removes redundant contours
 	cv::vector< cv::vector<cv::Point> > removeRedundantContours(cv::vector< cv::vector<cv::Point> > & contours, cv::vector<cv::Vec4i> lines);
 
@@ -42,12 +45,9 @@ public:
 
 private:
 
-	//thins thicker lines to reduce detection of invalid lines
+	//helper function to thin thicker lines to reduce detection of invalid lines
 	void thinningIteration(cv::Mat& im, int iter);
-	void thinning(cv::Mat& im);
 
 };
-
-
 
 #endif //VERTEXSEARCH_H

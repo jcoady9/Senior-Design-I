@@ -296,24 +296,3 @@ Line ImageProcessor::vec2Vertex(cv::Vec4i vec){
 	
 	return *line;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

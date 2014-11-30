@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
 #include "../include/imageProcessor.h"
@@ -36,6 +37,7 @@ void testLineDetection(){
 */
 void testContourDetection(){
 	cv::Mat img = cv::imread("images/two2.png", CV_LOAD_IMAGE_COLOR);
+	assert(!img.empty());
 
 	cv::vector<cv::Vec4i> lines = imageProcessor.lineDetection(img);
 
@@ -45,8 +47,76 @@ void testContourDetection(){
 
 	assert(!contours.empty());
 	assert(!hierarchy.empty());
+	assert((int)contours.size() == 53);
 
 	printf("contourDetection() test passed.\n");
+}
+
+/*
+ * tests the thinning of straight lines
+ */
+ void testLineThinning(){
+ 	cv::Mat img = cv::imread("images/horizontal-lines.jpg", CV_LOAD_IMAGE_COLOR);
+ 	assert(!img.empty());
+
+ 	cv::imshow("original image.", img);
+
+ 	//convert image to grayscale
+	if(img.channels() > 1){
+		cv::cvtColor(img, img, CV_RGB2GRAY);
+	}
+
+ 	//convert image to a binary image
+	cv::threshold(img, img, 10, 255, CV_THRESH_BINARY_INV);
+
+ 	imageProcessor.thinning(img);
+
+ 	cv::imshow("image after thinning.", img);
+
+ 	cv::waitKey(0);
+
+	printf("thinning() test passed.\n");
+ }
+
+/*
+ * tests removeRedundantContours() function
+ */
+void testRemoveRedundantContours(){
+	//test removing redundant contours with an image that should not have any contours after processing
+	cv::Mat img = cv::imread("images/horizontal-lines.jpg", CV_LOAD_IMAGE_COLOR);
+ 	assert(!img.empty());
+
+ 	//process for lines and contours
+	cv::vector<cv::Vec4i> lines = imageProcessor.lineDetection(img);
+	assert(!lines.empty());
+ 	cv::vector< cv::vector<cv::Point> > contours;
+	cv::vector<cv::Vec4i> hierarchy;
+	imageProcessor.contourDetection(img, contours, hierarchy);
+
+	cv::vector< cv::vector<cv::Point> > valid_contours = imageProcessor.removeRedundantContours(contours, lines);
+
+	assert((int)valid_contours.size() == 0);
+
+	//empty vectors for 2nd test
+	lines.clear();
+	contours.clear();
+	hierarchy.clear();
+	valid_contours.clear();
+
+	//test removing redundant contours with an image that will have valid contours after processing the image
+	img = cv::imread("images/two2.png", CV_LOAD_IMAGE_COLOR);
+ 	assert(!img.empty());
+
+ 	//process for lines and contours
+	lines = imageProcessor.lineDetection(img);
+	assert(!lines.empty());
+	imageProcessor.contourDetection(img, contours, hierarchy);
+
+	valid_contours = imageProcessor.removeRedundantContours(contours, lines);
+
+	assert((int)valid_contours.size() == 48);
+
+	printf("removeRedundantContours() test passed.\n");
 }
 
 /*
@@ -65,14 +135,16 @@ void testDistance(){
 	printf("distance() test passed.\n");
 }
 
-int main(){
+int main(void){
 	
 	printf("\nImageProcessor Unit Tests\n");
 
 	testLineDetection();
 	testContourDetection();
+	testLineThinning();
+	testRemoveRedundantContours();
 	testDistance();
 	
-	printf("all tests passed!\n");
+	printf("\nall tests passed!\n");
 
 }
