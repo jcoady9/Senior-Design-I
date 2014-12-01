@@ -65,7 +65,7 @@ int main(int argc, char** argv){
 			drawingRobot.drawPic(drawing,robotHeight, robotWidth);
 			break;
 		default : //default: use drawImageSimulator
-			sim.drawPic(drawing, robotHeight, robotWidth);
+			sim.drawPic(drawing, imgSize.width, imgSize.height);
 	}
 	
 	//clear the black image for next run

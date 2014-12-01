@@ -24,18 +24,6 @@ void setup(){
 
 void loop(){
 
- /*if(Serial.available()>0){
-   //wait for all information
-   delay(50); 
-   
-   //reset buffer each time new points come in
-   j=0;
-   for(j;j<6;j++){
-     buff[j] = '0';
-     points[j] = -1; 
-   }
-     readCoordinates();
-  }*/
   delay(50);
   Serial.print(ack);
   Serial.flush();
@@ -69,8 +57,6 @@ void loop(){
            robot.topRightCorner();
            break;
          
-         //TODO (SHANE WILL DO THIS) : finish the last few test cases for important corners/points
-         //also we must better organize the test case letters 
          
          case 'm':
             robot.backMotor+= 10; //moves down and to rightn
@@ -139,7 +125,7 @@ void readCoordinates(){
     if(checksum == points[4]){
       //draw the line here
       robot.drawLine(points[0],points[1],points[2],points[3]);
-      Serial.print("y\n"); //correct checksum and line is drawn
+      Serial.print("y"); //correct checksum and line is drawn
       ack = 'y';
     }else{
       Serial.print("n"); //wrong checksum, resend 

@@ -1,16 +1,17 @@
-
+/*
   Robot.cpp - Library for Robot object to control arm outside of main
   Created by Shane Bonner, November 17, 2014
   Released into the public domain.
-
+*/
 
 #include <BioloidController.h>
 #include <ax12.h>
+#include <Robot.h>
 #include <Motors2.h>
 #include <stdlib.h>
-
 #include <math.h>
-#include "Robot.h"
+
+
 
 
 Robot::Robot()
@@ -101,30 +102,49 @@ void Robot::drawLine(int x1, int y1, int x2, int y2)
  double xDiff = (double) x2 - (double) x1;
  double yDiff = (double) y2 - (double) y1;
  double distance = sqrt((xDiff * xDiff)+(yDiff*yDiff)); //distance formula
+ Serial.println();
 
  double slope = yDiff / xDiff;
+ Serial.println(slope);
  double distanceMoved = 0;
- double hypotenuse;
- int slopeMod = ((-5)*slope); //modified value of slope to add 
+ double hypotenuse = 0;
+ double slopeMod = ((5)*slope); //modified value of slope to add 
+ Serial.println(slopeMod);
+ double pythag = 0;
 
- while(distanceMoved < distance && backMotor >= 355 && backMotor <= 995 && frontMotor <= 730 && frontMotor >= 100){
+ while(distanceMoved < distance){ //&& backMotor >= 355 && backMotor <= 995 && frontMotor <= 730 && frontMotor >= 100){
   if(slope < 0){
+	Serial.println(distance);
 	delay(50);
-	backMotor -= 5;
-	frontMotor += slopeMod;
+	backMotor += 5;
+	frontMotor += slopeMod; //slope is negative so add the slopeMod
+
  	Serial.println(backMotor);
+
 	Serial.println(frontMotor);
+
 	SetPosition(1,backMotor);
   	SetPosition(2,frontMotor); 
-  	hypotenuse += sqrt((frontMotor*frontMotor)+(backMotor * backMotor));
+
+	pythag = sqrt((slopeMod*slopeMod)+(5*5)); //moving down then over, so the hypotenuse of the triangle
+ 	Serial.println(pythag);
+	
+	hypotenuse = 0; //reset each time
+  	hypotenuse += pythag; //sqrt((frontMotor*frontMotor)+(backMotor * backMotor));
+	
 	Serial.println(hypotenuse);  	
+	
 	distanceMoved += hypotenuse;
+
+	Serial.println(distanceMoved);
+
+	Serial.println("END ROUND");
 
   }else{
 	delay(50);
 	backMotor += 5; 
 	SetPosition(1,backMotor);
-	frontMotor += (5 * slope);
+	frontMotor += slopeMod; //slope is positive, still add the slopeMod
 	SetPosition(2,frontMotor); 
 	hypotenuse += sqrt((frontMotor*frontMotor)+(backMotor * backMotor));
 	distanceMoved += hypotenuse;
@@ -132,21 +152,9 @@ void Robot::drawLine(int x1, int y1, int x2, int y2)
  }
 
  penUp();
-/*delay(1000);
-
-
- 
- penDown();
- delay(1000);
- backMotor = x2;
- frontMotor = y2;
- SetPosition(1, backMotor);
- SetPosition(2, frontMotor);
- 
-
-
 
 } 
+
 
 
 

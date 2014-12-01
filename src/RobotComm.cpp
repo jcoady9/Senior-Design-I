@@ -14,7 +14,6 @@ using namespace std;
 RobotComm::RobotComm(){
 	TfileName = "coordinates.txt";//test file
 	RfileName = "/dev/ttyUSB0";//robot file
-	//checkSum = -1;
 
 }
 //destructor
@@ -30,7 +29,6 @@ RobotComm::~RobotComm(){
 void RobotComm::sendCoordinates(string coords, FILE * file){
 
 	fprintf(file, "%s", coords.c_str());
-	cout << "Points sent: " << coords.c_str() << "\n";
 	fflush(file);
 	
 }
@@ -71,13 +69,14 @@ int RobotComm::receiveACKSerial(FILE * file){
 void RobotComm::drawLineWork(string coords, FILE * comm)
 {	
 	//Send the vertices coordinates to the robot through its port file
+	cout << "Points sent: " << coords.substr(1).c_str() << "\n";
 	sendCoordinates(coords, comm);
 
 	//hold until the last line has been drawn
 	bool done  = false; 
 	int c = 0;  //make sure robot is not stuck on same point for too long
-	while(!done && c<200){
-		usleep(5000);//check if drawing is done every 0.5 seconds	
+	while(!done && c<500){
+		usleep(10000);//check if drawing is done every 0.5 seconds	
 		int response = -5;
 		c++;
 		response = receiveACKSerial(comm);
@@ -91,8 +90,8 @@ void RobotComm::drawLineWork(string coords, FILE * comm)
 			c = 0;
 			sendCoordinates(coords, comm);//resend
 			done = false;
-		}else if(c==199){//waited too long for ack
-			printf("Communcation time out. Resending...\n");
+		}else if(c==499){//waited too long for ack
+			//printf("Communcation time out. Resending...\n");
 			c = 0; 
 			sendCoordinates(coords, comm);//resend
 			done = false;
