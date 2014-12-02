@@ -74,11 +74,9 @@ void RobotComm::drawLineWork(string coords, FILE * comm)
 
 	//hold until the last line has been drawn
 	bool done  = false; 
-	int c = 0;  //make sure robot is not stuck on same point for too long
-	while(!done && c<500){
+	while(!done){
 		usleep(10000);//check if drawing is done every 0.5 seconds	
 		int response = -5;
-		c++;
 		response = receiveACKSerial(comm);
 		if(response == 0){//right checksum has been recieved
 			done = true; 
@@ -87,12 +85,6 @@ void RobotComm::drawLineWork(string coords, FILE * comm)
 			exit(0);
 		}else if(response == -3){//ack was recieved but checksum was wrong`
 			printf("Wrong Checksum. Resending...\n");
-			c = 0;
-			sendCoordinates(coords, comm);//resend
-			done = false;
-		}else if(c==499){//waited too long for ack
-			//printf("Communcation time out. Resending...\n");
-			c = 0; 
 			sendCoordinates(coords, comm);//resend
 			done = false;
 		}

@@ -1,12 +1,14 @@
 #include<stdio.h>
 #include<errno.h>
-
+#include <iostream>
 #include <opencv2/highgui/highgui.hpp>
-
 #include "../include/drawImageSimulator.h"
 #include "../include/drawImageRobot.h"
 #include "../include/drawImageInterface.h"
 #include "../include/imageProcessor.h"
+#include "../include/commandInterface.h"
+#include "../include/relaxCommand.h"
+#include "../include/quitCommand.h"
 #include "../include/drawing.h"
 #include "../include/RobotComm.h"
 
@@ -26,7 +28,7 @@ int main(int argc, char** argv){
 	//load the image
 	Mat img = imread(argv[1], CV_LOAD_IMAGE_COLOR);
 	int mode = atoi(argv[2]); 
-	int robotHeight = 256, robotWidth = 256;
+	int robotHeight = 1000, robotWidth = 1000;
 
 
 	//if the image is not found, exit program
@@ -73,8 +75,19 @@ int main(int argc, char** argv){
 	if(wri < 0){
 		printf("Error clearing black image.\n");
 	}
-
-	waitKey(0);
-
-	return 0;
+	
+	std::cout << "press any key to quit\n";
+	int c;
+	std::cin >> c; 
+		//shut down robot
+		if(mode == 2){
+			commandInterface *quit = new quitCommand();
+			commandInterface *relax = new relaxCommand();
+			RobotComm robot;
+			robot.RobotCommunication(relax);
+			//give robot time to relax
+			waitKey(100);	
+			robot.RobotCommunication(quit);			
+		}
+		return 0;
 }

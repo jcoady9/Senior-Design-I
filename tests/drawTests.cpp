@@ -28,20 +28,11 @@ int main()
 	
 
 	printf("-----------------------------------------------\n");
-	printf("\tVisited values before Draw: \n");
+	printf("\t\tDrawing...: \n");
 	printf("-----------------------------------------------\n");
 
-	printf("V1: %i\n", v1->getVisited());	
-	printf("V2: %i\n", v2->getVisited());
-	
 	//Run Draw for robot
 	robot.RobotCommunication(drawLineComm);
-
-	printf("-----------------------------------------------\n");
-	printf("\tVisited values after Draw: \n");
-	printf("-----------------------------------------------\n");
-	printf("V1: %i\n", v1->getVisited());	
-	printf("V2: %i\n", v2->getVisited());		
 
 	printf("-----------------------------------------------\n");
 	printf("\t\tEnd of tests.\n");
