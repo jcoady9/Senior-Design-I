@@ -4,12 +4,11 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "../include/drawImageSimulator.h"
+#include "../include/drawImageRobot.h"
 #include "../include/drawImageInterface.h"
 #include "../include/imageProcessor.h"
 #include "../include/drawing.h"
 #include "../include/RobotComm.h"
-
-
 
 using namespace cv;
 
@@ -26,8 +25,8 @@ int main(int argc, char** argv){
 	
 	//load the image
 	Mat img = imread(argv[1], CV_LOAD_IMAGE_COLOR);
-	int mode = atoi(argv[2]);
-	int robotHeight = 512, robotWidth = 512; 
+	int mode = atoi(argv[2]); 
+	int robotHeight = 256, robotWidth = 256;
 
 
 	//if the image is not found, exit program
@@ -54,24 +53,21 @@ int main(int argc, char** argv){
 	//write image dimensions to CLI
 	Size imgSize = img.size();
 	printf("Image Dimensions: %i x %i\n", imgSize.width, imgSize.height);
-	
-	//get vector of lines from lines
-	std::vector<Line> lines = drawing->getLines();
-	for( size_t i = 0; i < lines.size(); i++ ){
-		//cv::Vec4i l = lines[i];	
-		//printf("line[%i]: (%i, %i) -> (%i, %i)\n", (int) i, l[0], l[1], l[2], l[3]);
 
-		//Line * temp = scale((Line*) &lines[i], imgSize.width, imgSize.height, robotHeight, robotWidth);
-		if(mode == 1){//simulated
-			drawImageSimulator sim;	
-			sim.scale((Line*) &lines[i],imgSize.width, imgSize.height, robotHeight, robotWidth);
-			sim.drawPic((Line*) &lines[i]);
-		}else if(mode == 2){//actual robot
-			RobotComm Robot;
-			Robot.RobotCommunication((Line*) &lines[i]);
-		} 
+	//use either the drawing simulator or the drawing robot based on the mode parameter
+	drawImageSimulator sim;
+	DrawImageRobot drawingRobot;
+	switch(mode){
+		case 1 : //use drawImageSimulator
+			sim.drawPic(drawing, robotHeight, robotWidth);
+			break;
+		case 2 : //use drawImageRobot
+			drawingRobot.drawPic(drawing,robotHeight, robotWidth);
+			break;
+		default : //default: use drawImageSimulator
+			sim.drawPic(drawing, imgSize.width, imgSize.height);
 	}
-
+	
 	//clear the black image for next run
 	bool wri= cv::imwrite("black.png", img2);
 	if(wri < 0){
