@@ -4,58 +4,63 @@
 #include "../include/Line.h"
 #include <assert.h>
 
+//Tests the creation of a Line
 int test_Line(Line* line, Vertex* v1, Vertex* v2)
 {
 	printf("Testing test_Line class.\n");	
 	assert(line->getCurrentVertex() == v1);
 	assert(line->getNextVertex() == v2);
-	printf("Successfully identified current and next vertex.\n");
+	printf("Successfully identified current and next Vertex.\n");
 	
 	printf("test_Line passed!\n");
 	
 	return 0;
 }
 
+//Tests to get the value of the current Vertex
 int test_getCurrentVertex(Line* line, Vertex* v1)
 {
 	printf("Testing test_Line class.\n");	
 	assert(line->getCurrentVertex() == v1);
-	printf("Successfully got current vertex.\n");
+	printf("Successfully got current Vertex.\n");
 	
 	printf("test_getCurrentVertex passed!\n");
 	
 	return 0;
 }
 
+//Tests to set the value of the current Vertex
 int test_setCurrentVertex(Line* line, Vertex* v2)
 {
 	printf("Testing test_Line class.\n");	
 	line->setCurrentVertex(v2);
 	assert(line->getCurrentVertex() == v2);
-	printf("Successfully set current vertex.\n");
+	printf("Successfully set current Vertex.\n");
 	
 	printf("test_setCurrentVertex passed!\n");
 	
 	return 0;
 }
 
+//Tests to get the value of the next Vertex
 int	test_getNextVertex(Line* line, Vertex* v2)
 {
 	printf("Testing test_getNextVertex class.\n");
 	assert(line->getNextVertex() == v2);
-	printf("Successfully got next vertex.\n");
+	printf("Successfully got next Vertex.\n");
 	
 	printf("test_getNextVertex passed!\n");
 	
 	return 0;
 }
 
+//Tests to set the value of the next Vertex
 int	test_setNextVertex(Line* line, Vertex* v1)
 {
 	printf("Testing test_setNextVertex class.\n");
 	line->setNextVertex(v1);
 	assert(line->getNextVertex() == v1);
-	printf("Successfully set next vertex.\n");
+	printf("Successfully set next Vertex.\n");
 	
 	printf("test_setNextVertex passed!\n");
 	
@@ -64,7 +69,7 @@ int	test_setNextVertex(Line* line, Vertex* v1)
 
 int main()
 {
-	printf("Testing Line class.\n");
+	printf("\nTesting Line class.\n");
 	
 	Vertex* v1 = new Vertex(5, 3);
 	Vertex* v2 = new Vertex(10, 9);

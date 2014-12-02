@@ -1,3 +1,5 @@
+//drawImageSimulator.h
+
 #ifndef DRAWIMAGESIMULATOR_H
 #define DRAWIMAGESIMULATOR_H
 
