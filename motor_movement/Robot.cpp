@@ -1,8 +1,8 @@
 /*
   Robot.cpp - Library for Robot object to control arm outside of main
-  Created by Shane Bonner, November 17, 2014
+  Created November 17, 2014
   Released into the public domain.
-
+*/
 
 #include <BioloidController.h>
 #include <ax12.h>
@@ -15,15 +15,15 @@
 
 
 Robot::Robot()
-//vertice arrays for important coordinates on the plane of drawing
-: topRight {355, 730},
+//vertex arrays for important coordinates on the plane of drawing
+: topRight {566, 460},
   bottomLeft {995, 100},
-  bottomRight {815, 100},
-  deadCenter {765, 230} 
+  bottomRight {815, 160},
+  deadCenter {699, 225} 
 {
  //starting coordinates for the motors to position to top left of drawing area
- backMotor = 425;
- frontMotor =  730;
+ backMotor = 566;
+ frontMotor = 460;
 
 
 }
@@ -37,14 +37,14 @@ void Robot::penUp()
 //drop the pen
 void Robot::penDown()
 {
-  SetPosition(3, 480); 
+  SetPosition(3, 525); 
 }
 
 //move the arm back to the top left corner
 void Robot::relaxArm()
 {
-  backMotor = 425;
-  frontMotor = 730;
+  backMotor = 566;
+  frontMotor = 460;
   SetPosition(1, backMotor);
   SetPosition(2, frontMotor);
   SetPosition(3, 450);  
@@ -102,19 +102,20 @@ void Robot::drawLine(int x1, int y1, int x2, int y2)
  double xDiff = (double) x2 - (double) x1;
  double yDiff = (double) y2 - (double) y1;
  double distance = sqrt((xDiff * xDiff)+(yDiff*yDiff)); //distance formula
- Serial.println();
-
+// Serial.println();
+ Serial.println(distance);
  double slope = yDiff / xDiff;
- Serial.println(slope);
+ //Serial.println(slope);
  double distanceMoved = 0;
  double hypotenuse = 0;
  double slopeMod = ((5)*slope); //modified value of slope to add 
- Serial.println(slopeMod);
+// Serial.println(slopeMod);
  double pythag = 0;
 
  while(distanceMoved < distance){ //&& backMotor >= 355 && backMotor <= 995 && frontMotor <= 730 && frontMotor >= 100){
-  if(slope < 0){
-	Serial.println(distance);
+  //if(slope < 0){
+	
+	IK(backMotor,frontMotor, x2,y2);
 	delay(50);
 	backMotor += 5;
 	frontMotor += slopeMod; //slope is negative so add the slopeMod
@@ -140,7 +141,7 @@ void Robot::drawLine(int x1, int y1, int x2, int y2)
 
 	Serial.println("END ROUND");
 
-  }else{
+ // }else{
 	delay(50);
 	backMotor += 5; 
 	SetPosition(1,backMotor);
@@ -148,13 +149,63 @@ void Robot::drawLine(int x1, int y1, int x2, int y2)
 	SetPosition(2,frontMotor); 
 	hypotenuse += sqrt((frontMotor*frontMotor)+(backMotor * backMotor));
 	distanceMoved += hypotenuse;
-  }
+  //}
  }
 
  penUp();
 
 } 
-*/
+
+int Robot::IK(long Xcurrent, long Ycurrent, long Xnext, long Ynext){//where the robot is moving to 
+
+ float B = 0.0;                                    //distance that is needed to move
+ float q1= 0.0;                                   //angle between X-axis and line to be drawn
+ float q2= 0.0;                                   //angle of front motor link l1
+ float Q1= 0.0;                                   //Q1: angle between x-axis and "l1"
+ float Q2= 0.0;                                   //Q2: angle between "l1" and "l2"
+ long l1 = 60;                              //l1: length first bracket
+ long l2 = 70;                            //l2: length of tip bracket
+
+//Where the robot is going
+ long Xpos= 0.0;                                  //x coordinate where the arm should move to
+ long Ypos= 0.0;                                  //y corrdinate where the arm should move to      
+
+
+
+ Xpos = abs(Xcurrent-Xnext);                                 //relative distance to travel on x
+ Ypos = abs(Ycurrent-Ynext);                                 //relative distance to travel on y
+
+  B = sqrt(Xpos*Xpos + Ypos*Ypos);                        //the Pythagorean theorem
+ q1 = atan2(Ypos,Xpos);
+ q2 = acos((l1*l1 - l2*l2 + B*B)/(2*l1*B));              //the law of cosines         
+ Q1 = degrees(q2) - degrees(q1) + 90;                                     
+ Q2 = degrees(acos((l1*l1 + l2*l2 - B*B)/(2*l1*l2)));    //the law of cosines    
+
+
+ //---------------------------------------------------------------------------------------------------------------------------
+ //-----------------------------------------------| trouble shooting| --------------------------------------------------------
+ //---------------------------------------------------------------------------------------------------------------------------
+
+ Serial.println(Q1);
+ Serial.println(Q2);
+ Serial.println();
+ Serial.println(B);
+ Serial.println();
+ Serial.println(q1);
+ Serial.println(q2);
+ Serial.println(degrees(q1));
+ Serial.println(degrees(q2));
+ Serial.println();
+ Serial.println(Xpos);
+ Serial.println(Ypos);
+ Serial.println();
+ Serial.println("------------------------------------------------------");
+ Serial.println();
+
+
+ delay(5000);  
+}
+
 
 
 

@@ -53,8 +53,16 @@ void loop(){
             
          case 't': //experimental case using the stored array points for quick access.
                    //all four corners should have this for easy maneuvering around the area of drawing
-                   
-           robot.topRightCorner();
+               bioloid.readPose();//find where the servos are currently
+                bioloid.setNextPose(1, 684);  
+                bioloid.setNextPose(2, 223);  
+                bioloid.interpolateSetup(5000); // setup for interpolation from current->next over 1/2 a second
+               while(bioloid.interpolating > 0)
+               {  // do this while we have not reached our new pose
+                 bioloid.interpolateStep();     // move servos, if necessary. 
+                 delay(3);
+               }
+           //robot.drawLine(testPoints[0],testPoints[1],testPoints[2],testPoints[3]); //TEST LINE WITHOUT PROCESSING
            break;
          
          
@@ -84,7 +92,7 @@ void loop(){
                   points[j] = -1; 
               }
               readCoordinates();
-            // robot.drawLine(testPoints[0],testPoints[1],testPoints[2],testPoints[3]); //TEST LINE WITHOUT PROCESSING
+    
             break;
           
           case 'l':
