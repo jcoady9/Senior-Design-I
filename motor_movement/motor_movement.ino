@@ -10,7 +10,7 @@ BioloidController bioloid = BioloidController(1000000);
 char input;
 char buff[5], ack ='0';
 int points[5] = {0,0,0,0,0}; 
-int testPoints[5] = {355,730,765,230,2080};
+int testPoints[5] = {560,350,685,200,2080};
 int p, b, num, j;
 
 Robot robot; //TESTING OUT MODEL OBJECT
@@ -51,11 +51,28 @@ void loop(){
             robot.penDown();
             break; 
             
-         case 't': //experimental case using the stored array points for quick access.
-                   //all four corners should have this for easy maneuvering around the area of drawing
+         case 't': //test case
+                  
+               
+               bioloid.poseSize = 2;//
                bioloid.readPose();//find where the servos are currently
-                bioloid.setNextPose(1, 684);  
-                bioloid.setNextPose(2, 223);  
+               Serial.println("First Pose");
+                bioloid.setNextPose(1, testPoints[0]);  
+                bioloid.setNextPose(2,testPoints[1]); 
+                
+                bioloid.interpolateSetup(5000); // setup for interpolation from current->next over 1/2 a second
+               while(bioloid.interpolating > 0)
+               {  // do this while we have not reached our new pose
+                 bioloid.interpolateStep();     // move servos, if necessary. 
+                 delay(3);
+               }
+               robot.penDown();
+               Serial.println("Next position");
+               bioloid.readPose();//find where the servos are currently
+               
+                bioloid.setNextPose(1,testPoints[2]);  
+                bioloid.setNextPose(2, testPoints[3]); 
+                
                 bioloid.interpolateSetup(5000); // setup for interpolation from current->next over 1/2 a second
                while(bioloid.interpolating > 0)
                {  // do this while we have not reached our new pose
