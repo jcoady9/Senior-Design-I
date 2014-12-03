@@ -41,13 +41,24 @@ Drawing* ImageProcessor::processImage(cv::Mat & image){
 	cv::vector< cv::vector<cv::Point> > valid_contours = removeRedundantContours(contours, lines);
 	
 	//convert contour cv::Points into cv::Vec4i
-	cv::vector<cv::Vec4i> contour_lines = pointsToVec4i(valid_contours);
+	//cv::vector<cv::Vec4i> contour_lines = pointsToVec4i(valid_contours);
+
+	cv::vector<cv::Vec4i> simple_contour_lines;
+	for(int i = 0; i < (int)valid_contours.size(); i++){
+		cv::vector<cv::Point> point_vec = valid_contours[i];
+		cv::Vec4i vec;
+		vec[0] = point_vec[0].x;
+		vec[1] = point_vec[1].y;
+		vec[2] = point_vec[point_vec.size() - 1].x;
+		vec[3] = point_vec[point_vec.size() - 1].y;
+		simple_contour_lines.push_back(vec);
+	}
 
 	//concatenate vectors containing straight line and contour coordinates
 	cv::vector<cv::Vec4i> combinedVectors;
-	combinedVectors.reserve(lines.size() + contour_lines.size());
+	combinedVectors.reserve(lines.size() + simple_contour_lines.size());
 	combinedVectors.insert(combinedVectors.end(), lines.begin(), lines.end());
-	combinedVectors.insert(combinedVectors.end(), contour_lines.begin(), contour_lines.end());
+	combinedVectors.insert(combinedVectors.end(), simple_contour_lines.begin(), simple_contour_lines.end());
 
 	//convert vector of vec4i to vector of lines
 	std::vector<Line> lines_vec4i;

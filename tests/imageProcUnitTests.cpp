@@ -135,6 +135,29 @@ void testDistance(){
 	printf("distance() test passed.\n");
 }
 
+/*
+ * tests the processImage() function 
+*/
+void testProcessImage(){
+	cv::Mat img = cv::imread("images/horizontal-lines.jpg", CV_LOAD_IMAGE_COLOR);
+ 	assert(!img.empty());
+
+ 	imageProcessor.processImage(img);
+
+ 	cv::imshow("processing horizontal-lines.jpg", img);
+
+ 	img = cv::imread("images/two2.png", CV_LOAD_IMAGE_COLOR);
+ 	assert(!img.empty());
+
+ 	imageProcessor.processImage(img);
+
+ 	cv::imshow("processing two2.png", img);
+
+	cv::waitKey(0);
+
+	printf("processImage() test passed.\n");
+}
+
 int main(void){
 	
 	printf("\nImageProcessor Unit Tests\n");
@@ -144,6 +167,7 @@ int main(void){
 	testLineThinning();
 	testRemoveRedundantContours();
 	testDistance();
+	testProcessImage();
 	
 	printf("\nall tests passed!\n");
 
