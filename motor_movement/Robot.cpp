@@ -2,7 +2,7 @@
   Robot.cpp - Library for Robot object to control arm outside of main
   Created November 17, 2014
   Released into the public domain.
-*/
+
 
 #include <BioloidController.h>
 #include <ax12.h>
@@ -206,6 +206,6 @@ int Robot::IK(long Xcurrent, long Ycurrent, long Xnext, long Ynext){//where the 
  delay(5000);  
 }
 
-
+*/
 
 

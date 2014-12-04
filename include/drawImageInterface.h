@@ -1,3 +1,5 @@
+//drawImageInterface.h
+
 #ifndef DRAWIMAGEINTERFACE_H
 #define DRAWIMAGEINTERFACE_H
 

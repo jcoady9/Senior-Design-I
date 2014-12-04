@@ -1,9 +1,8 @@
-/*
-@author Shane Bonner
-   drawLineCommand.cpp - for the command that will tell the main function to use the four
-coordinates it has been sent to draw a straight line
+//drawLineCommand.cpp
 
-*/
+//The command that will tell the main function to use the four
+//coordinates that have been sent to draw a straight line.
+
 #include <sstream>
 #include "../include/drawLineCommand.h"
 #include <string>
