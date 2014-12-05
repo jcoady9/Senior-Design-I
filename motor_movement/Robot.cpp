@@ -2,7 +2,7 @@
   Robot.cpp - Library for Robot object to control arm outside of main
   Created November 17, 2014
   Released into the public domain.
-*/
+
 
 #include <BioloidController.h>
 #include <ax12.h>
@@ -164,8 +164,8 @@ int Robot::IK(int points[4]){//where the robot is moving to long
 	float B = 0.0, B2 = 0.0;            //distance that is needed to move
 	float q1_1= 0.0, q1_2 = 0.0;           //angle between X-axis and line to be drawn
 	float q2_1= 0.0,q2_2 =0.0;           //angle of front motor link l1
-	float Q1_1= 0.0, Q1_2 =0.0;           //Q1: angle between x-axis and l1
-	float Q2_1= 0.0, Q2_2 = 0.0 ;          //Q2: angle between l1 and l2
+	float Q1_1= 0.0, Q1_2 =0.0;           //Q1: angle between x-axis and "l1"
+	float Q2_1= 0.0, Q2_2 = 0.0 ;          //Q2: angle between "l1" and "l2"
 	long l1 = 60;          //l1: length first bracket
 	long l2 = 70;         //l2: length of tip bracket
 
@@ -173,33 +173,30 @@ int Robot::IK(int points[4]){//where the robot is moving to long
 	//Where the robot is going
 	long Xpos1= 0.0, Xpos2 =0.0;       //x coordinate where the arm should move to
 	long Ypos1= 0.0, Ypos2 =0.0;       //y corrdinate where the arm should move to      
-	
-	//angles for points[0] and points[1] (X1,Y1)
+
 	Xpos1 = abs(points[0]-prevousCoord[0]);     //relative distance to travel on x
 	Ypos1 = abs(points[1]-prevousCoord[1]);     //relative distance to travel on y
-	B = sqrt(Xpos1*Xpos1 + Ypos1*Ypos1);           //the Pythagorean theorem
-	q1_1 = atan2(Ypos1,Xpos1);//normalize based on the quadraint we are in
-	q2_1 = acos((l1*l1 - l2*l2 + B*B)/(2*l1*B)); //the law of cosines 
-	Q1_1 = degrees(q2_1) - degrees(q1_1);     
-	Q2_1 = degrees(acos((l1*l1 + l2*l2 - B*B)/(2*l1*l2))) ;//the law of cosines  
-
-	//angles for points[2] and points[3] (X2,Y2)
 	Xpos2 = abs(points[2]-points[0]);     //relative distance to travel on x
 	Ypos2 = abs(points[3]-points[1]);     //relative distance to travel on y
+
+	B = sqrt(Xpos1*Xpos1 + Ypos1*Ypos1);           //the Pythagorean theorem
 	B2 = sqrt(Xpos2*Xpos2 + Ypos2*Ypos2);           //the Pythagorean theorem
-	q1_2 = atan2(Ypos2,Xpos2);
-	q2_2 = acos((l1*l1 - l2*l2 + B2*B2)/(2*l1*B2)); //the law of cosines  
-	Q1_2 = degrees(q2_2) - degrees(q1_2);   
+	//q1_1 = atan2(Ypos1,Xpos1);//we should always be in the first quadraint
+	//q1_2 = atan2(Ypos2,Xpos2);
+	q2_1 = acos((l1*l1 - l2*l2 + B*B)/(2*l1*B)); //the law of cosines   
+	q2_2 = acos((l1*l1 - l2*l2 + B2*B2)/(2*l1*B2)); //the law of cosines         
+	Q1_1 = q2_1 - degrees(q1_1);     
+	Q1_2 = q2_2 - degrees(q1_2) ;                                   
+	Q2_1 = degrees(acos((l1*l1 + l2*l2 - B*B)/(2*l1*l2))) +90;//the law of cosines    
 	Q2_2 = degrees(acos((l1*l1 + l2*l2 - B2*B2)/(2*l1*l2)));//the law of cosines    
-	  
 	
 	prevousCoord[0] = points[2];
-	prevousCoord[1] = points[3];
+	prevousCoord[0] = points[3];
 
-	points[0] = previousMotorAngle[0] + (Q1_1 * (0.29)); //for AX-12 servos 0.29 degrees is equal to an increase of 1
-	points[1] = previousMotorAngle[1] - (Q2_1 * (0.29));
-	points[2] = points[0] + (Q1_2* (0.29));
-	points[3] = points[1] - (Q2_2* (0.29));
+	points[0] = previousMotorAngle[0] - Q1_1; 
+	points[1] = previousMotorAngle[1] - Q2_1;
+	points[2] = points[0] - Q1_2;
+	points[3] = points[1] - Q2_2;
 
 	previousMotorAngle[0] = points[2];
 	previousMotorAngle[1] = points[3];
@@ -209,9 +206,9 @@ Serial.println(points[0]);
 Serial.println(points[1]);
 Serial.println(points[2]);
 Serial.println(points[3]);
+Serial.println();
 
- Serial.print("First point");
- Serial.println();
+
  Serial.println(Q1_1);
  Serial.println(Q2_1);
  Serial.println();
@@ -226,7 +223,6 @@ Serial.println(points[3]);
  Serial.println(Ypos1);
  Serial.println();
  Serial.println();
- Serial.print("Second point");
  Serial.println(Q1_2);
  Serial.println(Q2_2);
  Serial.println();
@@ -246,7 +242,7 @@ Serial.println(points[3]);
 
  delay(50);  
 }
-
+*/
 
 
 
