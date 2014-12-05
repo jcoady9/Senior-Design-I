@@ -1,3 +1,5 @@
+//imageProcessor.cpp
+
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
@@ -77,7 +79,7 @@ Drawing* ImageProcessor::processImage(cv::Mat & image){
 	return newDrawing;
 }
 
-/**
+/*
  * detects straight lines in an image
  *
  * @param img	the image to perform line detection on
@@ -129,7 +131,7 @@ void ImageProcessor::contourDetection(const cv::Mat & src, cv::vector< cv::vecto
 	findContours(src, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
 }
 
-/**
+/*
  * Based off of code found from here: http://opencv-code.com/quick-tips/implementation-of-thinning-algorithm-in-opencv/
  *
  * This is part of the Zhang-Suen algorithm, documentation on how it works can be seenhere: http://read.pudn.com/downloads99/sourcecode/graph/texture_mapping/403914/Parallel%20thinning%20with%20two-	    subiteration%20algorithms.pdf
@@ -139,7 +141,7 @@ void ImageProcessor::contourDetection(const cv::Mat & src, cv::vector< cv::vecto
  *
  * @param  im    Binary image with range = 0-1
  * @param  iter  0=even, 1=odd
- */
+*/
 void ImageProcessor::thinningIteration(cv::Mat& im, int iter)
 {
     cv::Mat marker = cv::Mat::zeros(im.size(), CV_8UC1);
@@ -173,7 +175,7 @@ void ImageProcessor::thinningIteration(cv::Mat& im, int iter)
     im &= ~marker;
 }
 
-/**
+/*
  * Function for thinning the given binary image
  *
  * Based off of code found from here: http://opencv-code.com/quick-tips/implementation-of-thinning-algorithm-in-opencv/
@@ -181,7 +183,7 @@ void ImageProcessor::thinningIteration(cv::Mat& im, int iter)
  * This is part of the Zhang-Suen algorithm, documentation on how it works can be seen here: http://read.pudn.com/downloads99/sourcecode/graph/texture_mapping/403914/Parallel%20thinning%20with%20two-	    subiteration%20algorithms.pdf
  *
  * @param  im  Binary image with range = 0-255
- */
+*/
 void ImageProcessor::thinning(cv::Mat& im)
 {
     im /= 255;
@@ -303,7 +305,6 @@ Line ImageProcessor::vec2Vertex(cv::Vec4i vec){
 	Vertex* v2 = new Vertex(vec[2], vec[3]);
 	
 	Line * line  = new Line(v1, v2);
-	//v1->setNextVertex(v2);
 	
 	return *line;
 }

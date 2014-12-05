@@ -1,3 +1,5 @@
+//quitCommand.h
+
 #ifndef QUITCOMMAND_H
 #define QUITCOMMAND_H
 

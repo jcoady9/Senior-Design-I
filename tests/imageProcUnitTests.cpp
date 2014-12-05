@@ -1,3 +1,4 @@
+//imageProcUnitTests.cpp
 
 #include <assert.h>
 #include <stdio.h>
@@ -121,7 +122,7 @@ void testRemoveRedundantContours(){
 
 /*
  * tests the distance() function
-*/
+ */
 void testDistance(){
 	double result = imageProcessor.distance(cv::Point(100, 15), cv::Point(75, 36));
 	assert(result < 32.64 + DELTA && result > 32.64 - DELTA);
@@ -169,6 +170,6 @@ int main(void){
 	testDistance();
 	testProcessImage();
 	
-	printf("\nall tests passed!\n");
+	printf("\nAll tests passed!\n");
 
 }

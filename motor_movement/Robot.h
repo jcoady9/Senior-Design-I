@@ -3,10 +3,11 @@
 
 /*
   Robot.h - Library header file for Robot object to control arm movements
-  Created by Shane Bonner, November 17, 2014
+  Created November 17, 2014
   Released into the public domain.
 
 */
+
 
 class Robot
 {
@@ -20,6 +21,7 @@ class Robot
   void bottomRightCorner();
   void toDeadCenter();
   void drawLine(int x1, int y1, int x2, int y2);
+  int IK(int points[4]);
     
   int frontMotor;
   int backMotor;
@@ -28,7 +30,8 @@ class Robot
   int bottomLeft[2];
   int bottomRight[2];
   int deadCenter[2];
-    
+  int prevousCoord[2];
+  int previousMotorAngle[2];
    
   private:
     

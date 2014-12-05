@@ -1,8 +1,10 @@
+//robotRelaxTest.cpp
+
 #include "../include/relaxCommand.h"
 #include "../include/RobotComm.h"
 
 
-//test the quit command
+//test the relax command
 int main(){
 	RobotComm robot;
 	relaxCommand * relax = new relaxCommand();
