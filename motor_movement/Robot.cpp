@@ -4,6 +4,7 @@
   Released into the public domain.
 
 
+
 #include <BioloidController.h>
 #include <ax12.h>
 #include <Robot.h>
@@ -11,21 +12,20 @@
 #include <stdlib.h>
 #include <math.h>
 
-
-
-
 Robot::Robot()
 //vertex arrays for important coordinates on the plane of drawing
-: topRight {566, 460},
-  bottomLeft {995, 100},
-  bottomRight {815, 160},
-  deadCenter {699, 225}, 
-  prevousCoord {0,0},
-  previousMotorAngle{538,520}
+	: topRight {534, 404},
+	  bottomLeft {795, 179},
+	  bottomRight {762, 98},
+	  deadCenter {684, 233},
+	  relaxed {538, 520},
+	  upOrDown {350, 525}
+          prevousCoord {0,0},
+          previousMotorAngle{538,520}
 {
- //starting coordinates for the motors to position to top left of drawing area
- backMotor = 566;
- frontMotor = 460;
+	 //starting coordinates for the motors to position to top left of drawing area
+	 backMotor = relaxed[1];
+	 frontMotor = relaxed[2];
 
 
 }
@@ -33,129 +33,101 @@ Robot::Robot()
 //lift the pen
 void Robot::penUp()
 {
-  SetPosition(3, 350);
+  	SetPosition(3, upOrDown[1]);
 }
 
 //drop the pen
 void Robot::penDown()
 {
-  SetPosition(3, 525); 
+  	SetPosition(3, upOrDown[2]); 
 }
 
 //move the arm back to the top left corner
-void Robot::relaxArm()
+void Robot::relaxArm(BioloidController bioloid)
 {
-  backMotor = 566;
-  frontMotor = 460;
-  SetPosition(1, backMotor);
-  SetPosition(2, frontMotor);
-  SetPosition(3, 450);  
+	penUp();
+	bioloid.poseSize = 1; 
+	bioloid.readPose();//find where the servos are currently
+	bioloid.setNextPose(1, relaxed[1]);  
+	bioloid.setNextPose(2, relaxed[2]); 
+	
+	bioloid.interpolateSetup(500); // setup for interpolation from current->next
+
+	while(bioloid.interpolating > 0)
+	{ 
+	 // do this while we have not reached our new pose
+	 bioloid.interpolateStep();     // move servos, if necessary. 
+	 delay(3);
+	}
 }
 
-//move the arm to the top right corner
+//move the arm to the top right corner of the drawing plane
 void Robot::topRightCorner()
 {
-  backMotor = topRight[0];
-  frontMotor = topRight[1];
-  SetPosition(1, backMotor);
-  SetPosition(2, frontMotor);  
+	  backMotor = topRight[0];
+	  frontMotor = topRight[1];
+	  SetPosition(1, backMotor);
+	  SetPosition(2, frontMotor);  
 }
 
 
-//move to the bottom right corner
+//move to the bottom right corner of the drawing plane
 void Robot::bottomRightCorner()
 {
-  backMotor = bottomRight[0];
-  frontMotor = bottomRight[1];
-  SetPosition(1, backMotor);
-  SetPosition(2, frontMotor);
+	  backMotor = bottomRight[0];
+	  frontMotor = bottomRight[1];
+	  SetPosition(1, backMotor);
+	  SetPosition(2, frontMotor);
 }
 
-//move to the bottom left corner
+//move to the bottom left corner of the drawing plane
 void Robot::bottomLeftCorner()
 {
-  backMotor = bottomLeft[0];
-  frontMotor = bottomLeft[1];
-  SetPosition(1, backMotor);
-  SetPosition(2, frontMotor);
+	  backMotor = bottomLeft[0];
+	  frontMotor = bottomLeft[1];
+	  SetPosition(1, backMotor);
+	  SetPosition(2, frontMotor);
 }
 
+//move the the very center of the drawing plane
 void Robot::toDeadCenter()
 {
- backMotor = deadCenter[0];
- frontMotor = deadCenter[1];
- SetPosition(1, backMotor);
- SetPosition(2, frontMotor); 
+	 backMotor = deadCenter[0];
+	 frontMotor = deadCenter[1];
+	 SetPosition(1, backMotor);
+	 SetPosition(2, frontMotor); 
 }
 
-void Robot::drawLine(int x1, int y1, int x2, int y2)
-{
-// penUp();
-
- delay(1000);
- backMotor = x1;
- frontMotor = y1;
- SetPosition(1, backMotor);
- delay(1000);
- SetPosition(2, frontMotor);
-
- //as x increases on the plane, y decreases
- penDown();
- double xDiff = (double) x2 - (double) x1;
- double yDiff = (double) y2 - (double) y1;
- double distance = sqrt((xDiff * xDiff)+(yDiff*yDiff)); //distance formula
-// Serial.println();
- Serial.println(distance);
- double slope = yDiff / xDiff;
- //Serial.println(slope);
- double distanceMoved = 0;
- double hypotenuse = 0;
- double slopeMod = ((5)*slope); //modified value of slope to add 
-// Serial.println(slopeMod);
- double pythag = 0;
-
- while(distanceMoved < distance){ //&& backMotor >= 355 && backMotor <= 995 && frontMotor <= 730 && frontMotor >= 100){
-  //if(slope < 0){
+void Robot::drawLine(int x1, int y1, int x2, int y2, BioloidController bioloid)
+{	       
+	bioloid.poseSize = 2; // load two poses in, one for each vertex
+	bioloid.readPose();//find where the servos are currently
 	
-	//IK(backMotor,frontMotor, x2,y2);
-	delay(50);
-	backMotor += 5;
-	frontMotor += slopeMod; //slope is negative so add the slopeMod
+	bioloid.setNextPose(1, x1);  //set the coordinates for the vertex to which the arm is moving first
+	bioloid.setNextPose(2, y1); 
 
- 	Serial.println(backMotor);
+	bioloid.interpolateSetup(500); // setup for interpolation from current->next
 
-	Serial.println(frontMotor);
+	while(bioloid.interpolating > 0)
+	{ 
+	 // do this while we have not reached our new pose
+	 bioloid.interpolateStep();     // move servos, if necessary. 
+	 delay(3);
+	}
 
-	SetPosition(1,backMotor);
-  	SetPosition(2,frontMotor); 
+	penDown();
 
-	pythag = sqrt((slopeMod*slopeMod)+(5*5)); //moving down then over, so the hypotenuse of the triangle
- 	Serial.println(pythag);
-	
-	hypotenuse = 0; //reset each time
-  	hypotenuse += pythag; //sqrt((frontMotor*frontMotor)+(backMotor * backMotor));
-	
-	Serial.println(hypotenuse);  	
-	
-	distanceMoved += hypotenuse;
+	bioloid.readPose();//find where the servos are currently
+	bioloid.setNextPose(1, x2);  
+	bioloid.setNextPose(2, y2); 
 
-	Serial.println(distanceMoved);
-
-	Serial.println("END ROUND");
-
- // }else{
-	delay(50);
-	backMotor += 5; 
-	SetPosition(1,backMotor);
-	frontMotor += slopeMod; //slope is positive, still add the slopeMod
-	SetPosition(2,frontMotor); 
-	hypotenuse += sqrt((frontMotor*frontMotor)+(backMotor * backMotor));
-	distanceMoved += hypotenuse;
-  //}
- }
-
- penUp();
-
+	bioloid.interpolateSetup(1000); // setup for interpolation from current->next over 1/2 a second
+	while(bioloid.interpolating > 0)
+	{  
+	// do this while we have not reached our new pose
+	 bioloid.interpolateStep();     // move servos, if necessary. 
+	 delay(3);
+	}
 } 
 
 int Robot::IK(int points[4]){//where the robot is moving to long
@@ -242,7 +214,6 @@ Serial.println();
 
  delay(50);  
 }
+
 */
-
-
 
