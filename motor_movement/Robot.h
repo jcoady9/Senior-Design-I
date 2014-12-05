@@ -24,11 +24,14 @@ class Robot
 		void toDeadCenter();
 
 		//main drawing function(s)		
-		void drawLine(int x1, int y1, int x2, int y2, BioloidController bioloid);
+		void drawLine(int points[4], BioloidController bioloid);
 		
 		//field containing the position location of each dynamixel servo
 		int frontMotor;
 		int backMotor;
+		
+		//Inverse Kinematics function
+		void InverseKinematics(int points[4]);
 		
 		//arrays to store important locations on the drawing plane
 		int topRight[2];
