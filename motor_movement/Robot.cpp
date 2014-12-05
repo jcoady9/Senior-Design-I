@@ -2,7 +2,7 @@
   Robot.cpp - Library for Robot object to control arm outside of main
   Created November 17, 2014
   Released into the public domain.
-
+*/
 
 #include <BioloidController.h>
 #include <ax12.h>
@@ -19,7 +19,9 @@ Robot::Robot()
 : topRight {566, 460},
   bottomLeft {995, 100},
   bottomRight {815, 160},
-  deadCenter {699, 225} 
+  deadCenter {699, 225}, 
+  prevousCoord {0,0},
+  previousMotorAngle{538,520}
 {
  //starting coordinates for the motors to position to top left of drawing area
  backMotor = 566;
@@ -115,7 +117,7 @@ void Robot::drawLine(int x1, int y1, int x2, int y2)
  while(distanceMoved < distance){ //&& backMotor >= 355 && backMotor <= 995 && frontMotor <= 730 && frontMotor >= 100){
   //if(slope < 0){
 	
-	IK(backMotor,frontMotor, x2,y2);
+	//IK(backMotor,frontMotor, x2,y2);
 	delay(50);
 	backMotor += 5;
 	frontMotor += slopeMod; //slope is negative so add the slopeMod
@@ -156,56 +158,91 @@ void Robot::drawLine(int x1, int y1, int x2, int y2)
 
 } 
 
-int Robot::IK(long Xcurrent, long Ycurrent, long Xnext, long Ynext){//where the robot is moving to 
+int Robot::IK(int points[4]){//where the robot is moving to long
+//points = {x1,y1,x2,y2};
 
- float B = 0.0;                                    //distance that is needed to move
- float q1= 0.0;                                   //angle between X-axis and line to be drawn
- float q2= 0.0;                                   //angle of front motor link l1
- float Q1= 0.0;                                   //Q1: angle between x-axis and "l1"
- float Q2= 0.0;                                   //Q2: angle between "l1" and "l2"
- long l1 = 60;                              //l1: length first bracket
- long l2 = 70;                            //l2: length of tip bracket
-
-//Where the robot is going
- long Xpos= 0.0;                                  //x coordinate where the arm should move to
- long Ypos= 0.0;                                  //y corrdinate where the arm should move to      
+	float B = 0.0, B2 = 0.0;            //distance that is needed to move
+	float q1_1= 0.0, q1_2 = 0.0;           //angle between X-axis and line to be drawn
+	float q2_1= 0.0,q2_2 =0.0;           //angle of front motor link l1
+	float Q1_1= 0.0, Q1_2 =0.0;           //Q1: angle between x-axis and "l1"
+	float Q2_1= 0.0, Q2_2 = 0.0 ;          //Q2: angle between "l1" and "l2"
+	long l1 = 60;          //l1: length first bracket
+	long l2 = 70;         //l2: length of tip bracket
 
 
+	//Where the robot is going
+	long Xpos1= 0.0, Xpos2 =0.0;       //x coordinate where the arm should move to
+	long Ypos1= 0.0, Ypos2 =0.0;       //y corrdinate where the arm should move to      
 
- Xpos = abs(Xcurrent-Xnext);                                 //relative distance to travel on x
- Ypos = abs(Ycurrent-Ynext);                                 //relative distance to travel on y
+	Xpos1 = abs(points[0]-prevousCoord[0]);     //relative distance to travel on x
+	Ypos1 = abs(points[1]-prevousCoord[1]);     //relative distance to travel on y
+	Xpos2 = abs(points[2]-points[0]);     //relative distance to travel on x
+	Ypos2 = abs(points[3]-points[1]);     //relative distance to travel on y
 
-  B = sqrt(Xpos*Xpos + Ypos*Ypos);                        //the Pythagorean theorem
- q1 = atan2(Ypos,Xpos);
- q2 = acos((l1*l1 - l2*l2 + B*B)/(2*l1*B));              //the law of cosines         
- Q1 = degrees(q2) - degrees(q1) + 90;                                     
- Q2 = degrees(acos((l1*l1 + l2*l2 - B*B)/(2*l1*l2)));    //the law of cosines    
+	B = sqrt(Xpos1*Xpos1 + Ypos1*Ypos1);           //the Pythagorean theorem
+	B2 = sqrt(Xpos2*Xpos2 + Ypos2*Ypos2);           //the Pythagorean theorem
+	//q1_1 = atan2(Ypos1,Xpos1);//we should always be in the first quadraint
+	//q1_2 = atan2(Ypos2,Xpos2);
+	q2_1 = acos((l1*l1 - l2*l2 + B*B)/(2*l1*B)); //the law of cosines   
+	q2_2 = acos((l1*l1 - l2*l2 + B2*B2)/(2*l1*B2)); //the law of cosines         
+	Q1_1 = q2_1 - degrees(q1_1);     
+	Q1_2 = q2_2 - degrees(q1_2) ;                                   
+	Q2_1 = degrees(acos((l1*l1 + l2*l2 - B*B)/(2*l1*l2))) +90;//the law of cosines    
+	Q2_2 = degrees(acos((l1*l1 + l2*l2 - B2*B2)/(2*l1*l2)));//the law of cosines    
+	
+	prevousCoord[0] = points[2];
+	prevousCoord[0] = points[3];
+
+	points[0] = previousMotorAngle[0] - Q1_1; 
+	points[1] = previousMotorAngle[1] - Q2_1;
+	points[2] = points[0] - Q1_2;
+	points[3] = points[1] - Q2_2;
+
+	previousMotorAngle[0] = points[2];
+	previousMotorAngle[1] = points[3];
+
+Serial.println();
+Serial.println(points[0]);
+Serial.println(points[1]);
+Serial.println(points[2]);
+Serial.println(points[3]);
+Serial.println();
 
 
- //---------------------------------------------------------------------------------------------------------------------------
- //-----------------------------------------------| trouble shooting| --------------------------------------------------------
- //---------------------------------------------------------------------------------------------------------------------------
-
- Serial.println(Q1);
- Serial.println(Q2);
+ Serial.println(Q1_1);
+ Serial.println(Q2_1);
  Serial.println();
  Serial.println(B);
  Serial.println();
- Serial.println(q1);
- Serial.println(q2);
- Serial.println(degrees(q1));
- Serial.println(degrees(q2));
+ Serial.println(q1_1);
+ Serial.println(q2_1);
+ Serial.println(degrees(q1_1));
+ Serial.println(degrees(q2_1));
  Serial.println();
- Serial.println(Xpos);
- Serial.println(Ypos);
+ Serial.println(Xpos1);
+ Serial.println(Ypos1);
+ Serial.println();
+ Serial.println();
+ Serial.println(Q1_2);
+ Serial.println(Q2_2);
+ Serial.println();
+ Serial.println(B2);
+ Serial.println();
+ Serial.println(q1_2);
+ Serial.println(q2_2);
+ Serial.println(degrees(q1_2));
+ Serial.println(degrees(q2_2));
+ Serial.println();
+ Serial.println(Xpos2);
+ Serial.println(Ypos2);
  Serial.println();
  Serial.println("------------------------------------------------------");
  Serial.println();
 
 
- delay(5000);  
+ delay(50);  
 }
 
-*/
+
 
 

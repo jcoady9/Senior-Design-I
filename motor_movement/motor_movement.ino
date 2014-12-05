@@ -10,7 +10,8 @@ BioloidController bioloid = BioloidController(1000000);
 char input;
 char buff[5], ack ='0';
 int points[5] = {0,0,0,0,0}; 
-int testPoints[5] = {560,350,685,200,2080};
+int previouspoint[2] = {0,0};
+int testPoints[4] = {10,10,100,100};
 int p, b, num, j;
 
 Robot robot; //TESTING OUT MODEL OBJECT
@@ -53,14 +54,14 @@ void loop(){
             
          case 't': //test case
                   
-               
+               robot.IK(testPoints);
                bioloid.poseSize = 2;//
                bioloid.readPose();//find where the servos are currently
                Serial.println("First Pose");
-                bioloid.setNextPose(1, testPoints[0]);  
-                bioloid.setNextPose(2,testPoints[1]); 
+               bioloid.setNextPose(1, testPoints[0]);  
+               bioloid.setNextPose(2,testPoints[1]); 
                 
-                bioloid.interpolateSetup(5000); // setup for interpolation from current->next over 1/2 a second
+               bioloid.interpolateSetup(5000); // setup for interpolation from current->next over 1/2 a second
                while(bioloid.interpolating > 0)
                {  // do this while we have not reached our new pose
                  bioloid.interpolateStep();     // move servos, if necessary. 
@@ -70,10 +71,10 @@ void loop(){
                Serial.println("Next position");
                bioloid.readPose();//find where the servos are currently
                
-                bioloid.setNextPose(1,testPoints[2]);  
-                bioloid.setNextPose(2, testPoints[3]); 
+               bioloid.setNextPose(1,testPoints[2]);  
+               bioloid.setNextPose(2, testPoints[3]); 
                 
-                bioloid.interpolateSetup(5000); // setup for interpolation from current->next over 1/2 a second
+                bioloid.interpolateSetup(1000); // setup for interpolation from current->next over 1/2 a second
                while(bioloid.interpolating > 0)
                {  // do this while we have not reached our new pose
                  bioloid.interpolateStep();     // move servos, if necessary. 

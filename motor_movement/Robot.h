@@ -21,7 +21,7 @@ class Robot
   void bottomRightCorner();
   void toDeadCenter();
   void drawLine(int x1, int y1, int x2, int y2);
-  int IK(long Xcurrent, long Ycurrent, long Xnext, long Ynext);
+  int IK(int points[4]);
     
   int frontMotor;
   int backMotor;
@@ -30,7 +30,8 @@ class Robot
   int bottomLeft[2];
   int bottomRight[2];
   int deadCenter[2];
-    
+  int prevousCoord[2];
+  int previousMotorAngle[2];
    
   private:
     
