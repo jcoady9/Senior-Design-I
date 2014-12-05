@@ -30,7 +30,7 @@ int main(int argc, char** argv){
 	//load the image
 	Mat img = imread(argv[1], CV_LOAD_IMAGE_COLOR);
 	int mode = atoi(argv[2]); 
-	int robotHeight = 1000, robotWidth = 1000;
+	int robotHeight = 108, robotWidth = 75;
 
 
 	//if the image is not found, exit program
