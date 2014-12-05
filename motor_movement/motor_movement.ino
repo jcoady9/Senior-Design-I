@@ -9,7 +9,7 @@ BioloidController bioloid = BioloidController(1000000);
 
 char input;
 char buff[5], ack ='0';
-int points[5] = {0,0,0,0,0}; 
+int points[5] ; 
 int previouspoint[2] = {0,0};
 int testPoints[4] = {10,10,100,100};
 int p, b, num, j;
@@ -21,6 +21,9 @@ void setup(){
   //robot is already set to topLeft coordinates
     robot.penUp();
     Serial.begin(9600); //start serial communications at 38400bps
+    Relax(1);
+    Relax(2);
+    Relax(3);
 }
 
 void loop(){
@@ -47,8 +50,8 @@ void loop(){
             break; 
             
          case 't': //test case
-           robot.IK(testPoints); 
-           robot.drawLine(testPoints[0],testPoints[1],testPoints[2],testPoints[3], bioloid); //TEST LINE WITHOUT PROCESSING
+           
+           robot.drawLine(testPoints, bioloid); //TEST LINE WITHOUT PROCESSING
            break;
          
          
@@ -113,11 +116,12 @@ void readCoordinates(){
           buff[b]=input;
        }
     }     
-    
+
     int checksum = points[0] + points[1] + points[2] + points[3];
     if(checksum == points[4]){
       //draw the line here
-      robot.drawLine(points[0],points[1],points[2],points[3], bioloid);
+      int temp[4] = {points[0], points[1], points[2], points[3]};
+      robot.drawLine(temp, bioloid);
       Serial.print("y"); //correct checksum and line is drawn
       ack = 'y';
     }else{
@@ -136,7 +140,7 @@ int calc()
     for(x;x<=b;x++){
           num=num+(buff[x]-'0')*pow(10,b-x);
     }
-    if(num > 100){
+    if(num >= 99){
      num=num+1;  
     }
     return num;
