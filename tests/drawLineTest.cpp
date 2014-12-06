@@ -13,10 +13,15 @@ int main()
 	printf("-----------------------------------------------\n");
 	
 
-	Vertex* v1 = new Vertex(355 , 730);//top right 
-	Vertex* v2 = new Vertex(765 , 230);//center
+	Vertex* v1 = new Vertex(10 , 10);//top right 
+	Vertex* v2 = new Vertex(100 , 100);//center
 	
 	Line *line = new Line(v1,v2);
+
+	Vertex* v3 = new Vertex(30 , 30);//top right 
+	Vertex* v4 = new Vertex(100 , 100);//center
+	
+	Line *line1 = new Line(v3,v4);
 	
 	RobotComm robot;
 
@@ -29,12 +34,20 @@ int main()
 	drawLineCommand * drawLineComm = new drawLineCommand(point1[0], point1[1], point2[0], point2[1]);
 	
 
+	line1->getCurrentVertex()->getPoints(point1);
+	line1->getNextVertex()->getPoints(point2);
+	
+	//Create and send Command
+	drawLineCommand * drawLineComm2 = new drawLineCommand(point1[0], point1[1], point2[0], point2[1]);
+
 	printf("-----------------------------------------------\n");
 	printf("\t\tDrawing...: \n");
 	printf("-----------------------------------------------\n");
 	
 	//Run Draw for robot
 	robot.RobotCommunication(drawLineComm);	
+	robot.RobotCommunication(drawLineComm2);
+	
 
 	printf("-----------------------------------------------\n");
 	printf("\t\tEnd of tests.\n");

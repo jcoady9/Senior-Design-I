@@ -9,7 +9,7 @@ BioloidController bioloid = BioloidController(1000000);
 
 char input;
 char buff[5], ack ='0';
-int points[5] = {0,0,0,0,0}; 
+int points[5] ; 
 int previouspoint[2] = {0,0};
 int testPoints[4] = {10,10,100,100};
 int p, b, num, j;
@@ -21,6 +21,9 @@ void setup(){
   //robot is already set to topLeft coordinates
     robot.penUp();
     Serial.begin(9600); //start serial communications at 38400bps
+    Relax(1);
+    Relax(2);
+    Relax(3);
 }
 
 void loop(){
@@ -28,19 +31,13 @@ void loop(){
   delay(50);
   Serial.print(ack);
   Serial.flush();
-  /*Serial.print(robot.backMotor);
-  Serial.println();
-  Serial.print(robot.frontMotor);
-  Serial.println();*/
   
-    // SetPosition(1,robot.backMotor);
-    // SetPosition(2,robot.frontMotor);
    if(Serial.available()>0){
         int inByte = Serial.read();
         switch (inByte)
         {
           case 'q':    
-            robot.relaxArm();
+            robot.relaxArm(bioloid);
             exit(0);
             break;    
           
@@ -53,34 +50,8 @@ void loop(){
             break; 
             
          case 't': //test case
-                  
-               robot.IK(testPoints);
-               bioloid.poseSize = 2;//
-               bioloid.readPose();//find where the servos are currently
-               Serial.println("First Pose");
-               bioloid.setNextPose(1, testPoints[0]);  
-               bioloid.setNextPose(2,testPoints[1]); 
-                
-               bioloid.interpolateSetup(5000); // setup for interpolation from current->next over 1/2 a second
-               while(bioloid.interpolating > 0)
-               {  // do this while we have not reached our new pose
-                 bioloid.interpolateStep();     // move servos, if necessary. 
-                 delay(3);
-               }
-               robot.penDown();
-               Serial.println("Next position");
-               bioloid.readPose();//find where the servos are currently
-               
-               bioloid.setNextPose(1,testPoints[2]);  
-               bioloid.setNextPose(2, testPoints[3]); 
-                
-                bioloid.interpolateSetup(1000); // setup for interpolation from current->next over 1/2 a second
-               while(bioloid.interpolating > 0)
-               {  // do this while we have not reached our new pose
-                 bioloid.interpolateStep();     // move servos, if necessary. 
-                 delay(3);
-               }
-           //robot.drawLine(testPoints[0],testPoints[1],testPoints[2],testPoints[3]); //TEST LINE WITHOUT PROCESSING
+           
+           robot.drawLine(testPoints, bioloid); //TEST LINE WITHOUT PROCESSING
            break;
          
          
@@ -121,7 +92,7 @@ void loop(){
            break;  
           
            case 'r':
-            robot.relaxArm();
+            robot.relaxArm(bioloid);
             break;    
       }
 }
@@ -138,7 +109,6 @@ void readCoordinates(){
         if(input == ','){//comma has been reached, convert numbers from buffer to in
          points[p] = calc();
          b=-1;
-         //Serial.println(points[p]);
          p++;
         }
         else{//value is not a comma, add to buffer
@@ -146,11 +116,12 @@ void readCoordinates(){
           buff[b]=input;
        }
     }     
-    
+
     int checksum = points[0] + points[1] + points[2] + points[3];
     if(checksum == points[4]){
       //draw the line here
-      robot.drawLine(points[0],points[1],points[2],points[3]);
+      int temp[4] = {points[0], points[1], points[2], points[3]};
+      robot.drawLine(temp, bioloid);
       Serial.print("y"); //correct checksum and line is drawn
       ack = 'y';
     }else{
@@ -169,7 +140,7 @@ int calc()
     for(x;x<=b;x++){
           num=num+(buff[x]-'0')*pow(10,b-x);
     }
-    if(num > 100){
+    if(num >= 99){
      num=num+1;  
     }
     return num;
