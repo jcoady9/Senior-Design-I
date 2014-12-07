@@ -6,6 +6,8 @@
  *constructor
  *
  *@param lines - vector of Line objects to store in this instance of the Drawing object
+ *@param width - width of the source image
+ *@param height - height of the source image
 */
 Drawing::Drawing(std::vector<Line> lines, int width, int height){
 	dLines = lines;

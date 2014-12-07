@@ -2,42 +2,42 @@
 
 #include "../include/Line.h"
 
-
 //constructor
-Line::Line(Vertex * current, Vertex * next){
-	currentVertex = current;
-	nextVertex = next;
+Line::Line(Point *p1, Point *p2){
+	endPoint1 = p1;
+	endPoint2 = p2;
 }
 //destructor
 Line::~Line(){
-
 }
 
 /**
 	**Gets the Current vertex assoicated with the current one
 	** @return the Current Vertex
 **/
-Vertex* Line::getCurrentVertex(){
-	return currentVertex;
+	
+Point * Line::getPoint1(){
+	return endPoint1;
 }
+
 /**
 	**Sets the Current vertex assoicated with the current one
 **/
-void Line::setCurrentVertex(Vertex* current){
-	currentVertex = current; 
+void Line::setPoint1(Point *p1){
+	endPoint1 = p1; 
 }
 
 /**
 	**Gets the Next vertex assoicated with the current one
 	** @return the Next Vertex
 **/
-Vertex* Line::getNextVertex(){
-	return nextVertex;
+Point * Line::getPoint2(){
+	return endPoint2;
 }
+
 /**
 	**Sets the next vertex assoicated with the current one
 **/
-void Line::setNextVertex(Vertex* next){
-	nextVertex = next; 
+void Line::setPoint2(Point *p2){
+	endPoint2 = p2; 
 }
-

@@ -1,8 +1,6 @@
 //drawImageSimulator.cpp
 
 #include <stdio.h>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
@@ -11,9 +9,14 @@
 #include <vector>
 #include <string>
 #include <fcntl.h> 
+
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
 #include "../include/drawImageSimulator.h"
 #include "../include/Line.h"
-#include "../include/vertex.h"
+#include "../include/point.h"
+#include "../include/drawing.h"
 
 /**
 Simulator class to simulate the full functionality of our project. Processes the points received
@@ -33,27 +36,26 @@ void drawImageSimulator::drawPic(Drawing* drawing, int robotHeight, int robotWid
 {
 
 	std::vector<Line> lines = drawing->getLines();
-
+	cv::Mat img;
 	for(int i = 0; i < (int)lines.size(); i++){
 
-		cv::Mat img;
+		
 
 		cv::Vec4i vect;
 
 		//pull vertices from the Line
-		Vertex * v = new Vertex(0,0);
+		Point * v = new Point(0,0);
 		int points[2], points2[2];
 
 		//Scale each line so that it fits in the range of the blank image
 		scale((Line*) &lines[i], drawing->getDrawingWidth(), drawing->getDrawingHeight(), robotHeight, robotWidth);
 
-		v = lines[i].getCurrentVertex();
-		v->getPoints(points);
+		v = lines[i].getPoint1();
+		v->getCoords(points);
 
-		v = lines[i].getNextVertex();
-		v->getPoints(points2);
+		v = lines[i].getPoint2();
+		v->getCoords(points2);
 
-	
 		//store the points in the vector to be used for opencv image
 		vect[0] = points[0];
 		vect[1] = points[1];
@@ -66,11 +68,16 @@ void drawImageSimulator::drawPic(Drawing* drawing, int robotHeight, int robotWid
 	
 		//write the line to a blank image
 		bool wri = cv::imwrite("black.png", img);
-		if(wri){
-			cv::imshow("Robot Simulated Image", img);
+		if(!wri){
+			printf("Error drawing image!\n");
+			exit(EXIT_FAILURE);
 		}
 
 	}
+
+	//show the image
+	cv::imshow("Robot Simulated Image", img);
+	cv::waitKey(0);
 
 }
 /**
@@ -87,14 +94,14 @@ Line* drawImageSimulator::scale(Line* i, int imgH, int imgL, int robH, int robW)
 {	
 	int pointsI1[2], pointsI2[2];
 	float tempRX, tempRY, tempRX2, tempRY2;
-	Vertex * v = new Vertex(0,0);
+	Point * v = new Point(0,0);
 	
 	//get vertex coordinates
-	v = i->getCurrentVertex();
-	v->getPoints(pointsI1);
+	v = i->getPoint1();
+	v->getCoords(pointsI1);
 
-	v = i->getNextVertex();
-	v->getPoints(pointsI2);
+	v = i->getPoint2();
+	v->getCoords(pointsI2);
 
 	//apply scaling factors
 	tempRX = ((float) pointsI1[0] / imgH) * robH;
@@ -103,7 +110,7 @@ Line* drawImageSimulator::scale(Line* i, int imgH, int imgL, int robH, int robW)
 	tempRY2 = ((float) pointsI2[1] / imgL) * robW;
 
 	//return new line with scaled vertices
-	i->getCurrentVertex()->setPoints((int) tempRX, (int) tempRY);
-	i->getNextVertex()->setPoints((int) tempRX2, (int) tempRY2);
+	i->getPoint1()->setCoords((int) tempRX, (int) tempRY);
+	i->getPoint2()->setCoords((int) tempRX2, (int) tempRY2);
 	return i;
 }

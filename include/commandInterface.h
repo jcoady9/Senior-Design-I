@@ -21,8 +21,4 @@ class commandInterface
 
 };
 
-
-
-
-
 #endif //COMMANDINTERFACE

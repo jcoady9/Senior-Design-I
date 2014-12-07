@@ -1,9 +1,6 @@
 //drawImageRobot.cpp
 
 #include "../include/drawImageRobot.h"
-//#include "../include/RobotComm.h"
-//#include "../include/commandInterface.h"
-//#include "../include/drawLineCommand.h"
 
 //constructor
 DrawImageRobot::DrawImageRobot(){
@@ -31,8 +28,8 @@ void DrawImageRobot::drawPic(Drawing* drawing, int robotHeight, int robotWidth){
 		
 		//pull points from the the line to pass to robot
 		int point1[2], point2[2];
-		l->getCurrentVertex()->getPoints(point1);
-		l->getNextVertex()->getPoints(point2);
+		l->getPoint1()->getCoords(point1);
+		l->getPoint2()->getCoords(point2);
 		
 		//Create and send Command
 		drawLineCommand * drawLineComm = new drawLineCommand(point1[0], point1[1], point2[0], point2[1]);
@@ -50,18 +47,18 @@ void DrawImageRobot::drawPic(Drawing* drawing, int robotHeight, int robotWidth){
 	** ScaledY = (ImageY/ImageHeight) * RobotHeight
 	**@return scaled line
 **/
-Line* DrawImageRobot::scale(Line* i, int imgH, int imgL, int robH, int robW)
+Line* DrawImageRobot::scale(Line* l, int imgH, int imgL, int robH, int robW)
 {	
 	int pointsI1[2], pointsI2[2];
 	float tempRX, tempRY, tempRX2, tempRY2;
-	Vertex * v = new Vertex(0,0);
+	Point * p = new Point(0,0);
 
 	//pull points from the the line to pass to robot
-	v = i->getCurrentVertex();
-	v->getPoints(pointsI1);
+	p = l->getPoint1();
+	p->getCoords(pointsI1);
 
-	v = i->getNextVertex();
-	v->getPoints(pointsI2);
+	p = l->getPoint2();
+	p->getCoords(pointsI2);
 	
 	//Scale the line to the plane in which we draw.
 	tempRX = ((float) pointsI1[0] / imgH) * robH;
@@ -70,7 +67,7 @@ Line* DrawImageRobot::scale(Line* i, int imgH, int imgL, int robH, int robW)
 	tempRY2 = ((float) pointsI2[1] / imgL) * robW;
 	
 	//Create a new line for return with the scaled vertices
-	i->getCurrentVertex()->setPoints((int) tempRX, (int) tempRY);
-	i->getNextVertex()->setPoints((int) tempRX2, (int) tempRY2);
-	return i;
+	l->getPoint1()->setCoords((int) tempRX, (int) tempRY);
+	l->getPoint2()->setCoords((int) tempRX2, (int) tempRY2);
+	return l;
 }

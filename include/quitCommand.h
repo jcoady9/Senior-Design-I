@@ -13,7 +13,6 @@ relax back to its starting position and quit the program
 #include <string>
 #include "commandInterface.h"
 
-
 class quitCommand:public commandInterface
 {
 	private: 

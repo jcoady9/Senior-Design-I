@@ -4,9 +4,11 @@
 #define DRAWING_H_
 
 #include <vector>
-
 #include "Line.h"
 
+/*
+ * model class to store detected lines and source image dimensions after source image has been processed
+*/
 class Drawing {
 
 public:

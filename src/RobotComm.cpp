@@ -132,4 +132,3 @@ void RobotComm::RobotCommunication(commandInterface* c){
 	fclose(comm);
 
 }
-

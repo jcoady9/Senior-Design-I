@@ -5,9 +5,8 @@
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
 #include "drawing.h"
-#include "vertex.h"
+#include "point.h"
 #include "Line.h"
 
 /*
@@ -41,8 +40,8 @@ public:
 	//converts vector<vector<point>> to vector<vec4i>
 	cv::vector<cv::Vec4i> pointsToVec4i(const cv::vector< cv::vector<cv::Point> > & contours);
 
-	//Convert Vec4i into two verticies, then append them.
-	Line vec2Vertex(cv::Vec4i vec);
+	//Convert Vec4i into two points, then store them in a Line object.
+	Line vec2Point(cv::Vec4i vec);
 
 private:
 

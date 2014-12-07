@@ -20,12 +20,12 @@ all :
 
 #compile all test code
 test:
-	$(CC) $(CFLAGS) src/vertex.cpp tests/vertexTests.cpp -o vertextest
-	$(CC) $(CFLAGS) src/vertex.cpp src/Line.cpp tests/LineTests.cpp -o LineTest
+	$(CC) $(CFLAGS) src/point.cpp tests/vertexTests.cpp -o vertextest
+	$(CC) $(CFLAGS) src/point.cpp src/Line.cpp tests/LineTests.cpp -o LineTest
 	$(CC) $(CFLAGS) src/relaxCommand.cpp src/RobotComm.cpp src/commandInterface.cpp tests/robotRelaxTest.cpp -o relaxtest
 	$(CC) $(CFLAGS) src/quitCommand.cpp src/RobotComm.cpp src/commandInterface.cpp tests/robotQuitTest.cpp -o quittest
-	$(CC) $(CFLAGS) src/vertex.cpp  src/Line.cpp src/RobotComm.cpp src/commandInterface.cpp src/drawLineCommand.cpp tests/drawLineTest.cpp  -o drawLineTest  $(LIBS) $(LFLAGS)
-	$(CC) $(CFLAGS) src/imageProcessor.cpp src/drawing.cpp src/vertex.cpp src/Line.cpp tests/imageProcUnitTests.cpp  -o imageProcUnitTests $(LIBS) $(LFLAGS)
+	$(CC) $(CFLAGS) src/point.cpp  src/Line.cpp src/RobotComm.cpp src/commandInterface.cpp src/drawLineCommand.cpp tests/drawLineTest.cpp  -o drawLineTest  $(LIBS) $(LFLAGS)
+	$(CC) $(CFLAGS) src/imageProcessor.cpp src/drawing.cpp src/point.cpp src/Line.cpp tests/imageProcUnitTests.cpp  -o imageProcUnitTests $(LIBS) $(LFLAGS)
 
 #clean the project directory of all object & executable files
 clean:

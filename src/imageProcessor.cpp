@@ -3,18 +3,20 @@
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
-#include "../include/drawing.h"
-#include "../include/Line.h"
-#include "../include/vertex.h"
 #include "../include/imageProcessor.h"
 
 #define POWER 2
 #define MAX_DIST 10.0
 #define PERCENTAGE 0.1
 
-
+/*
+ * constructor
+*/
 ImageProcessor::ImageProcessor(){}
 
+/*
+ * destructor
+*/
 ImageProcessor::~ImageProcessor(){}
 
 /*
@@ -66,8 +68,8 @@ Drawing* ImageProcessor::processImage(cv::Mat & image){
 	std::vector<Line> lines_vec4i;
 	for(int i = 0; i < (int)combinedVectors.size(); i++){
 		cv::Vec4i vec = combinedVectors[i];
-		Vertex* v1 = new Vertex(vec[0], vec[1]);
-		Vertex* v2 = new Vertex(vec[2], vec[3]);
+		Point* v1 = new Point(vec[0], vec[1]);
+		Point* v2 = new Point(vec[2], vec[3]);
 		Line* line = new Line(v1, v2);
 		lines_vec4i.push_back(*line);
 	}
@@ -134,7 +136,7 @@ void ImageProcessor::contourDetection(const cv::Mat & src, cv::vector< cv::vecto
 /*
  * Based off of code found from here: http://opencv-code.com/quick-tips/implementation-of-thinning-algorithm-in-opencv/
  *
- * This is part of the Zhang-Suen algorithm, documentation on how it works can be seenhere: http://read.pudn.com/downloads99/sourcecode/graph/texture_mapping/403914/Parallel%20thinning%20with%20two-	    subiteration%20algorithms.pdf
+ * This is part of the Zhang-Suen algorithm, documentation on how it works can be seen here: http://read.pudn.com/downloads99/sourcecode/graph/texture_mapping/403914/Parallel%20thinning%20with%20two-	    subiteration%20algorithms.pdf
  *
  * Perform one thinning iteration.
  * Normally you wouldn't call this function directly from your code.
@@ -142,14 +144,14 @@ void ImageProcessor::contourDetection(const cv::Mat & src, cv::vector< cv::vecto
  * @param  im    Binary image with range = 0-1
  * @param  iter  0=even, 1=odd
 */
-void ImageProcessor::thinningIteration(cv::Mat& im, int iter)
-{
+void ImageProcessor::thinningIteration(cv::Mat& im, int iter){
+
     cv::Mat marker = cv::Mat::zeros(im.size(), CV_8UC1);
 
-    for (int i = 1; i < im.rows-1; i++)
-    {
-        for (int j = 1; j < im.cols-1; j++)
-        {
+    for (int i = 1; i < im.rows-1; i++){
+
+        for (int j = 1; j < im.cols-1; j++){
+
             uchar p2 = im.at<uchar>(i-1, j);
             uchar p3 = im.at<uchar>(i-1, j+1);
             uchar p4 = im.at<uchar>(i, j+1);
@@ -167,8 +169,9 @@ void ImageProcessor::thinningIteration(cv::Mat& im, int iter)
             int m1 = iter == 0 ? (p2 * p4 * p6) : (p2 * p4 * p8);
             int m2 = iter == 0 ? (p4 * p6 * p8) : (p2 * p6 * p8);
 
-            if (A == 1 && (B >= 2 && B <= 6) && m1 == 0 && m2 == 0)
+            if (A == 1 && (B >= 2 && B <= 6) && m1 == 0 && m2 == 0){
                 marker.at<uchar>(i,j) = 1;
+            }
         }
     }
 
@@ -184,20 +187,19 @@ void ImageProcessor::thinningIteration(cv::Mat& im, int iter)
  *
  * @param  im  Binary image with range = 0-255
 */
-void ImageProcessor::thinning(cv::Mat& im)
-{
+void ImageProcessor::thinning(cv::Mat& im){
+
     im /= 255;
 
     cv::Mat prev = cv::Mat::zeros(im.size(), CV_8UC1);
     cv::Mat diff;
 
-    do {
+    while (cv::countNonZero(diff) > 0){
         thinningIteration(im, 0);
         thinningIteration(im, 1);
         cv::absdiff(im, prev, diff);
         im.copyTo(prev);
     } 
-    while (cv::countNonZero(diff) > 0);
 
     im *= 255;
 }
@@ -298,13 +300,18 @@ cv::vector<cv::Vec4i> ImageProcessor::pointsToVec4i(const cv::vector< cv::vector
 	return vector;
 }
 
-Line ImageProcessor::vec2Vertex(cv::Vec4i vec){
+/*
+ * converts cv::Vec4i data into a Line object
+ *
+ * @param vec - the Vec4i to be converted
+ *
+ * @return a Line object containing the data stored in vec
+*/
+Line ImageProcessor::vec2Point(cv::Vec4i vec){
 	
-	Vertex* v1 = new Vertex(vec[0], vec[1]);
-	
-	Vertex* v2 = new Vertex(vec[2], vec[3]);
-	
-	Line * line  = new Line(v1, v2);
+	Point* p1 = new Point(vec[0], vec[1]);
+	Point* p2 = new Point(vec[2], vec[3]);
+	Line * line  = new Line(p1, p2);
 	
 	return *line;
 }

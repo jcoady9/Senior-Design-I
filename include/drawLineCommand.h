@@ -11,7 +11,7 @@ to the robot to use to draw a straight line
 #include "commandInterface.h"
 #include <string>
 
-class drawLineCommand:public commandInterface
+class drawLineCommand : public commandInterface
 {
 	private: 
 		std::string command;
@@ -22,7 +22,5 @@ class drawLineCommand:public commandInterface
 		virtual std::string toString();
 
 };
-
-
 
 #endif //DRAWLINECOMMAND_H
