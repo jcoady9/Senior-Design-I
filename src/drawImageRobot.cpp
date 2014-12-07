@@ -1,9 +1,9 @@
 //drawImageRobot.cpp
 
 #include "../include/drawImageRobot.h"
-#include "../include/RobotComm.h"
-#include "../include/commandInterface.h"
-#include "../include/drawLineCommand.h"
+//#include "../include/RobotComm.h"
+//#include "../include/commandInterface.h"
+//#include "../include/drawLineCommand.h"
 
 //constructor
 DrawImageRobot::DrawImageRobot(){

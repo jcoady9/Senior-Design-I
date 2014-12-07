@@ -7,6 +7,9 @@
 #include "RobotComm.h"
 #include "Line.h"
 #include "drawing.h"
+#include "RobotComm.h"
+#include "commandInterface.h"
+#include "drawLineCommand.h"
 
 class DrawImageRobot : public drawImageInterface {
 
